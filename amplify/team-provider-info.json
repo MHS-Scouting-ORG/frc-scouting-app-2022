@@ -40,11 +40,15 @@
       "UnauthRoleName": "amplify-frcscoutingapp2022-dev-153933-unauthRole",
       "StackName": "amplify-frcscoutingapp2022-dev-153933",
       "StackId": "arn:aws:cloudformation:us-west-1:308692676076:stack/amplify-frcscoutingapp2022-dev-153933/0049f650-70ed-11ec-8c03-022d3bcc78b1",
-      "AmplifyAppId": "d1bxofie4hejc2"
+      "AmplifyAppId": "d1bxofie4hejc2",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-frcscoutingapp2022-dev-153933-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "function": {
-        "frcScoutingLambda2022": {}
+        "frcScoutingLambda2022": {
+          "deploymentBucketName": "amplify-frcscoutingapp2022-dev-153933-deployment",
+          "s3Key": "amplify-builds/frcScoutingLambda2022-432f6b626446694a722f-build.zip"
+        }
       },
       "hosting": {
         "amplifyhosting": {
