@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/teams": {
+      "name": "/teams",
+      "lambdaFunction": "frcScoutingLambda2022",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}
