@@ -29,5 +29,32 @@
         }
       }
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frcscoutingapp2022-dev-153933-authRole",
+      "UnauthRoleArn": "arn:aws:iam::308692676076:role/amplify-frcscoutingapp2022-dev-153933-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::308692676076:role/amplify-frcscoutingapp2022-dev-153933-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-frcscoutingapp2022-dev-153933-deployment",
+      "UnauthRoleName": "amplify-frcscoutingapp2022-dev-153933-unauthRole",
+      "StackName": "amplify-frcscoutingapp2022-dev-153933",
+      "StackId": "arn:aws:cloudformation:us-west-1:308692676076:stack/amplify-frcscoutingapp2022-dev-153933/0049f650-70ed-11ec-8c03-022d3bcc78b1",
+      "AmplifyAppId": "d1bxofie4hejc2"
+    },
+    "categories": {
+      "function": {
+        "frcScoutingLambda2022": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1bxofie4hejc2",
+          "type": "cicd"
+        }
+      },
+      "auth": {
+        "frcscoutingapp2022": {}
+      }
+    }
   }
 }
