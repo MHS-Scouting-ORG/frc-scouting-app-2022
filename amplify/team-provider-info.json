@@ -47,7 +47,7 @@
       "function": {
         "frcScoutingLambda2022": {
           "deploymentBucketName": "amplify-frcscoutingapp2022-dev-153933-deployment",
-          "s3Key": "amplify-builds/frcScoutingLambda2022-432f6b626446694a722f-build.zip"
+          "s3Key": "amplify-builds/frcScoutingLambda2022-4d4e65473843456c4b36-build.zip"
         }
       },
       "hosting": {
