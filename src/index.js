@@ -6,8 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import Amplify from 'aws-amplify'
 import awsExports from './aws-exports'
 import 'bootstrap/dist/css/bootstrap.min.css'
-
-awsExports.oauth.redirectSignIn = process.env.REDIRECT_URI
+console.log(JSON.stringify(awsExports.oauth))
+awsExports.oauth['redirectSignIn'] = process.env.REACT_APP_REDIRECT_URI
+awsExports.oauth['redirectSignOut'] = process.env.REACT_APP_REDIRECT_URI
+console.log(JSON.stringify(awsExports.oauth))
 
 Amplify.configure(awsExports)
 
