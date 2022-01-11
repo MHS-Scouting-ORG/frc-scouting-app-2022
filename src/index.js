@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import Amplify from 'aws-amplify'
 import awsExports from './aws-exports'
 import 'bootstrap/dist/css/bootstrap.min.css'
+
+awsExports.oauth.redirectSignIn = process.env.REDIRECT_URI
+
 Amplify.configure(awsExports)
 
 ReactDOM.render(
