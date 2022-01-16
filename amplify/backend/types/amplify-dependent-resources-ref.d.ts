@@ -23,6 +23,8 @@ export type AmplifyDependentResourcesAttributes = {
         "frcscoutingapp2022": {
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
+            "HostedUIDomain": "string",
+            "OAuthMetadata": "string",
             "UserPoolId": "string",
             "UserPoolArn": "string",
             "UserPoolName": "string",

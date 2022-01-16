@@ -37,6 +37,31 @@
     "resourceName": "frcscoutingapp2022",
     "sharedId": "cf733608",
     "serviceName": "Cognito",
-    "useDefault": "manual"
+    "useDefault": "defaultSocial",
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "useEnabledMfas": true,
+    "dependsOn": [],
+    "hostedUI": true,
+    "userPoolGroupList": [],
+    "hostedUIDomainName": "frcscoutingapp202269d1243c-69d1243c",
+    "authProvidersUserPool": [
+      "Google"
+    ],
+    "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
+    "authProviders": [],
+    "hostedUIProviderCreds": "[]",
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://dev.d1bxofie4hejc2.amplifyapp.com/\"],\"LogoutURLs\":[\"https://dev.d1bxofie4hejc2.amplifyapp.com/\"]}"
   }
 }
