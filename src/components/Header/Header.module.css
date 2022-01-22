@@ -1,0 +1,41 @@
+.Header {
+   opacity: 1;
+   display: flex;
+   grid-area: header;
+   align-items: center;
+   justify-content: start;
+   padding: 2rem 2rem;
+}
+
+.Logo {
+   justify-self: end;
+}
+
+.Logo a {
+   font-family: 'Roboto', sans-serif;
+   font-size: 1rem;
+   text-decoration: none;
+   color: black;
+}
+
+.Nav {
+   display: none;
+}
+
+.Nav a {
+   font-family: 'Roboto', sans-serif;
+   font-size: 1rem;
+   text-decoration: none;
+   margin: 0 1rem;
+   color: black;
+}
+
+@media (min-width: 40rem) {
+   .Nav {
+      display: block;
+   }
+	.Header {
+      justify-content: end;
+      padding: 2rem 3rem;
+   }
+}

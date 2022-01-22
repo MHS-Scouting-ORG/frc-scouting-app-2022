@@ -1,0 +1,23 @@
+.BurgerButton {
+	display: flex;
+	flex-direction: column;
+	row-gap: 6px;
+	transform: rotateZ(0deg);
+	transition: transform 200ms;
+}
+
+.BurgerButtonBar {
+	background: black;
+	width: 2rem;
+	height: 2px;
+}
+
+.BurgerButtonRotate {
+	transform: rotateZ(90deg);
+}
+
+@media (min-width: 40rem) {
+	.BurgerButton {
+		display: none;
+	}
+}

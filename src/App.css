@@ -1,5 +1,10 @@
 .App {
   text-align: center;
+  display: grid;
+  grid-template-rows: fit-content(6rem) minmax(max-content, 80vh) fit-content(6rem);
+  grid-template-areas: "header"
+     "main"
+     "footer"
 }
 
 .App-logo {
@@ -35,4 +40,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@media (min-width: 40rem) {
+   .App {
+      grid-template-rows: fit-content(6rem) minmax(3rem, calc(100vh - 6rem)) fit-content(6rem);
+   }
 }
