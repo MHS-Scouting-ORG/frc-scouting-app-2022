@@ -8,7 +8,7 @@ import classes from './Header.module.css';
 const header = (props) => {
 	return (
 		<div className={ classes.Header }>
-			<BurgerButton />
+			<BurgerButton handleMobileMenu={ props.handleMobileMenu } mobileMenuShow={ props.mobileMenuShow } />
 			<div className={ classes.Nav }>
 				<Link to="/">Home</Link>
 				<Link to="/about">About</Link>

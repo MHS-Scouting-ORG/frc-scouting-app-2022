@@ -9,20 +9,24 @@ import Home from './components/Home/Home';
 import About from './components/About/About';
 import Dashboard from './components/Dashboard/Dashboard';
 
+import { useState } from 'react';
+
 import {
   BrowserRouter as Router,
   Routes,
   Route
 } from "react-router-dom";
 
-import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap';
+import { Container } from 'react-bootstrap'
 
 function App() {
+  const [mobileMenuShow, setMobileMenuShow] = useState(false);
+
   return (
     <Router>
-	 	<MenuDrawer />
-	 	<Header />
+	 	<MenuDrawer show={ mobileMenuShow } handleMobileMenu={ setMobileMenuShow } />
+	 	<Header handleMobileMenu={ setMobileMenuShow } mobileMenuShow={ mobileMenuShow } />
       <Container>
         <Routes>
           <Route path="/" element={<Home/>}/>
