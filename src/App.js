@@ -38,5 +38,8 @@ function App() {
   );
 }
 
-//export default withAuthenticator(App);
-export default App;
+let exportApp = App
+if(process.env.NODE_ENV === 'production')
+  exportApp = withAuthenticator(App)
+
+export default exportApp

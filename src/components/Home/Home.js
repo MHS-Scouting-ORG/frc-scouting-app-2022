@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react-bootstrap'
-import { API } from 'aws-amplify'
+import api from '../../api/index'
 
 const Home = (props) => {
 
@@ -10,7 +10,7 @@ const Home = (props) => {
   const [teamName, setTeamName] = useState("")
   const [matchId, setMatchId] = useState(0)
   useEffect(() => {
-    API.get('frcScoutingApi','/teams')
+    api.get('frcScoutingApi','/teams')
       .then(data => {
         setTeams(data)
       })
@@ -45,7 +45,7 @@ const Home = (props) => {
             <Button variant="primary" type="submit" onClick={evt => {
               evt.preventDefault()
               console.log(`updating new teams ${teamId}, ${teamName}`)
-              API.put('frcScoutingApi','/teams', {
+              api.put('frcScoutingApi','/teams', {
                 body: {
                   TeamId: teamId,
                   TeamName: teamName,
