@@ -10,6 +10,7 @@ console.log(JSON.stringify(awsExports.oauth))
 awsExports.oauth['redirectSignIn'] = process.env.REACT_APP_REDIRECT_URI
 awsExports.oauth['redirectSignOut'] = process.env.REACT_APP_REDIRECT_URI
 console.log(JSON.stringify(awsExports.oauth))
+console.log(process.env.NODE_ENV)
 
 Amplify.configure(awsExports)
 
