@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react-bootstrap'
 import api from '../../api/index'
+import Table from '../Table/table'
 
 const Home = (props) => {
 
@@ -67,11 +68,7 @@ const Home = (props) => {
           
         </Row>
         <Row>
-          <ListGroup>
-            {(() => {
-              return teams.map(({TeamId}) => <ListGroup.Item>{TeamId}</ListGroup.Item>)
-            })()}
-          </ListGroup>
+          <Table />
         </Row>
       </div>
   )
