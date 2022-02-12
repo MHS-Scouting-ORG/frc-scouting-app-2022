@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import Amplify from 'aws-amplify'
 import awsExports from './aws-exports'
 import 'bootstrap/dist/css/bootstrap.min.css'
-if(process.env.NODE_ENV !== 'production') {
+if(process.env.NODE_ENV === 'production') {
   console.log(JSON.stringify(awsExports.oauth))
   awsExports.oauth['redirectSignIn'] = process.env.REACT_APP_REDIRECT_URI
   awsExports.oauth['redirectSignOut'] = process.env.REACT_APP_REDIRECT_URI
