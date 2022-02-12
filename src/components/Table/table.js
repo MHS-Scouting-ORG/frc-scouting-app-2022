@@ -1,14 +1,10 @@
 import React, { useMemo } from 'react'
 import { useTable } from 'react-table'
+import API from '../../api/index'
 
 export default function () {
 
-  const data = useMemo(() => [
-    {
-      teamId:"0",
-      matchId:"0"
-    }
-  ], [])
+  const data = useMemo(API.get, [])
   const columns = useMemo(() => [
     {
       Header: "TeamId",
