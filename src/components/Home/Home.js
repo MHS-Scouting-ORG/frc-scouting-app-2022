@@ -21,7 +21,7 @@ const Home = (props) => {
     () => [
       {
         teamNumber: '2443',
-        averagePoints: '40',
+        averagePoints: 'a',
         averageLowHub: '10',
         averageHighHub: '10',
         averageLowAccuracy: '99%',
@@ -29,14 +29,23 @@ const Home = (props) => {
         averageHangar: '15'
       },
       {
-        teamNumber: '3442',
-        averagePoints: '40',
+        teamNumber: '66',
+        averagePoints: 'b',
         averageLowHub: '10',
         averageHighHub: '10',
         averageLowAccuracy: '99%',
         averageHighAccuracy: '99%',
         averageHangar: '15'
-      }
+      },
+      {
+        teamNumber: '12',
+        averagePoints: 'c',
+        averageLowHub: '10',
+        averageHighHub: '10',
+        averageLowAccuracy: '99%',
+        averageHighAccuracy: '99%',
+        averageHangar: '15'
+      },
     ],
     []
   )
@@ -74,15 +83,16 @@ const Home = (props) => {
       []
     )
 
-    const tableInstance = useTable({columns, data})
+    const tableInstance = useTable({columns, data}, useSortBy)
 
     const {
       getTableProps,
       getTableBodyProps,
+      getSortByToggleProps,
       headerGroups,
       rows,
       prepareRow,
-    } = useTable({columns, data})
+    } = useTable({columns, data}, useSortBy)
 
   return (
       <div>
@@ -95,7 +105,7 @@ const Home = (props) => {
                 {
                   headerGroup.headers.map(column => (
                 <th {
-                  ...column.getHeaderProps()}
+                  ...column.getHeaderProps(column.getSortByToggleProps())}
                   style = {{
                     borderBottom: 'solid 3 px red',
                     background: 'powderblue',
@@ -108,7 +118,6 @@ const Home = (props) => {
                   {
                     column.render('Header')
                   }
-
                 </th>
                   ))}
               </tr>
