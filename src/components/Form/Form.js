@@ -2,6 +2,8 @@ import React from "react";
 import Input from "./Input";
 import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
+import Dropdown from "./Dropdown";
+import Initials from "./Initials";
 
 class Form extends React.Component{
     constructor(props){
@@ -12,6 +14,7 @@ class Form extends React.Component{
         this.state = {
             checkBoxValues:[false,false,false,false,false,false],
             Comment:"",
+            scoutInitials: ""
         };
     }
 
@@ -23,8 +26,8 @@ class Form extends React.Component{
     makeCheckBox(title,i){
         return(
             <div>
-                <h3>{title}</h3>
                 <Checkbox
+                    label = {title}
                     changeState={this.checkBoxClicked}
                     place={i}
                 />
@@ -33,16 +36,34 @@ class Form extends React.Component{
     }
 
     checkState(){
-        let checkBox = this.state.boxCheckValues[1];
-        console.log(checkBox);
+        let checkBox = this.state.checkBoxValues;
+        console.log(checkBox[3]);
+    }
+
+    changeInput(){
+        
     }
 
     render(){
         return(
             <div>
-                <h1>FORM</h1>
-                {this.makeCheckBox("yellow card",0)}
-                <button onClick={this.checkState}>CHECK STATE</button>
+                <h1> FORM </h1>
+                <h3> AUTONOMOUS </h3>
+                <div>
+                    
+                </div>
+                <h3> TELEOP </h3>
+                <div>
+                    {/*# of fouls*/}
+                    {/*# of tech fouls*/}
+                    {this.makeCheckBox("Yellow card: ",0)}
+                    {this.makeCheckBox("Red card: ",1)}
+                    {this.makeCheckBox("Disabled: ",2)}
+                    {this.makeCheckBox("Disqualifed: ",3)}
+                    {this.makeCheckBox("Hangar Bonus: ",4)}
+                    {this.makeCheckBox("Cargo Bonus: ",5)}
+                    <button onClick={this.checkState}>CHECK STATE</button>
+                </div>
             </div>
         )
     }
