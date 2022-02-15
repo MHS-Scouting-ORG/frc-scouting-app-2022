@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react-bootstrap'
 import api from '../../api/index'
 import { useTable, useSortBy } from 'react-table'
+import Columns from '../Table/Columns'
+import { Data } from '../Table/SampleData'
 
 const Home = (props) => {
 
@@ -16,6 +18,15 @@ const Home = (props) => {
         setTeams(data)
       })
   }, [update])
+
+
+
+
+
+
+
+
+
   
   const data = React.useMemo(
     () => [
@@ -31,25 +42,25 @@ const Home = (props) => {
       {
         teamNumber: '66',
         averagePoints: 'b',
-        averageLowHub: '10',
-        averageHighHub: '10',
-        averageLowAccuracy: '99%',
-        averageHighAccuracy: '99%',
-        averageHangar: '15'
+        averageLowHub: '2',
+        averageHighHub: '4',
+        averageLowAccuracy: '90%',
+        averageHighAccuracy: '80%',
+        averageHangar: '7'
       },
       {
         teamNumber: '12',
         averagePoints: 'c',
-        averageLowHub: '10',
-        averageHighHub: '10',
-        averageLowAccuracy: '99%',
-        averageHighAccuracy: '99%',
-        averageHangar: '15'
+        averageLowHub: '2345',
+        averageHighHub: '23456',
+        averageLowAccuracy: '10%',
+        averageHighAccuracy: '11%',
+        averageHangar: '10'
       },
     ],
     []
   )
-    const columns = React.useMemo(
+/*    const columns = React.useMemo(
       () => [
         {
           Header: 'Team #',
@@ -82,13 +93,14 @@ const Home = (props) => {
       ],
       []
     )
+*/
+  //  const columns = 
 
     const tableInstance = useTable({columns, data}, useSortBy)
 
     const {
       getTableProps,
       getTableBodyProps,
-      getSortByToggleProps,
       headerGroups,
       rows,
       prepareRow,
@@ -108,7 +120,7 @@ const Home = (props) => {
                   ...column.getHeaderProps(column.getSortByToggleProps())}
                   style = {{
                     borderBottom: 'solid 3 px red',
-                    background: 'powderblue',
+                    background: 'lightblue',
                     border: 'solid 1px black',
                     color: 'black',
                     padding: '10px',
@@ -139,6 +151,7 @@ const Home = (props) => {
                       style = {{
                         padding: '10px',
                         border: 'solid 1px gray',
+                        textAlign: 'center',
                         background: 'lightyellow',
                       }}
                     >
@@ -172,9 +185,9 @@ const Home = (props) => {
               })
             }}>
               Submit
-          </Button>*/}
+          </Button> */}
       </div>
-  )
-}
+  ) 
+} 
 
 export default Home;
