@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react-bootstrap'
 import { a, API } from 'aws-amplify'
-import { useTable } from 'react-table'
+import { useTable, useSortBy } from 'react-table'
 
 
 const Home = (props) => {
@@ -18,7 +18,8 @@ const Home = (props) => {
       })
   }, [update])
   
-  const data = 
+  const data = React.useMemo(
+    () =>
      [
         {
             ScouterInitials: 'MM',
@@ -110,8 +111,9 @@ const Home = (props) => {
             Comments: '',
             OpinionScale: 0
         },
-      ]
-  
+      ],
+      [],
+  )
 
   
 
@@ -122,20 +124,14 @@ const Home = (props) => {
     }
   }
 
-  const columns = (
-
-    Object.keys(data[0]).map(a =>
-      {
-        return {
-          Header: a,
-          accessor: a
-        }
-      }
-    )
+  const columns = React.useMemo(
+    () =>
+      Object.keys(data[0]).map(makeColumns),
+      []
   )
   
 
-  const tableInstance = useTable({ columns, data });
+  const tableInstance = useTable({ columns, data }, useSortBy);
 
   const {
     getTableProps,
@@ -159,8 +155,14 @@ const Home = (props) => {
                   {
                     headerGroup.headers.map(column =>
                       (
-                        <th {...column.getHeaderProps()} >
-                          {column.render('Header')}
+                        <th 
+                          {...column.getHeaderProps(column.getSortByToggleProps())}
+                          style={{
+                            padding: '10px',
+                            textAlign: 'center',
+                          }}
+                        >
+                            {column.render('Header')}
                         </th>
                       )
                     )
@@ -169,35 +171,42 @@ const Home = (props) => {
               )
             )
           }
-      </thead>
+        </thead>
 
-      <tbody {...getTableBodyProps()}>
-        {
-          rows.map( row =>
-            {
-              prepareRow(row)
+        <tbody {...getTableBodyProps()}>
+          {
+            rows.map( row =>
+              {
+                prepareRow(row)
 
-              return (
-                <tr {...row.getRowProps()}>
-                  {
-                    row.cells.map(cell =>
-                      {
-                        return (
-                          <td {...cell.getCellProps()} >
-                            {cell.render('Cell')}
-                          </td>
-                        )
-                      }
-                    )
-                  }
-                </tr>
-              )
-            }
-          )
-        }
-      </tbody>
+                return (
+                  <tr {...row.getRowProps()}>
+                    {
+                      row.cells.map(cell =>
+                        {
+                          return (
+                            <td 
+                              {...cell.getCellProps()}
+                              style = {{
+                                padding: '10px',
+                                border: 'solid 1px black',
+                                textAlign: 'center',
+                              }}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          )
+                        }
+                      )
+                    }
+                  </tr>
+                )
+              }
+            )
+          }
+        </tbody>
 
-   </table>
+      </table>
     </div>
   )
 }
