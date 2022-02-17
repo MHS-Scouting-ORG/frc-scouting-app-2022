@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react-bootstrap'
-import api from '../../api/index'
-import { useTable, useSortBy } from 'react-table'
-import Columns from '../Table/Columns'
-import { Data } from '../Table/SampleData'
+import { a, API } from 'aws-amplify'
+import { useTable } from 'react-table'
+
 
 const Home = (props) => {
 
@@ -13,181 +12,194 @@ const Home = (props) => {
   const [teamName, setTeamName] = useState("")
   const [matchId, setMatchId] = useState(0)
   useEffect(() => {
-    api.get('frcScoutingApi','/teams')
+    API.get('frcScoutingApi','/teams')
       .then(data => {
         setTeams(data)
       })
   }, [update])
+  
+  const data = 
+     [
+        {
+            ScouterInitials: 'MM',
+            TeamNumber: 2443,
+            MatchNumber: 12,
+            AllianceColor: 'BLUE',
+            AutoLowMade: 0,
+            AutoLowMissed: 0,
+            AutoUpperMade: 0,
+            AutoUpperMissed: 0,
+            Taxi: false,
+            AutoPlacement: 0,
+            TeleLowMade: 0,
+            TeleLowMissed: 0,
+            TeleUpperMade: 0,
+            TeleUpperMissed: 0,
+            Hangar: '',
+            LaunchpadUse: false,
+            NumberOfFouls: 0,
+            NumberOfTech: 0,
+            YellowCard: false,
+            RedCard: false,
+            Disabled: false,
+            Disqualified: false,
+            HangarBonus: false,
+            CargoBonus: false,
+            NumberOfRankingPoints: 0,
+            Strategy: '',
+            Comments: '',
+            OpinionScale: 0
+        },
+        {
+            ScouterInitials: 'MP',
+            TeamNumber: 200,
+            MatchNumber: 2,
+            AllianceColor: 'BLUE',
+            AutoLowMade: 0,
+            AutoLowMissed: 0,
+            AutoUpperMade: 0,
+            AutoUpperMissed: 0,
+            Taxi: false,
+            AutoPlacement: 0,
+            TeleLowMade: 0,
+            TeleLowMissed: 0,
+            TeleUpperMade: 0,
+            TeleUpperMissed: 0,
+            Hangar: '',
+            LaunchpadUse: false,
+            NumberOfFouls: 0,
+            NumberOfTech: 0,
+            YellowCard: false,
+            RedCard: false,
+            Disabled: false,
+            Disqualified: false,
+            HangarBonus: false,
+            CargoBonus: false,
+            NumberOfRankingPoints: 0,
+            Strategy: '',
+            Comments: '',
+            OpinionScale: 0
+        },
+        {
+            ScouterInitials: 'PO',
+            TeamNumber: 65,
+            MatchNumber: 3,
+            AllianceColor: 'RED',
+            AutoLowMade: 0,
+            AutoLowMissed: 0,
+            AutoUpperMade: 0,
+            AutoUpperMissed: 0,
+            Taxi: false,
+            AutoPlacement: 0,
+            TeleLowMade: 0,
+            TeleLowMissed: 0,
+            TeleUpperMade: 0,
+            TeleUpperMissed: 0,
+            Hangar: '',
+            LaunchpadUse: false,
+            NumberOfFouls: 0,
+            NumberOfTech: 0,
+            YellowCard: false,
+            RedCard: false,
+            Disabled: false,
+            Disqualified: false,
+            HangarBonus: false,
+            CargoBonus: false,
+            NumberOfRankingPoints: 0,
+            Strategy: '',
+            Comments: '',
+            OpinionScale: 0
+        },
+      ]
+  
 
+  
 
+  const makeColumns = function (a) {
+    return {
+      Header: a,
+      accessor: a
+    }
+  }
 
+  const columns = (
 
+    Object.keys(data[0]).map(a =>
+      {
+        return {
+          Header: a,
+          accessor: a
+        }
+      }
+    )
+  )
+  
 
+  const tableInstance = useTable({ columns, data });
 
-
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = tableInstance
 
 
   
-  const data = React.useMemo(
-    () => [
-      {
-        teamNumber: '2443',
-        averagePoints: 'a',
-        averageLowHub: '10',
-        averageHighHub: '10',
-        averageLowAccuracy: '99%',
-        averageHighAccuracy: '99%',
-        averageHangar: '15'
-      },
-      {
-        teamNumber: '66',
-        averagePoints: 'b',
-        averageLowHub: '2',
-        averageHighHub: '4',
-        averageLowAccuracy: '90%',
-        averageHighAccuracy: '80%',
-        averageHangar: '7'
-      },
-      {
-        teamNumber: '12',
-        averagePoints: 'c',
-        averageLowHub: '2345',
-        averageHighHub: '23456',
-        averageLowAccuracy: '10%',
-        averageHighAccuracy: '11%',
-        averageHangar: '10'
-      },
-    ],
-    []
-  )
-/*    const columns = React.useMemo(
-      () => [
-        {
-          Header: 'Team #',
-          accessor: 'teamNumber',
-        },
-        {
-          Header: 'Average Points',
-          accessor: 'averagePoints',
-        },
-        {
-          Header: 'Average Low Hub',
-          accessor: 'averageLowHub',
-        },
-        {
-          Header: 'Average High Hub',
-          accessor: 'averageHighHub',
-        },
-        {
-          Header: 'Average Low Hub Accuracy',
-          accessor: 'averageLowAccuracy',
-        },
-        {
-          Header: 'Average High Hub Accuracy',
-          accessor: 'averageHighAccuracy',
-        },
-        {
-          Header: 'Average Hangar Points',
-          accessor: 'averageHangar',
-        },
-      ],
-      []
-    )
-*/
-  //  const columns = 
-
-    const tableInstance = useTable({columns, data}, useSortBy)
-
-    const {
-      getTableProps,
-      getTableBodyProps,
-      headerGroups,
-      rows,
-      prepareRow,
-    } = useTable({columns, data}, useSortBy)
-
   return (
-      <div>
-        <div>
-          <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
-            <thead> 
-              {
-               headerGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {
-                  headerGroup.headers.map(column => (
-                <th {
-                  ...column.getHeaderProps(column.getSortByToggleProps())}
-                  style = {{
-                    borderBottom: 'solid 3 px red',
-                    background: 'lightblue',
-                    border: 'solid 1px black',
-                    color: 'black',
-                    padding: '10px',
-                    fontWeight: 'bold',
-                  }}
-                >
+    <div>
+      <table {...getTableProps()} >
+        
+       <thead>
+          {
+            headerGroups.map(headerGroup => 
+              (
+                <tr {...headerGroup.getHeaderGroupProps()} >
                   {
-                    column.render('Header')
-                  }
-                </th>
-                  ))}
-              </tr>
-               ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {
-                rows.map(row => {
-                  prepareRow(row)
-              
-                  return(
-                  <tr {...row.getRowProps()}>
-                    {
-                      row.cells.map(cell => {
-
-                    return(
-                    <td 
-                      {...cell.getCellProps()}
-                      style = {{
-                        padding: '10px',
-                        border: 'solid 1px gray',
-                        textAlign: 'center',
-                        background: 'lightyellow',
-                      }}
-                    >
-                      {
-                        cell.render('Cell')}
-                    </td>
+                    headerGroup.headers.map(column =>
+                      (
+                        <th {...column.getHeaderProps()} >
+                          {column.render('Header')}
+                        </th>
+                      )
                     )
-                   })}
-                  </tr>
-                  )
-                })}
-            </tbody>
-          </table>
-        </div>
-            {/*<Button variant="primary" type="submit" onClick={evt => {
-              evt.preventDefault()
-              console.log(`updating new teams ${teamId}, ${teamName}`)
-              api.put('frcScoutingApi','/teams', {
-                body: {
-                  TeamId: teamId,
-                  TeamName: teamName,
-                  MatchId: matchId
-                }
-              })
-              .then(_ => {
+                  }
+                </tr>
+              )
+            )
+          }
+      </thead>
 
-                setUpdate(!update)
-              })
-              .catch(err => {
-                console.log(err)
-              })
-            }}>
-              Submit
-          </Button> */}
-      </div>
-  ) 
-} 
+      <tbody {...getTableBodyProps()}>
+        {
+          rows.map( row =>
+            {
+              prepareRow(row)
+
+              return (
+                <tr {...row.getRowProps()}>
+                  {
+                    row.cells.map(cell =>
+                      {
+                        return (
+                          <td {...cell.getCellProps()} >
+                            {cell.render('Cell')}
+                          </td>
+                        )
+                      }
+                    )
+                  }
+                </tr>
+              )
+            }
+          )
+        }
+      </tbody>
+
+   </table>
+    </div>
+  )
+}
 
 export default Home;
