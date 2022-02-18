@@ -32,6 +32,13 @@ class Form extends React.Component{
             comment:"",
             scale:0,
         };
+
+        this.checkBoxClicked = this.checkBoxClicked.bind(this);
+        this.makeCheckBox = this.makeCheckBox.bind(this);
+        this.checkState = this.checkState.bind(this);
+        this.changeInital = this.changeInital.bind(this);
+        this.changeTeam = this.changeTeam.bind(this);
+        this.changeMatch = this.changeMatch.bind(this);
     }
 
     initialsChange(event){
