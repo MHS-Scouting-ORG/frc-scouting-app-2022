@@ -4,6 +4,7 @@ import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
 import Initials from "./Initials";
 import Dropdown from "./Dropdown";
+import Scale from "./Scale"
 
 class Form extends React.Component{
     constructor(props){
@@ -11,17 +12,25 @@ class Form extends React.Component{
         this.initialsChange = this.initialsChange.bind(this);
         this.changeTeamNumber = this.changeTeamNumber.bind(this);
         this.changeMatchNumber = this.changeMatchNumber.bind(this);
+        this.inputBoxChanged = this.inputBoxChanged.bind(this);
+        this.makeInputBox = this.makeInputBox.bind(this);
         this.checkBoxClicked = this.checkBoxClicked.bind(this);
         this.makeCheckBox = this.makeCheckBox.bind(this);
-        this.checkState = this.checkState.bind(this);
-        this.getVal = this.getVal.bind(this);
+        this.setComment = this.setComment.bind(this);
+        this.scaleChange = this.scaleChange.bind(this);
+        this.submitStates = this.submitStates.bind(this);
         this.state = {
             scouterInitials:"",
             teamNumber:"",
             matchNumber:"",
-            checkBoxValues:[false,false,false,false,false,false],
-            Comment:"",
-            testing: ''
+            allianceColor:"",
+            taxi:"",
+            hangarUse:"",
+            inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
+            rankingPoints:"",
+            checkBoxValues:[false,false,false,false,false,false,false,false,false,false,false],
+            comment:"",
+            scale:0,
         };
     }
 
@@ -29,12 +38,29 @@ class Form extends React.Component{
         this.setState({scouterInitials:event.target.value.toUpperCase()});
     }
 
-    changeTeamNumber(event){
+    changeTeamNumber(event,fill){
         this.setState({teamNumber:event.target.value});
     }
 
-    changeMatchNumber(event){
+    changeMatchNumber(event,fill){
         this.setState({matchNumber:event.target.value});
+    }
+
+    inputBoxChanged(event,i){
+        let inputStates = this.state.inputBoxValues;
+        inputStates[i] = event.target.value;
+    }
+
+    makeInputBox(title,i){
+        return (
+            <div>
+                <Input
+                    label={title}
+                    setState={this.inputBoxChanged}
+                    place={i}
+                />
+            </div>
+        )
     }
 
     checkBoxClicked(i){
@@ -54,45 +80,64 @@ class Form extends React.Component{
         )
     }
 
-    checkState(){
-        let checkBox = this.state.checkBoxValues;
-        console.log(this.state);
-        console.log(checkBox[3]);
+    setComment(event){
+        this.setState({comment:event.target.value});
     }
 
-    getVal(val){
-        this.setState({testing: val});
-        console.log(val);
+    scaleChange(event){
+        this.setState({scale:event.target.value})
+    }
+
+    submitStates(){
+        let checkBox = this.state.checkBoxValues;
+
+        console.log(this.state);
+        console.log(checkBox[3]);
+        
     }
 
     render(){
         return(
             <div>
                 <h1>FORM</h1>
+                <Initials changeInitials={this.initialsChange}/>
+                <Input setState={this.changeTeamNumber} place={-1} label={"Team Number: "}></Input>
+                <Input setState={this.changeMatchNumber} place={-1} label={"Match Number: "}></Input>
+                <Dropdown title={"Alliance Color: "} choices={["Blue", "Red"]}></Dropdown>
+                <h3>AUTONOMOUS</h3>
+                {this.makeInputBox("# Low Hub Made: ",0)}
+                {this.makeInputBox("# Low Hub Missed: ",1)}
+                {this.makeInputBox("# Upper Hub Made: ",2)}
+                {this.makeInputBox("# Upper Hub Missed: ",3)}
+                <Dropdown title={"Taxi: "} choices={["No","Yes"]}></Dropdown>
+                {/* */}
+                <h3>TELE-OP</h3>
+                {this.makeInputBox("# Low Hub Made: ",4)}
+                {this.makeInputBox("# Low Hub Missed: ",5)}
+                {this.makeInputBox("# Upper Hub Made: ",6)}
+                {this.makeInputBox("# Upper Hub Missed: ",7)}
+                <Dropdown title={"Hangar: "} choices={["None", "Attempted", "Low", "Mid", "High", "Traversal"]}/>
+                {this.makeInputBox("# of fouls: ",8)}
+                {this.makeInputBox("# of tech fouls",9)}
+                {this.makeCheckBox("Yellow card: ",0)}
+                {this.makeCheckBox("Red card: ", 1)}
+                {this.makeCheckBox("Disabled: ", 2)}
+                {this.makeCheckBox("Disqualifed: ", 3)}
+                {this.makeCheckBox("Hangar Bonus: ", 4)}
+                {this.makeCheckBox("Cargo Bonus: ", 5)}
+                <Dropdown title={"Ranking Points: "} choices={[0,1,2,3,4]}></Dropdown>
+                <h3>PRIORITIES & STRATEGIES</h3>
+                {this.makeCheckBox("Low Hub Shooter: ", 6)}
+                {this.makeCheckBox("Upper Hub Shooter: ", 7)}
+                {this.makeCheckBox("Launchpad Shooter: ", 8)}
+                {this.makeCheckBox("Hanger: ", 9)}
+                {this.makeCheckBox("Defense: ", 10)}
+                <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
+                <p> Scale of 1-10, rate partnership (how well you do think our alliances' can work together) </p>
+                <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
                 <div>
-                    <Initials changeInitials={this.initialsChange}/>
+                    <button onClick={this.submitStates}>SUBMIT</button>
                 </div>
-                <div>
-                    <Input change={this.changeTeamNumber} title={"Team Number: "}></Input>
-                </div>
-                <div>
-                    <Input change={this.changeMatchNumber} title={"Match Number: "}></Input>
-                </div>
-                <div>
-                    
-                </div>
-                <div>
-                    <Dropdown choices={["None", "Attempted", "Low", "Mid", "High", "Traversal"]}/>
-                </div>
-                <div>
-                    {/* */}
-                    {this.makeCheckBox("yellow card: ",0)}
-                    {this.makeCheckBox("red card: ", 1)}
-                    {this.makeCheckBox("disabled: ", 2)}
-                    {this.makeCheckBox("disqualifed: ", 3)}
-                    {this.makeCheckBox("hangar", 4)}
-                </div>
-                <button onClick={this.checkState}>CHECK STATE</button>
             </div>
         )
     }

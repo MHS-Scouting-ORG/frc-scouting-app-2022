@@ -1,11 +1,24 @@
 import React from "react";
 
-function Input(props){
-    return(
-        <label> {props.title}
-        <input type="number" onChange={props.change}></input>
-        </label>
-    )
+class Input extends React.Component{
+    constructor(props){
+        super(props);
+        this.inputChange = this.inputChange.bind(this);
+    }
+
+    inputChange(event){
+        this.props.setState(event,this.props.place);
+    }
+
+    render(){
+        return (
+            <div>
+                <label> {this.props.label}
+                    <input type='number' onChange={this.inputChange}></input>
+                </label>
+            </div>
+        );
+    }
 }
 
 export default Input;
