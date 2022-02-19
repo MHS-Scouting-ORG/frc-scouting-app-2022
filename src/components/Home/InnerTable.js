@@ -1,27 +1,7 @@
-import React, { useState, useEffect } from 'react'
-import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react-bootstrap'
-import api from '../../api/index'
+import React from 'react';
 import { useTable, useSortBy } from 'react-table'
-//import { Columns } from '../Table/Columns.js';
-//import { Data } from '../Table/SampleData.js';
-import InnerTable from './InnerTable'
 
-const Home = (props) => {
-
-  const [teams, setTeams] = useState([])
-  const [update, setUpdate] = useState(true)
-  const [teamId, setTeamId] = useState("")
-  const [teamName, setTeamName] = useState("")
-  const [matchId, setMatchId] = useState(0)
-  useEffect(() => {
-    api.get('frcScoutingApi','/teams')
-      .then(data => {
-        setTeams(data)
-      })
-  }, [update])
-  
-
-
+const InnerTable = (props) => {
 
   const data = React.useMemo(
     () => [
@@ -126,54 +106,12 @@ const Home = (props) => {
     }
   }
 
-  /* All
   const columns = React.useMemo(
     () =>
       Object.keys(data[0]).map(makeColumns),
       []
   )
-  */
-
-
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Team Number',
-        accessor: 'TeamNumber',
-      },
-      {
-        Header: 'Priorities',
-        accessor: 'priorities',
-      },
-      {
-        Header: 'Average Points',
-        accessor: 'averagePoints',
-      },
-      {
-        Header: 'Average Low Hub',
-        accessor: 'averageLowHub',
-      },
-      {
-        Header: 'Average High Hub',
-        accessor: 'averageHighHub',
-      },
-      {
-        Header: 'Average Low Hub Accuracy',
-        accessor: 'averageLowAccuracy',
-      },
-      {
-        Header: 'Average High Hub Accuracy',
-        accessor: 'averageHighAccuracy',
-      },
-      {
-        Header: 'Average Hangar Points',
-        accessor: 'averageHangar',
-      },
-    ],
-    []
-  )
-
-    const tableInstance = useTable({ columns, data }, useSortBy)
+  const tableInstance = useTable({ columns, data }, useSortBy)
 
     const {
       getTableProps,
@@ -187,9 +125,7 @@ const Home = (props) => {
   return (
       <div>
         <div>
-        </div>
-        <div>
-          <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
+          <table {...getTableProps()}>
             <thead> 
               {
                headerGroups.map(headerGroup => (
@@ -197,16 +133,7 @@ const Home = (props) => {
                 {
                   headerGroup.headers.map(column => (
                 <th {
-                  ...column.getHeaderProps(column.getSortByToggleProps())}
-                  style = {{
-                    borderBottom: 'solid 3 px red',
-                    background: 'powderblue',
-                    border: 'solid 1px black',
-                    color: 'black',
-                    padding: '10px',
-                    fontWeight: 'bold',
-                  }}
-                >
+                  ...column.getHeaderProps(column.getSortByToggleProps())}>
                   {
                     column.render('Header')
                   }
@@ -227,16 +154,9 @@ const Home = (props) => {
 
                     return(
                     <td 
-                      {...cell.getCellProps()}
-                      style = {{
-                        padding: '10px',
-                        border: 'solid 1px gray',
-                        background: 'lightyellow',
-                      }}
-                    >
+                      {...cell.getCellProps()}>
                       {
                         cell.render('Cell')}
-                        <InnerTable />
                     </td>
                     )
                    })}
@@ -270,4 +190,6 @@ const Home = (props) => {
   )
 }
 
-export default Home;
+export default InnerTable;
+
+  
