@@ -6,7 +6,11 @@ const SampleData = () => {
             () =>
                 [
                     {
-                        Summary: [45, 86, 75],
+                        Summary: {
+                            TotalPoints: 45,
+                            LowHubAccuracy: 75,
+                            UpperHubAccuracy: 85
+                        },
                         ScouterInitials: 'MM',
                         TeamNumber: 123,
                         MatchNumber: 12,
@@ -37,7 +41,11 @@ const SampleData = () => {
                         OpinionScale: 0
                     },
                     {
-                        Summary: [45, 86, 75],
+                        Summary: {
+                            TotalPoints: 45,
+                            LowHubAccuracy: 75,
+                            UpperHubAccuracy: 85
+                        },
                         ScouterInitials: 'MP',
                         TeamNumber: 123,
                         MatchNumber: 2,
@@ -68,7 +76,11 @@ const SampleData = () => {
                         OpinionScale: 0
                     },
                     {
-                        Summary: [45, 86, 75],
+                        Summary: {
+                            TotalPoints: 45,
+                            LowHubAccuracy: 75,
+                            UpperHubAccuracy: 85
+                        },
                         ScouterInitials: 'PO',
                         TeamNumber: 65,
                         MatchNumber: 3,
