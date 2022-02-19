@@ -1,16 +1,27 @@
 import React from 'react';
 
-function Dropdown(props){
-    return (
-        <div>
-            <label> {props.title}
-                <select onChange={props.setState}>
-                    <option></option>
-                    {props.choices.map((choice) => <option key={choice} > {choice} </option>)}
-                </select>
-            </label>
-        </div>
-    )
+class Dropdown extends React.Component{
+    constructor(props){
+        super(props);
+        this.dropDownChange = this.dropDownChange.bind(this);
+    }
+
+    dropDownChange(event){
+        this.props.setState(event,this.props.place);
+    }
+
+    render(){
+        return (
+            <div>
+                <label> {this.props.title}
+                    <select onChange={this.dropDownChange}>
+                        <option></option>
+                        {this.props.choices.map((choice) => <option key={choice} > {choice} </option>)}
+                    </select>
+                </label>
+            </div>
+        )
+    }
 }
 
 export default Dropdown;
