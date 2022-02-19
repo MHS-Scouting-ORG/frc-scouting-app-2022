@@ -1,0 +1,14 @@
+{
+  "resourceName": "dynamod4649fcc",
+  "tableName": "dynamod4649fcc",
+  "partitionKey": {
+    "fieldName": "TeamId",
+    "fieldType": "string"
+  },
+  "sortKey": {
+    "fieldName": "MatchId",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
