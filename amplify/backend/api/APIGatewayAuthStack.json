@@ -11,7 +11,7 @@
     "env": {
       "Type": "String"
     },
-    "frcScoutingApi": {
+    "apid003caa1": {
       "Type": "String"
     }
   },
@@ -52,7 +52,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -64,7 +64,7 @@
                           }
                         ]
                       },
-                      "/POST/teams/*"
+                      "/POST/items/*"
                     ]
                   ]
                 },
@@ -82,7 +82,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -94,7 +94,7 @@
                           }
                         ]
                       },
-                      "/POST/teams"
+                      "/POST/items"
                     ]
                   ]
                 },
@@ -112,7 +112,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -124,7 +124,7 @@
                           }
                         ]
                       },
-                      "/GET/teams/*"
+                      "/GET/items/*"
                     ]
                   ]
                 },
@@ -142,7 +142,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -154,7 +154,7 @@
                           }
                         ]
                       },
-                      "/GET/teams"
+                      "/GET/items"
                     ]
                   ]
                 },
@@ -172,7 +172,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -184,7 +184,7 @@
                           }
                         ]
                       },
-                      "/PUT/teams/*"
+                      "/PUT/items/*"
                     ]
                   ]
                 },
@@ -202,7 +202,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -214,7 +214,7 @@
                           }
                         ]
                       },
-                      "/PUT/teams"
+                      "/PUT/items"
                     ]
                   ]
                 },
@@ -232,7 +232,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -244,7 +244,7 @@
                           }
                         ]
                       },
-                      "/PATCH/teams/*"
+                      "/PATCH/items/*"
                     ]
                   ]
                 },
@@ -262,7 +262,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -274,7 +274,7 @@
                           }
                         ]
                       },
-                      "/PATCH/teams"
+                      "/PATCH/items"
                     ]
                   ]
                 },
@@ -292,7 +292,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -304,7 +304,7 @@
                           }
                         ]
                       },
-                      "/DELETE/teams/*"
+                      "/DELETE/items/*"
                     ]
                   ]
                 },
@@ -322,7 +322,7 @@
                       },
                       ":",
                       {
-                        "Ref": "frcScoutingApi"
+                        "Ref": "apid003caa1"
                       },
                       "/",
                       {
@@ -334,7 +334,7 @@
                           }
                         ]
                       },
-                      "/DELETE/teams"
+                      "/DELETE/items"
                     ]
                   ]
                 }
