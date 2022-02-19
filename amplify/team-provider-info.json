@@ -10,6 +10,11 @@
       "StackName": "amplify-frcscoutingapp2022-master-122110",
       "StackId": "arn:aws:cloudformation:us-west-2:187619627858:stack/amplify-frcscoutingapp2022-master-122110/40101c00-91d2-11ec-af0c-023e412ae7f7",
       "AmplifyAppId": "d1rkvaikd0s4ye"
+    },
+    "categories": {
+      "auth": {
+        "frcscoutingapp20220de72d56": {}
+      }
     }
   }
 }
