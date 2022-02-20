@@ -8,7 +8,23 @@ api.get = use_remote ? API.get.bind(API, api_name, endpoint) : async function() 
   return Promise.resolve({})
 }
 
-api.put = use_remote ? API.put.bind(API, api_name, endpoint) : async function() {
+api.put = use_remote ? async function(obj) {
+  const fn = API.put.bind(API, api_name, endpoint)
+  try {
+    const user = await Auth.currentAuthenticatedUser()
+    //console.log(user)
+    if(user) {
+      const email = user.attributes.email
+      obj.body.email = email
+    }
+    console.log(obj)
+  }
+  catch(e) {
+    console.log(e)
+  }
+  console.log(obj)
+  return fn(obj)
+} : async function() {
   return Promise.resolve({})
 }
 
