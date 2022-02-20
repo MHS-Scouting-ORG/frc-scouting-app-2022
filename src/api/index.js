@@ -1,12 +1,18 @@
 import { API, Auth } from 'aws-amplify'
 
 import { SSM, STS } from 'aws-sdk'
-
+import config from '../config.json'
 const use_remote = process.env.REACT_APP_ENABLE_AUTH === '1'
-const api_name = 'apid003caa1'
-const endpoint = '/items'
+const {
+  api_name,
+  api_endpoint: endpoint,
+  aws_region: region,
+  bluealliance_api_endpoint
+} = config
+
+
 const api = {}
-const region = 'us-west-2'
+
 api.get = use_remote ? API.get.bind(API, api_name, endpoint) : async function() {
   return Promise.resolve({})
 }
@@ -42,12 +48,18 @@ api.getYear = use_remote ? async function() {
   return Promise.resolve(2020)
 }
 
+api.getTeamInfo = async function(api_key) {
+  return fetch(`${bluealliance_api_endpoint}/team/frc2443`, { headers : { 'x-tba-auth-key' : api_key }, mode: "cors"})
+    .then(res => res.json())
+}
+
 api.getBlueAllianceAuthKey = use_remote ? async function() {
   const user = await Auth.currentCredentials()
   const ssm = new SSM({credentials: Auth.essentialCredentials(user), region})
   return new Promise((resolve, reject) => {
     ssm.getParameter({
-      Name:"bluealliance_api_key"
+      Name:"bluealliance_api_key",
+      WithDecryption: true
     }, (err, data) => {
       if(err)
         reject(err)
