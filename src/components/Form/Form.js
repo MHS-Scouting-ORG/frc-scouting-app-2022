@@ -4,7 +4,7 @@ import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
 import Initials from "./Initials";
 import Dropdown from "./Dropdown";
-import Scale from "./Scale"
+import Scale from "./Scale";
 
 class Form extends React.Component{
     constructor(props){
@@ -21,6 +21,8 @@ class Form extends React.Component{
         this.setComment = this.setComment.bind(this);
         this.scaleChange = this.scaleChange.bind(this);
         this.submitStates = this.submitStates.bind(this);
+        this.newElement = this.newElement.bind(this);
+        this.onClickCreate = this.onClickCreate.bind(this);
         this.state = {
             statistics: {
                 totalPoints: 0,
@@ -31,7 +33,7 @@ class Form extends React.Component{
             teamNumber:"",
             matchNumber:"",
             dropDownBoxValues:["","","",""],
-            inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
+            inputBoxValues:[0,0,0,0,0,0,0,0,0,0,0],
             rankingPoints:"",
             checkBoxValues:[false,false,false,false,false,false,false,false,false,false,false],
             comment:"",
@@ -153,16 +155,40 @@ class Form extends React.Component{
             }
         })
 
+        console.log(this.state);
         console.log(points, lowAccuracy, highAccuracy);
     }
+    
+    newElement(xPos,yPos){
+        /*let newElement = document.getElementById('myElement');
+        newElement.style.position = "absolute";
+        newElement.style.top = xPos; //or whatever 
+        newElement.style.left = yPos; // or whatever
+
+        return(
+            <div id="myElement"></div>
+        )*/
+        return (
+            <h1>OMG HEY</h1>
+        )
+    }
+
+    onClickCreate(event) {
+        var xPos = event.clientX;
+        var yPos = event.clientY;
+        this.newElement(xPos,yPos);
+    }
+      
 
     render(){
         return(
             <div>
-                <h1>FORM</h1>
-                <Initials changeInitials={this.initialsChange}/>
-                <Input setState={this.changeTeamNumber} place={-1} label={"Team Number: "}></Input>
-                <Input setState={this.changeMatchNumber} place={-1} label={"Match Number: "}></Input>
+                <h1>FORM</h1>{/*}
+                <Initials changeInitials={this.initialsChange}/>{/*
+                <Input setState={this.changeTeamNumber} place={10} states={this.state.inputBoxValues} buttonClick={this.inputButtonClicked} label={"Team Number: "}></Input>
+
+                <Input setState={this.changeMatchNumber} place={10} states={this.state.inputBoxValues} buttonClick={this.inputButtonClicked} label={"Match Number: "}></Input>
+        */}
                 {this.makeDropDownBox("Alliance Color: ",["Blue","Red"],0)}
                 <h3>AUTONOMOUS</h3>
                 {this.makeInputBox("# Low Hub Made: ",0)}
@@ -170,7 +196,7 @@ class Form extends React.Component{
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],1)}
-                <img onClick={this.submitStates} src='./images/TARRRRRMAC.PNG'/>
+                <img onClick={this.onClickCreate} src='./images/TARRRRRMAC.PNG'/>
                 {/* */}
                 <h3>TELE-OP</h3>
                 {this.makeInputBox("# Low Hub Made: ",4)}
@@ -199,6 +225,7 @@ class Form extends React.Component{
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>
                 </div>
+                {document.addEventListener("click",this.onClickCreate)}
             </div>
         )
     }
