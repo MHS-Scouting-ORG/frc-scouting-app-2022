@@ -14,7 +14,9 @@ class Input extends React.Component{
         return (
             <div>
                 <label> {this.props.label}
+                    <button> - </button>
                     <input type='number' min={0} onChange={this.inputChange}></input>
+                    <button> + </button>
                 </label>
             </div>
         );
