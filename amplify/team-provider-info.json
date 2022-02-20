@@ -41,7 +41,7 @@
       "function": {
         "frcscoutingapp2022cf9ff8af": {
           "deploymentBucketName": "amplify-frcscoutingapp2022-dev-133001-deployment",
-          "s3Key": "amplify-builds/frcscoutingapp2022cf9ff8af-78666f46644862444e63-build.zip"
+          "s3Key": "amplify-builds/frcscoutingapp2022cf9ff8af-62586231656a505a4d62-build.zip"
         }
       },
       "auth": {
