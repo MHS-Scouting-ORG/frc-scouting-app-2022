@@ -23,5 +23,30 @@
         }
       }
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frcscoutingapp2022-dev-133001-authRole",
+      "UnauthRoleArn": "arn:aws:iam::187619627858:role/amplify-frcscoutingapp2022-dev-133001-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::187619627858:role/amplify-frcscoutingapp2022-dev-133001-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-frcscoutingapp2022-dev-133001-deployment",
+      "UnauthRoleName": "amplify-frcscoutingapp2022-dev-133001-unauthRole",
+      "StackName": "amplify-frcscoutingapp2022-dev-133001",
+      "StackId": "arn:aws:cloudformation:us-west-2:187619627858:stack/amplify-frcscoutingapp2022-dev-133001/dcf51f80-91db-11ec-a318-0647be69fd5d",
+      "AmplifyAppId": "d1rkvaikd0s4ye",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-frcscoutingapp2022-dev-133001-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "function": {
+        "frcscoutingapp2022cf9ff8af": {
+          "deploymentBucketName": "amplify-frcscoutingapp2022-dev-133001-deployment",
+          "s3Key": "amplify-builds/frcscoutingapp2022cf9ff8af-78666f46644862444e63-build.zip"
+        }
+      },
+      "auth": {
+        "frcscoutingapp20220de72d56": {}
+      }
+    }
   }
 }
