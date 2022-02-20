@@ -1,7 +1,7 @@
 import { API } from 'aws-amplify'
 
 let api = API
-if(process.env.NODE_ENV !== 'production')
+if(process.env.REACT_APP_ENABLE_AUTH !== '1')
   api = {
     get() {
       return Promise.resolve([])
