@@ -39,7 +39,7 @@ function App() {
 }
 
 let exportApp = App
-if(process.env.NODE_ENV === 'production')
+if(process.env.REACT_APP_ENABLE_AUTH === '1')
   exportApp = withAuthenticator(App)
 
 export default exportApp
