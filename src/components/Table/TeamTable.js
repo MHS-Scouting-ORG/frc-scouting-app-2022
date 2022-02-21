@@ -4,24 +4,24 @@ import SampleData from "./Data";
 
 const TeamTable = (props) => {
 
-    const data = SampleData();
+  const data = SampleData();
 
-    const makeColumns = function (a) {
-            return {
-                Header: a,
-                accessor: a,
-            }
+  const makeColumns = function (a) {
+    return {
+      Header: a,
+      accessor: a,
     }
+  }
 
-    let columnValues =  Object.keys(data[0]).slice(3);
+  let columnValues = Object.keys(data[0]).slice(4);
 
-    const columns = React.useMemo(
-        () =>
-            columnValues.map(makeColumns),
-            []
-    )
+  const columns = React.useMemo(
+    () =>
+      columnValues.map(makeColumns),
+    []
+  )
 
-    const tableInstance = useTable({ columns, data }, useSortBy);
+  const tableInstance = useTable({ columns, data }, useSortBy);
 
   const {
     getTableProps,
@@ -31,67 +31,63 @@ const TeamTable = (props) => {
     prepareRow,
   } = tableInstance
 
-
-  
   return (
     <div>
       <table {...getTableProps()} >
-        
-       <thead>
+
+        <thead>
           {
-            headerGroups.map(headerGroup => 
-              (
-                <tr {...headerGroup.getHeaderGroupProps()} >
-                  {
-                    headerGroup.headers.map(column =>
-                      (
-                        <th 
-                          {...column.getHeaderProps(column.getSortByToggleProps())}
-                          style={{
-                            padding: '10px',
-                            textAlign: 'center',
-                          }}
-                        >
-                            {column.render('Header')}
-                        </th>
-                      )
-                    )
-                  }
-                </tr>
-              )
+            headerGroups.map(headerGroup =>
+            (
+              <tr {...headerGroup.getHeaderGroupProps()} >
+                {
+                  headerGroup.headers.map(column =>
+                  (
+                    <th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      style={{
+                        padding: '10px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {column.render('Header')}
+                    </th>
+                  )
+                  )
+                }
+              </tr>
+            )
             )
           }
         </thead>
 
         <tbody {...getTableBodyProps()}>
           {
-            rows.map( row =>
-              {
-                prepareRow(row)
+            rows.map(row => {
+              prepareRow(row)
 
-                return (
-                  <tr {...row.getRowProps()}>
-                    {
-                      row.cells.map(cell =>
-                        {
-                          return (
-                            <td 
-                              {...cell.getCellProps()}
-                              style = {{
-                                padding: '10px',
-                                border: 'solid 1px black',
-                                textAlign: 'center',
-                              }}
-                            >
-                              {cell.render('Cell')}
-                            </td>
-                          )
-                        }
+              return (
+                <tr {...row.getRowProps()}>
+                  {
+                    row.cells.map(cell => {
+                      return (
+                        <td
+                          {...cell.getCellProps()}
+                          style={{
+                            padding: '10px',
+                            border: 'solid 1px black',
+                            textAlign: 'center',
+                          }}
+                        >
+                          {cell.render('Cell')}
+                        </td>
                       )
                     }
-                  </tr>
-                )
-              }
+                    )
+                  }
+                </tr>
+              )
+            }
             )
           }
         </tbody>

@@ -24,7 +24,6 @@ const Home = (props) => {
       <SummaryTable />
       <br/>
       <br/>
-      <TeamTable />
     </div>
   )
 }
