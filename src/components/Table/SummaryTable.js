@@ -51,27 +51,6 @@ const SummaryTable = (props) => {
                     ),
             },
             {
-                id: 'expander',
-                Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
-                    <span {...getToggleAllRowsExpandedProps()}>
-                        {isAllRowsExpanded? '':''}
-                    </span>
-                ),
-                Cell: ({ row }) =>
-                row.canExpand ? (
-                    <span
-                    {...row.getToggleAllRowsExpandedProps({
-                        style: {
-                            paddingleft: `${row.depth * 2}rem`,
-                        }
-
-                    })}
-                    >
-                        {row.isExpanded ? '':''}
-                    </span>
-                ) : null,
-            },
-            {
                 Header: 'Team #',
                 accessor: 'TeamNumber'
             },  
