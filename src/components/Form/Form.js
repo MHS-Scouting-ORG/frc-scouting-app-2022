@@ -41,8 +41,16 @@ class Form extends React.Component{
             checkBoxValues:[false,false,false,false,false,false,false,false,false,false,false],
             comment:"",
             scale:0,
+            radical: 0
         };
     }
+
+    /*
+    fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/matches', {mode: 'cors', headers:{'X-TBA-Auth-Key': 'TKWj89sH9nu6hwIza0zK91UQBRUaW5ETVJrZ7KhHOolwmuKxKqD3UkQMAoqHahsn'}})
+        .then(response => response.json())
+        .catch(err => console.log(err))
+        .then(data => console.log(data)) */
+        
 
     initialsChange(event){
         this.setState({scouterInitials:event.target.value.toUpperCase()});
@@ -93,6 +101,14 @@ class Form extends React.Component{
 
     changeMatchNumber(event,fill){
         this.setState({matchNumber:event.target.value});
+    } 
+
+    incrementNumber(){
+        this.setState({radical: this.inputBoxValues + 1})
+    }
+
+    decreaseNumber(){
+        this.setState({radical: this.inputBoxValues - 1})
     }
 
     dropDownChanged(event,i){
@@ -108,6 +124,8 @@ class Form extends React.Component{
                     choices={options}
                     place={i}
                     setState={this.dropDownChanged}
+                    button={this.incrementNumber}
+                    button={this.decreaseNumber}
                 />
             </div>
         )
