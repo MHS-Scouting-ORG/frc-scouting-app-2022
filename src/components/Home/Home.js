@@ -22,8 +22,6 @@ const Home = (props) => {
   return (
     <div>
       <SummaryTable />
-      <br/>
-      <br/>
     </div>
   )
 }
