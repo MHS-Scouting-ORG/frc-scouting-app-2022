@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import { useTable, useSortBy, useExpanded } from "react-table";
 import SampleData from "./Data";
 import TeamTable from "./TeamTable";
@@ -22,14 +22,16 @@ const SummaryTable = (props) => {
 
         return finList;*/
 
-        fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
+        return fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
             .catch(err => console.log(err))
-            .then(data => console.log(data));
+            .then(data => data.map(team => team.team_number));
 
     }
 
+
     const teams = getTeams();
+    console.log(teams);
 
 
     const getTeamInfo = (cell) => { // get objects of certain team number
@@ -67,16 +69,16 @@ const SummaryTable = (props) => {
                 accessor: 'averageLowHub',
             },
             {
-                Header: 'Average High Hub',
-                accessor: 'averageHighHub',
+                Header: 'Average Upper Hub',
+                accessor: 'averageUpperHub',
             },
             {
                 Header: 'Average Low Hub Accuracy',
                 accessor: 'averageLowAccuracy',
             },
             {
-                Header: 'Average High Hub Accuracy',
-                accessor: 'averageHighAccuracy',
+                Header: 'Average Upper Hub Accuracy',
+                accessor: 'averageUpperAccuracy',
             },
             {
                 Header: 'Average Hangar Points',
@@ -143,6 +145,7 @@ const SummaryTable = (props) => {
                             prepareRow(row)
 
                             return ( <React.Fragment {...row.getRowProps()} >
+                                
                                 <tr>
                                     {
                                         row.cells.map(cell => {
@@ -171,6 +174,8 @@ const SummaryTable = (props) => {
                                         </td>
                                     </tr>
                                 ) : null}
+
+                                
                                 </React.Fragment>
                             )
                         }
