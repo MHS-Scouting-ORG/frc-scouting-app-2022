@@ -5,27 +5,43 @@ import Textbox from "./Textbox";
 import Initials from "./Initials";
 import Dropdown from "./Dropdown";
 import Scale from "./Scale";
+import MatchDropdown from "./MatchDropdown";
 
 class Form extends React.Component{
     constructor(props){
         super(props);
-        this.initialsChange = this.initialsChange.bind(this);
-        this.changeTeamNumber = this.changeTeamNumber.bind(this);
-        this.getMatchTeams = this.getMatchTeams.bind(this);
-        this.changeMatchNumber = this.changeMatchNumber.bind(this);
+        //this.initialsChange = this.initialsChange.bind(this);
+
+        //this.changeTeamNumber = this.changeTeamNumber.bind(this);
+        this.getMatches = this.getMatches.bind(this);
+        this.makeMatchDropdown = this.makeMatchDropdown.bind(this);
+        //this.changeMatchNumber = this.changeMatchNumber.bind(this);
+
         this.dropDownChanged = this.dropDownChanged.bind(this);
         this.makeDropDownBox = this.makeDropDownBox.bind(this);
+
         this.inputBoxChanged = this.inputBoxChanged.bind(this);
         this.buttonMinus = this.buttonMinus.bind(this);
         this.buttonPlus = this.buttonPlus.bind(this);
         this.makeInputBox = this.makeInputBox.bind(this);
-        this.checkBoxClicked = this.checkBoxClicked.bind(this);
-        this.makeCheckBox = this.makeCheckBox.bind(this);
+
+        this.newElement = this.newElement.bind(this);
+        this.onClickCreate = this.onClickCreate.bind(this);
+
+        /*this.checkBoxClicked = this.checkBoxClicked.bind(this);
+        this.makeCheckBox = this.makeCheckBox.bind(this);*/
+
+        this.penaltyBoxClicked = this.penaltyBoxClicked.bind(this);
+        this.makePenaltyBox = this.makePenaltyBox.bind(this);
+        this.bonusBoxClicked = this.penaltyBoxClicked.bind(this);
+        this.makeBonusBox = this.makePenaltyBox.bind(this);
+        this.strategyyBoxClicked = this.penaltyBoxClicked.bind(this);
+        this.makeStrategyyBox = this.makePenaltyBox.bind(this);
+
         this.setComment = this.setComment.bind(this);
         this.scaleChange = this.scaleChange.bind(this);
         this.submitStates = this.submitStates.bind(this);
-        this.newElement = this.newElement.bind(this);
-        this.onClickCreate = this.onClickCreate.bind(this);
+
         this.state = {
             statistics: {
                 totalPoints: 0,
@@ -33,35 +49,69 @@ class Form extends React.Component{
                 highHubAccuracy: 0
             },
             scouterInitials:"",
-            teamNumber:"",
             matchNumber:"",
+            teamNumber:"",
             dropDownBoxValues:["","","",""],
+            autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0,0],
-            rankingPoints:"",
             checkBoxValues:[false,false,false,false,false,false,false,false,false,false,false],
+            penaltyValues:[false,false,false,false],
+            bonusValues:[false,false],
+            strategyValues:[false,false,false,false,false],
+            rankingPoints:"",
+            strategy:'',
             comment:"",
             scale:0,
-            radical: 0
         };
     }
+    
+    /* {
+            Summary: {
+                TotalPoints: 45,
+                LowHubAccuracy: 75,
+                UpperHubAccuracy: 85
+            },
 
-    /*
-    fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/matches', {mode: 'cors', headers:{'X-TBA-Auth-Key': 'TKWj89sH9nu6hwIza0zK91UQBRUaW5ETVJrZ7KhHOolwmuKxKqD3UkQMAoqHahsn'}})
-        .then(response => response.json())
-        .catch(err => console.log(err))
-        .then(data => console.log(data)) */
-        
+            MatchNumber: 123,
+            TeamNumber: 12,
 
-    initialsChange(event){
+            AutoLowMade: 4,
+            AutoLowMissed: 5,
+            AutoUpperMade: 6,
+            AutoUpperMissed: 7,
+
+            Taxi: false,
+            AutoPlacement: [x,y],
+
+            TeleLowMade: 8,
+            TeleLowMissed: 9,
+            TeleUpperMade: 10,
+            TeleUpperMissed: 11,
+
+            Hangar: 15,
+
+            NumberOfFouls: 0,
+            NumberOfTech: 0,
+            Penalties: [yellow, red, disabled, disqualified] // booleans, you can use an array
+
+            HangarBonus: false,
+            CargoBonus: false,
+            NumberOfRankingPoints: 0,
+
+            Strategy: [low shooter, high shooter, launchpad use, hangar, defense], // booleans, you can us an array
+
+            Comments: '',
+            OpinionScale: 0
+        }
+    
+    */
+
+    /*initialsChange(event){
         this.setState({scouterInitials:event.target.value.toUpperCase()});
-    }
+    }*/
 
-    changeTeamNumber(event,fill){
-        this.setState({teamNumber:event.target.value});
-    }
-
-    getMatchTeams(url = '', data = {}){
-        const teams = () => {
+    getMatches(url = '', data = {}){
+        const matches = () => {
             fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
                 mode: 'cors',
                 headers:{
@@ -72,44 +122,32 @@ class Form extends React.Component{
             .then(data => console.log(data))
             .catch(err => console.log(err))
         }
-        teams();
+        matches();
     }
 
 
-            /*return ()
-        console.log(teams.json());
-        return teams.json();
 
-            /* Example POST method implementation:
-            async function postData(url = '', data = {}) {
-            // Default options are marked with *
-            const response = await fetch(url, {
-                method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
-                headers: {
-                'Content-Type': 'application/json'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                redirect: 'follow', // manual, *follow, error
-                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                body: JSON.stringify(data) // body data type must match "Content-Type" header
-            });
-            return response.json(); // parses JSON response into native JavaScript objects
-            }*/
+
+
+
+    
+    makeMatchDropdown(){
+        return (
+            <div>
+                <MatchDropdown
+                    fetchMatches={this.getMatches}
+                />
+            </div>
+        )
+    }
+
+
+
+
 
     changeMatchNumber(event,fill){
         this.setState({matchNumber:event.target.value});
     } 
-
-    incrementNumber(){
-        this.setState({radical: this.inputBoxValues + 1})
-    }
-
-    decreaseNumber(){
-        this.setState({radical: this.inputBoxValues - 1})
-    }
 
     dropDownChanged(event,i){
         let dropDownStates = this.state.dropDownBoxValues;
@@ -124,8 +162,6 @@ class Form extends React.Component{
                     choices={options}
                     place={i}
                     setState={this.dropDownChanged}
-                    button={this.incrementNumber}
-                    button={this.decreaseNumber}
                 />
             </div>
         )
@@ -162,6 +198,23 @@ class Form extends React.Component{
         )
     }
 
+    newElement(xPos,yPos){
+        /**insert good code here */
+        let position = [xPos,yPos]
+        return (
+            console.log(position)
+        )
+    }
+
+    onClickCreate(event) {
+        let xPos = event.clientX;
+        let yPos = event.clientY;
+        let totalPosition = this.state.autoPosition;
+        totalPosition[0] = xPos;
+        totalPosition[1] = yPos;
+        this.newElement(xPos,yPos);
+    }
+/*
     checkBoxClicked(i){
         let boxChecked = this.state.checkBoxValues;
         boxChecked[i] = !boxChecked[i];
@@ -174,7 +227,58 @@ class Form extends React.Component{
                     label={title}
                     changeState={this.checkBoxClicked}
                     place={i}
+                />
+            </div>
+        )
+    }
+*/
 
+    penaltyBoxClicked(i){
+        let penaltyStates = this.state.penaltyValues;
+        penaltyStates[i] = !penaltyStates[i];
+    }
+
+    makePenaltyBox(name,i){
+        return (
+            <div>
+                <Checkbox
+                    title={name}
+                    changeState={this.penaltyBoxClicked}
+                    place={i}
+                />
+            </div>
+        )
+    }
+    
+    bonusBoxClicked(i){
+        let bonusStates = this.state.bonusValues;
+        bonusStates[i] = !bonusStates[i];
+    }
+
+    makeBonusBox(name,i){
+        return (
+            <div>
+                <Checkbox
+                    title={name}
+                    changeState={this.bonusBoxClicked}
+                    place={i}
+                />
+            </div>
+        )
+    }
+    
+    strategyBoxClicked(i){
+        let strategyStates = this.state.strategyValues;
+        strategyStates[i] = !strategyStates[i];
+    }
+
+    makeStrategyBox(name,i){
+        return (
+            <div>
+                <Checkbox
+                    title={name}
+                    changeState={this.strategyBoxClicked}
+                    place={i}
                 />
             </div>
         )
@@ -233,20 +337,6 @@ class Form extends React.Component{
         console.log(this.state);
         console.log(points, lowAccuracy, highAccuracy);
     }
-
-    newElement(xPos,yPos){
-        /**insert good code here */
-        let position = [xPos,yPos]
-        return (
-            console.log(position)
-        )
-    }
-
-    onClickCreate(event) {
-        var xPos = event.clientX;
-        var yPos = event.clientY;
-        this.newElement(xPos,yPos);
-    }
       
 
     render(){
@@ -255,7 +345,12 @@ class Form extends React.Component{
                 <h1>FORM</h1>
                 <Initials changeInitials={this.initialsChange}/>
                 <Input setState={this.changeMatchNumber} label={"Match Number: "}></Input>
-                <button onClick={this.getMatchTeams}>MATCH TEAMS</button>
+                <br></br>
+                <br></br>
+                {this.makeMatchDropdown()}
+                <button onClick={this.getMatches}>MATCH TEAMS</button>
+                <br></br>
+                <br></br>
                 <Input setState={this.changeTeamNumber} label={"Team Number: "}></Input>
                 {this.makeDropDownBox("Alliance Color: ",["Blue","Red"],0)}
                 <h3>AUTONOMOUS</h3>
@@ -274,21 +369,21 @@ class Form extends React.Component{
                 {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)}
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
-                {this.makeCheckBox("Yellow card: ",0)}
-                {this.makeCheckBox("Red card: ", 1)}
-                {this.makeCheckBox("Disabled: ", 2)}
-                {this.makeCheckBox("Disqualifed: ", 3)}
-                {this.makeCheckBox("Hangar Bonus: ", 4)}
-                {this.makeCheckBox("Cargo Bonus: ", 5)}
+                {this.makePenaltyBox("Yellow card: ",0)}
+                {this.makePenaltyBox("Red card: ", 1)}
+                {this.makePenaltyBox("Disabled: ", 2)}
+                {this.makePenaltyBox("Disqualifed: ", 3)}
+                {this.makeBonusBox("Hangar Bonus: ", 4)}
+                {this.makeBonusBox("Cargo Bonus: ", 5)}
                 {this.makeDropDownBox("Ranking Points: ",[0,1,2,3,4],3)}
                 <h3>PRIORITIES & STRATEGIES</h3>
-                {this.makeCheckBox("Low Hub Shooter: ", 6)}
-                {this.makeCheckBox("Upper Hub Shooter: ", 7)}
-                {this.makeCheckBox("Launchpad Shooter: ", 8)}
-                {this.makeCheckBox("Hangar: ", 9)}
-                {this.makeCheckBox("Defense: ", 10)}
+                {this.makeStrategyBox("Low Hub Shooter: ", 6)}
+                {this.makeStrategyBox("Upper Hub Shooter: ", 7)}
+                {this.makeStrategyBox("Launchpad Shooter: ", 8)}
+                {this.makeStrategyBox("Hangar: ", 9)}
+                {this.makeStrategyBox("Defense: ", 10)}
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
-                <p> Scale of 1-10, rate partnership (how well you do think our alliances' can work together) </p>
+                <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>
@@ -299,3 +394,4 @@ class Form extends React.Component{
 }
 
 export default Form;
+
