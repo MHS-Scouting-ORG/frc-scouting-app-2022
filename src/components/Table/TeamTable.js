@@ -13,7 +13,8 @@ const TeamTable = (props) => {
     }
   }
 
-  let columnValues = Object.keys(data[0]).slice(4);
+  let keys = Object.keys(data[0]);
+  let columnValues = Object.keys(data[0]).slice(2);
 
   const columns = React.useMemo(
     () =>

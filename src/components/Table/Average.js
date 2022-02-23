@@ -1,6 +1,26 @@
+import { loadingBar } from "aws-amplify";
+import SampleData from "./Data";
 import React from "react";
 
-const Averages = (info) => {
+const Average = (teamNumber) => {
+
+    const data = SampleData();
+
+    // get objects of certain team number
+    let info = () => data.filter((x) => x.TeamNumber === teamNumber)
+    console.log(info);
+
+    /*const teamObject = {
+        TeamNumber: 0,
+        Strategy: '',
+        AveragePoints: 0,
+        AverageLowHubShots: 0,
+        AverageLowHubAccuracy: 0,
+        AverageUpperHubShots: 0,
+        AverageUpperHubAccuracy: 0,
+        AverageHangar: 0,
+    }
+    */
 
     const points = () => {
         let getPoints = info.map((o) => o.Summary.TotalPoints); //array of points from team info
@@ -16,8 +36,13 @@ const Averages = (info) => {
     }
 
     const strategy = () => {
-        let stragies = info.map((o) => o.Strategy);
-        let lengths = info.map() //low hub shooter(6), upper hub shooter(7), launchpad(8), hangar(9), defense (10)
+        let list = [];
+        let strategies = info.map((o) => {
+            for(let i=0; i<info.length; i++){
+                
+            }
+        });
+        //low hub shooter(6), upper hub shooter(7), launchpad(8), hangar(9), defense (10)
     }
 
     const lowHubAccuracy = () => {
@@ -26,7 +51,7 @@ const Averages = (info) => {
 
         for(let i=0; i<lowAccuracies.length; i++){
             sum += lowAccuracies[i];
-        }
+        } 
 
         let average = sum / info.length;
         return average;
@@ -40,7 +65,7 @@ const Averages = (info) => {
             totalLowMade += shotsMade[i];
         }
 
-        let average = totalAccuracy / info.length;
+        let average = totalLowMade / info.length;
         return average;
     }
 
@@ -96,18 +121,31 @@ const Averages = (info) => {
     }
 
 
+    /*let teamAverage = Object.create(teamObject);
+    teamAverage.TeamNumber = teamNumber;
+    teamAverage.Strategy = strategy();
+    teamAverage.AveragePoints = points();
+    teamAverage.AverageLowHubShots = lowHubShots();
+    teamAverage.AverageLowHubAccuracy = lowHubAccuracy();
+    teamAverage.AverageUpperHubShots = upperHubShots();
+    teamAverage.AverageUpperHubAccuracy = upperHubAccuracies();
+    teamAverage.AverageHangar = hangar();
+    */
+
     return ({
-        TeamNumber: points(),
-        Priority: '',
-        AveragePoints: 0,
-        AverageLowHubShots: 0,
-        AverageLowHubAccuracy: 0,
-        AverageHighHubShots: 0,
-        AverageHighHubAccuracy: 0,
-        AverageHangar: 0,
+        TeamNumber: teamNumber,
+        Strategy: strategy(),
+        AveragePoints: points(),
+        AverageLowHubShots: lowHubShots(),
+        AverageLowHubAccuracy: lowHubAccuracy(),
+        AverageUpperHubShots: upperHubShots(),
+        AverageUpperHubAccuracy: upperHubAccuracies(),
+        AverageHangar: hangar(),
     });
+
+   
 
 }
 
 
-export default Averages;
+export default Average;
