@@ -5,7 +5,6 @@ import { useTable, useSortBy } from 'react-table'
 import TeamTable from '../Table/TeamTable'
 import SummaryTable from '../Table/SummaryTable'
 import ReactTable from 'react-table'
-import Testing from '../Table/Testing'
 
 const Home = (props) => {
 
