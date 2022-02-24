@@ -1,15 +1,15 @@
 import React from 'react'
 import { useTable, useSortBy, useExpanded } from "react-table";
 import SampleData from "./Data";
-import Average from './Average';
+import Averages from './Average';
 import TeamTable from "./TeamTable";
 
 const SummaryTable = (props) => {
 
-    //const data = SampleData();
+    const data = SampleData();
 
     const getTeams = () => {
-        /*let list = data.map( (o) => {
+        let list = data.map( (o) => {
                 return o.TeamNumber;
         });
 
@@ -21,9 +21,9 @@ const SummaryTable = (props) => {
             }
         });
 
-        return finList;*/
+        return finList;
 
-        let list = [];
+        /*let list = [];
 
         fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
@@ -34,17 +34,17 @@ const SummaryTable = (props) => {
             })
             .catch(err => console.log(err));
         return list;
+        */
     }
 
-
-    const teams = getTeams();
-
-    const data = (teams.map((team) => {
-        return Average(team);
-    }))
-    console.log(data)
+    /*const teams = getTeams();
+    console.log(teams)
 
 
+    const data = teams.forEach(team => 
+        Averages(team)
+    );
+    */
 
     const getTeamInfo = (cell) => { // get objects of certain team number
         let info = data.filter((x) => x.TeamNumber === cell.value)
@@ -57,6 +57,7 @@ const SummaryTable = (props) => {
         () => [
             { id:'exp',
                 Header: () => null,
+                accessor: 'TeamNumber',
                 Cell: ({row}) => 
                    (
                         <span {...row.getToggleRowExpandedProps()}>
@@ -103,7 +104,7 @@ const SummaryTable = (props) => {
     const renderRowSubComponent = React.useCallback(
         ({ row }) => (
           <pre>
-            <code>{<TeamTable/>}</code>
+            <div>{<TeamTable/>}</div>
           </pre>
         ),
         []
@@ -156,14 +157,16 @@ const SummaryTable = (props) => {
                         rows.map(row => {
                             prepareRow(row)
 
-                            return ( <React.Fragment {...row.getRowProps()} >
+                            return ( <React.Fragment  >
                                 
-                                <tr>
+                                <tr {...row.getRowProps()}>
                                     {
                                         row.cells.map(cell => {
                                             return (
                                                 <td
-                                                    onClick = {() => getTeamInfo(cell)}
+                                                    onClick = {() => {
+                                                        getTeamInfo(cell)
+                                                    }}
                                                     {...cell.getCellProps()}
                                                     style={{
                                                         padding: '10px',

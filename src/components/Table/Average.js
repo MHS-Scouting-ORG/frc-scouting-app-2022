@@ -2,7 +2,7 @@ import { loadingBar } from "aws-amplify";
 import SampleData from "./Data";
 import React from "react";
 
-const Average = (teamNumber) => {
+const Averages = (teamNumber) => {
 
     const data = SampleData();
 
@@ -37,9 +37,23 @@ const Average = (teamNumber) => {
 
     const strategy = () => {
         let list = [];
-        let strategies = info.map((o) => {
-            for(let i=0; i<info.length; i++){
-                
+
+        let strategies = info.forEach(element => {
+            let array = element.Strategy;
+            if(array[0]===true && !list.includes(array[0])){
+                list.push("Low Hub Shooter")
+            }
+            if(array[1]===true && !list.includes(array[1])){
+                list.push("Upper Hub Shooter")
+            }
+            if(array[2]===true && !list.includes(array[2])){
+                list.push("Launchpad User")
+            }
+            if(array[3]===true && !list.includes(array[3])){
+                list.push("Hangar")
+            }
+            if(array[4]===true && !list.includes(array[4])){
+                list.push("Defense")
             }
         });
         //low hub shooter(6), upper hub shooter(7), launchpad(8), hangar(9), defense (10)
@@ -148,4 +162,4 @@ const Average = (teamNumber) => {
 }
 
 
-export default Average;
+export default Averages;

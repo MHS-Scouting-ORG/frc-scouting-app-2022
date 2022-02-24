@@ -2,9 +2,10 @@ import React from "react";
 import { useTable, useSortBy } from "react-table";
 import SampleData from "./Data";
 
-const TeamTable = (props) => {
+const TeamTable = (team) => {
 
   const data = SampleData();
+
 
   const makeColumns = function (a) {
     return {
