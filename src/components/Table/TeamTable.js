@@ -6,7 +6,6 @@ const TeamTable = (tData) => {
 
   const data = SampleData();
 
-
   const makeColumns = function (a) {
     return {
       Header: a,
