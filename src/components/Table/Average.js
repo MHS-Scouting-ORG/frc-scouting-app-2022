@@ -16,19 +16,21 @@ const Averages = (info) => {
     }
 
     const strategy = () => {
-        let strat = info.map((o) => o.Strategy);
+        let getstrat = info.map((o) => o.Strategy);
+        let strat = '';
+
 
     }
 
     const averageLowAccuracy = () => {
         let getLowAcc = info.map((o) => o.Summary.LowHubAccuracy);
-        let LowHubAccuracy = 0;
+        let lowHubAccuracy = 0;
 
         for(let i=0; i<getLowAcc.length; i++){
-            LowHubAccuracy += getLowAcc[i];
+            lowHubAccuracy += getLowAcc[i];
         }
 
-        let average = LowhubAccuracy / info.length;
+        let average = lowhubAccuracy / info.length;
         
         return average;
     }
@@ -48,13 +50,13 @@ const Averages = (info) => {
 
     const highHubAccuracy = () => {
         let getUpperAcc = info.map((o) => o.Summary.UpperHubAccuracy);
-        let UpperHubAccuracy = 0;
+        let upperHubAccuracy = 0;
 
         for(let i=0; i<getUpperAcc.length; i++){
-            UpperHubAccuracy += getUpperAcc[i];
+            upperHubAccuracy += getUpperAcc[i];
         }
 
-        let average = UpperHubAccuracy / info.length;
+        let average = upperHubAccuracy / info.length;
         
         return average;
     }
@@ -106,12 +108,12 @@ const Averages = (info) => {
 
     return({
         TeamNumber: 0,
-        Priority: "",
+        Strategy: "",
         AveragePoints: 0,
         AverageLowHubShots: 0,
         AverageLowAccuracy: 0,
-        AverageHighHubShots: 0,
-        AverageHighAccuracy: 0,
+        AverageUpperHubShots: 0,
+        AverageUpperAccuracy: 0,
         AverageHangar: 0,
     });
 }
