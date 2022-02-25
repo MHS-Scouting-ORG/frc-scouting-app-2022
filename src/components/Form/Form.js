@@ -13,8 +13,13 @@ class Form extends React.Component{
         //this.initialsChange = this.initialsChange.bind(this);
 
         //this.changeTeamNumber = this.changeTeamNumber.bind(this);
-        this.getMatches = this.getMatches.bind(this);
+        this.changeMatchType = this.changeMatchType.bind(this);
+        this.changeTypeNumber = this.changeTypeNumber.bind(this);
+        this.changeMatchNumber = this.changeMatchNumber.bind(this);
         this.makeMatchDropdown = this.makeMatchDropdown.bind(this);
+
+        this.getMatchTeams = this.getMatchTeams.bind(this);
+        this.makeTeamDropdown = this.makeTeamDropdown.bind(this);
         //this.changeMatchNumber = this.changeMatchNumber.bind(this);
 
         this.dropDownChanged = this.dropDownChanged.bind(this);
@@ -49,8 +54,10 @@ class Form extends React.Component{
                 highHubAccuracy: 0
             },
             scouterInitials:"",
+            matchType:"",
+            number:"",
             matchNumber:"",
-            teamNumber:"",
+            teams:"",
             dropDownBoxValues:["","","",""],
             autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0,0],
@@ -110,8 +117,33 @@ class Form extends React.Component{
         this.setState({scouterInitials:event.target.value.toUpperCase()});
     }*/
 
-    getMatches(url = '', data = {}){
-        const matches = () => {
+    changeMatchType(event){
+        this.setState({matchType:event});
+    }
+    
+    changeTypeNumber(event){
+        this.setState({number:(event.target.value)});
+    }
+    
+    changeMatchNumber(event){
+        this.setState({matchNumber:event.target.value});
+    }
+
+    makeMatchDropdown(){
+        return (
+            <div>
+                <MatchDropdown
+                    setMatchType={this.changeMatchType}
+                    setTypeNumber={this.changeTypeNumber}
+                    setMatchNumber={this.changeMatchNumber}
+                />
+            </div>
+        )
+    }
+
+    getMatchTeams(match){
+        let matchKey = this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+        const matches = (match) => {
             fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
                 mode: 'cors',
                 headers:{
@@ -119,24 +151,27 @@ class Form extends React.Component{
                 }
             })
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {
+                data.map((matches) => {
+                    if(matches.key === matchKey){
+                        this.setState({teams:data[matches].alliances.blue.team_keys.concat(data[matches].alliances.red.team_keys)});
+                        console.log(data[matches].alliances.blue.team_keys.concat(data[matches].alliances.red.team_keys));
+                    }
+                })
+            })
             .catch(err => console.log(err))
         }
+        console.log(matchKey);
         matches();
     }
 
-
-
-
-
-
-    
-    makeMatchDropdown(){
+    makeTeamDropdown(){
+        let alliances = [1,2,3] /*///this.getMatchTeams(1); //this.getMatchTeams();*/
         return (
             <div>
-                <MatchDropdown
-                    fetchMatches={this.getMatches}
-                />
+                <select>
+                    {alliances.map((alliance) => <option key={alliance}> {alliance} </option>)}
+                </select>
             </div>
         )
     }
@@ -242,7 +277,7 @@ class Form extends React.Component{
         return (
             <div>
                 <Checkbox
-                    title={name}
+                    label={name}
                     changeState={this.penaltyBoxClicked}
                     place={i}
                 />
@@ -259,7 +294,7 @@ class Form extends React.Component{
         return (
             <div>
                 <Checkbox
-                    title={name}
+                    label={name}
                     changeState={this.bonusBoxClicked}
                     place={i}
                 />
@@ -276,7 +311,7 @@ class Form extends React.Component{
         return (
             <div>
                 <Checkbox
-                    title={name}
+                    label={name}
                     changeState={this.strategyBoxClicked}
                     place={i}
                 />
@@ -348,7 +383,8 @@ class Form extends React.Component{
                 <br></br>
                 <br></br>
                 {this.makeMatchDropdown()}
-                <button onClick={this.getMatches}>MATCH TEAMS</button>
+                {this.makeTeamDropdown()}
+                <button onClick={this.getMatchTeams}>MATCH TEAMS</button>
                 <br></br>
                 <br></br>
                 <Input setState={this.changeTeamNumber} label={"Team Number: "}></Input>

@@ -1,34 +1,25 @@
+import { input } from 'aws-amplify';
 import React from 'react';
 
 class MatchDropdown extends React.Component{
     constructor(props){
         super(props);
-        this.inputWhichFinal = this.inputWhichFinal.bind(this);
+        this.changeMatchType = this.changeMatchType.bind(this);   
     }
 
-    inputWhichFinal(){
-        if(true){
-
-        }
-    }
-
-    changeTeamNumber(event,number){
+    changeMatchType(event){
         let matchType = event.target.value;
-        if(matchType === "Qualification Match "){
-            this.setState({matcheNumber:"qm"});
-            return 'qm';
+        if(matchType === "Qualification"){
+            this.props.setMatchType('qm');
         } 
-        else if(matchType === "Quarterfinals Match "){
-            this.setState({matcheNumber:"qf"});
-            return 'qf' + number;
+        else if(matchType === "Quarterfinal"){
+            this.props.setMatchType('qf');
         }
-        else if(matchType === "Semifinals Match "){
-            this.setState({matcheNumber:"sf"});
-            return 'sf' + number;
+        else if(matchType === "Semifinal"){
+            this.props.setMatchType('sf');
         }
-        else if(matchType === "Finals Match "){
-            this.setState({matcheNumber:"f"});
-            return 'f' + number;
+        else if(matchType === "Finals"){
+            this.props.setMatchType('f');
         }
     }
 
@@ -36,16 +27,16 @@ class MatchDropdown extends React.Component{
         return (
             <div>
                 <label>
-                    <select onChange={this.props.teamNumberPicked}>
+                    <select onChange={this.changeMatchType}>
                         <option></option>
                         <option> Qualification </option>
                         <option> Quarterfinal </option>
                         <option> Semifinal </option>
                         <option> Finals </option>
-                    </select>
-                    <input></input>
+                    </select> {"  "}
+                    <input onChange={this.props.setTypeNumber}></input>
                     {" "} Match: {" "}
-                    <input></input>
+                    <input onChange={this.props.setMatchNumber}></input>
                 </label>
                 
                 {/*
