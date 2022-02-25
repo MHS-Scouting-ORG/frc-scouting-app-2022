@@ -4,6 +4,7 @@ import { a, API } from 'aws-amplify'
 import { useTable, useSortBy } from 'react-table'
 import TeamTable from '../Table/TeamTable'
 import SummaryTable from '../Table/SummaryTable'
+import ReactTable from 'react-table'
 
 const Home = (props) => {
 
@@ -18,6 +19,8 @@ const Home = (props) => {
         setTeams(data)
       })
   }, [update])
+
+  
   
   return (
     <div>
