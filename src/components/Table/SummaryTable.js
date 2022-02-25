@@ -172,7 +172,8 @@ const SummaryTable = (props) => {
                                                         padding: '10px',
                                                         border: 'solid 1px black',
                                                         textAlign: 'center',
-                                                    }}>
+                                                    }}
+                                                >
                                                     {cell.render('Cell')}
 
                                                 </td>

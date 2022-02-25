@@ -2,7 +2,7 @@ import React from "react";
 import { useTable, useSortBy } from "react-table";
 import SampleData from "./Data";
 
-const TeamTable = (team) => {
+const TeamTable = (tData) => {
 
   const data = SampleData();
 

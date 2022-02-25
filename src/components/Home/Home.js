@@ -4,7 +4,7 @@ import { a, API } from 'aws-amplify'
 import { useTable, useSortBy } from 'react-table'
 import TeamTable from '../Table/TeamTable'
 import SummaryTable from '../Table/SummaryTable'
-import ReactTable from 'react-table'
+import TestTable from '../Table/Test'
 
 const Home = (props) => {
 
@@ -25,6 +25,7 @@ const Home = (props) => {
   return (
     <div>
       <SummaryTable />
+      <TestTable/>
     </div>
   )
 }
