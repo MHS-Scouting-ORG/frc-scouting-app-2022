@@ -110,6 +110,7 @@ class Form extends React.Component{
         this.setState({scouterInitials:event.target.value.toUpperCase()});
     }*/
 
+    /*
     getMatches(url = '', data = {}){
         const matches = () => {
             fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
@@ -123,7 +124,7 @@ class Form extends React.Component{
             .catch(err => console.log(err))
         }
         matches();
-    }
+    }*/
 
 
 

@@ -3,32 +3,46 @@ import React from 'react';
 class MatchDropdown extends React.Component{
     constructor(props){
         super(props);
-        this.inputWhichFinal = this.inputWhichFinal.bind(this);
-    }
-
-    inputWhichFinal(){
-        if(true){
-
+        this.state = {
+            match=[]
         }
+        this.changeTeamNumber = this.changeTeamNumber.bind(this)
+
     }
 
-    changeTeamNumber(event,number){
+    getMatches(url = '', data = {}){
+        const matches = () => {
+            fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
+                mode: 'cors',
+                headers:{
+                    'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
+                }
+            })
+            .then(response => response.json())
+            .then(data => console.log(data),
+            this.setState({match: data.results[0]}))
+            .catch(err => console.log(err))
+        }
+        matches();
+    }
+
+    changeTeamNumber(event,){
         let matchType = event.target.value;
         if(matchType === "Qualification Match "){
             this.setState({matcheNumber:"qm"});
-            return 'qm';
+            return this.state.match.comp_level.qm;
         } 
         else if(matchType === "Quarterfinals Match "){
             this.setState({matcheNumber:"qf"});
-            return 'qf' + number;
+            return this.state.match.comp_level.qf;
         }
         else if(matchType === "Semifinals Match "){
             this.setState({matcheNumber:"sf"});
-            return 'sf' + number;
+            return this.state.match.comp_level.sf;
         }
         else if(matchType === "Finals Match "){
             this.setState({matcheNumber:"f"});
-            return 'f' + number;
+            return this.state.match.comp_level.f;
         }
     }
 
@@ -36,7 +50,7 @@ class MatchDropdown extends React.Component{
         return (
             <div>
                 <label>
-                    <select onChange={this.props.teamNumberPicked}>
+                    <select onChange={this.changeTeamNumber}>
                         <option></option>
                         <option> Qualification </option>
                         <option> Quarterfinal </option>
