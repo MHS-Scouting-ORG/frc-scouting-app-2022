@@ -1,0 +1,6 @@
+{
+    "bluealliance_api_endpoint":"https://www.thebluealliance.com/api/v3",
+    "aws_region":"us-west-2",
+    "api_name":"apid003caa1",
+    "api_endpoint":"/items"
+}

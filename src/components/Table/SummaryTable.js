@@ -7,6 +7,8 @@ import TestTable from './Test';
 
 const SummaryTable = (props) => {
 
+    //const data = React.useMemo([], []);
+
 
     const getTeams = () => {
         /*let list = data.map( (o) => {
@@ -38,6 +40,8 @@ const SummaryTable = (props) => {
             setData(null);
         }*/
 
+        const tData = [];
+
         const teamObject = {
             TeamNumber: 0,
             Strategy: '',
@@ -49,34 +53,43 @@ const SummaryTable = (props) => {
             AverageHangar: 0,
         }
 
-        let list = [];
-
         fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
             .catch(err => console.log(err))
-            .then(data => {
-                data.map(obj => {
+            .then(values => { 
+                values.map(obj => {
                     let teamAverages = Object.create(teamObject);
                     teamAverages.TeamNumber = obj.team_number;
-                    list.push(teamAverages);
+                    tData.push(teamAverages);
                 });
             })
 
-        return list;
+        return tData;
     }
 
-    const tData = getTeams();
-    console.log(tData)
 
-    const data = SampleData();
+
+
+    
+    
+    //const data = SampleData();
 
     
 
     const getTeamInfo = (cell) => { // get objects of certain team number
-        let info = data.filter((x) => x.TeamNumber === cell.value)
+        let info = tData.filter((x) => x.TeamNumber === cell.value)
         console.log(info)
         return info;
     }
+    
+    const tData = getTeams();
+    console.log(tData);
+
+    const data = React.useMemo(
+        () => [
+            tData, []
+        ]
+    )
 
 
     const columns = React.useMemo(
@@ -101,27 +114,27 @@ const SummaryTable = (props) => {
             },
             {
                 Header: 'Average Points',
-                accessor: 'averagePoints',
+                accessor: 'AveragePoints',
             },
             {
                 Header: 'Average Low Hub',
-                accessor: 'averageLowHub',
+                accessor: 'AverageLowHubShots',
             },
             {
                 Header: 'Average Low Hub Accuracy',
-                accessor: 'averageLowAccuracy',
+                accessor: 'AverageLowHubAccuracy',
             },
             {
                 Header: 'Average Upper Hub',
-                accessor: 'averageUpperHub',
+                accessor: 'AverageUpperHubShots',
             },
             {
                 Header: 'Average Upper Hub Accuracy',
-                accessor: 'averageUpperAccuracy',
+                accessor: 'AverageUpperHubAccuracy',
             },
             {
                 Header: 'Average Hangar Points',
-                accessor: 'averageHangar',
+                accessor: 'AverageHangar',
             },
         ],
         []
@@ -130,7 +143,7 @@ const SummaryTable = (props) => {
     const renderRowSubComponent = React.useCallback(
         ({ row }) => (
           <pre>
-            <div>{<TestTable information={data} />} {<TeamTable/>} </div>
+            <div> {<TeamTable/>} </div>
           </pre>
         ),
         []

@@ -15,7 +15,8 @@ const Home = (props) => {
   const [teamName, setTeamName] = useState("")
   const [matchId, setMatchId] = useState(0)
   useEffect(() => {
-    API.get('frcScoutingApi','/teams')
+
+    api.get()
       .then(data => {
         setTeams(data)
       })
@@ -24,10 +25,12 @@ const Home = (props) => {
   
   
   return (
+
     <div>
       <SummaryTable />
       <TestTable information={SampleData()}/>
     </div>
+
   )
 }
 

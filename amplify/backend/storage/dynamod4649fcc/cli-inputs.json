@@ -1,13 +1,13 @@
 {
-  "resourceName": "frcScoutingAppDynamoDB2022",
-  "tableName": "scoutingDataTable",
+  "resourceName": "dynamod4649fcc",
+  "tableName": "dynamod4649fcc",
   "partitionKey": {
     "fieldName": "TeamId",
     "fieldType": "string"
   },
   "sortKey": {
     "fieldName": "MatchId",
-    "fieldType": "number"
+    "fieldType": "string"
   },
   "gsi": [],
   "triggerFunctions": []

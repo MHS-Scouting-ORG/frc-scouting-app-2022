@@ -17,7 +17,7 @@ AWS.config.update({ region: process.env.TABLE_REGION });
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-let tableName = "scoutingDataTable";
+let tableName = "dynamod4649fcc";
 if(process.env.ENV && process.env.ENV !== "NONE") {
   tableName = tableName + '-' + process.env.ENV;
 }
@@ -26,9 +26,9 @@ const userIdPresent = false; // TODO: update in case is required to use that def
 const partitionKeyName = "TeamId";
 const partitionKeyType = "S";
 const sortKeyName = "MatchId";
-const sortKeyType = "N";
+const sortKeyType = "S";
 const hasSortKey = sortKeyName !== "";
-const path = "/teams";
+const path = "/items";
 const UNAUTH = 'UNAUTH';
 const hashKeyPath = '/:' + partitionKeyName;
 const sortKeyPath = hasSortKey ? '/:' + sortKeyName : '';
@@ -54,19 +54,16 @@ const convertUrlType = (param, type) => {
   }
 }
 
-app.get(path, (req, res) => {
+app.get(path, function(req, res) {
   dynamodb.scan({
     TableName: tableName
   }, (err, data) => {
     if(err) {
       res.statusCode = 500
-      res.json({error:'Could not scan table'})
-
+      res.json({ error: 'could not scan table'})
     }
-    else {
+    else
       res.json(data.Items)
-    }
-      
   })
 })
 
