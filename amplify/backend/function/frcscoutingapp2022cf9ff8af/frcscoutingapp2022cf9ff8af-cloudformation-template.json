@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Lambda Function resource stack creation using Amplify CLI",
+  "Description": "{\"createdOn\":\"Linux\",\"createdBy\":\"Amplify\",\"createdWith\":\"7.6.5\",\"stackType\":\"function-Lambda\",\"metadata\":{}}",
   "Parameters": {
     "CloudWatchRule": {
       "Type": "String",
@@ -16,13 +16,13 @@
     "s3Key": {
       "Type": "String"
     },
-    "storagefrcScoutingAppDynamoDB2022Name": {
+    "storagedynamod4649fccName": {
       "Type": "String",
-      "Default": "storagefrcScoutingAppDynamoDB2022Name"
+      "Default": "storagedynamod4649fccName"
     },
-    "storagefrcScoutingAppDynamoDB2022Arn": {
+    "storagedynamod4649fccArn": {
       "Type": "String",
-      "Default": "storagefrcScoutingAppDynamoDB2022Arn"
+      "Default": "storagedynamod4649fccArn"
     }
   },
   "Conditions": {
@@ -55,12 +55,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "frcScoutingLambda2022",
+            "frcscoutingapp2022cf9ff8af",
             {
               "Fn::Join": [
                 "",
                 [
-                  "frcScoutingLambda2022",
+                  "frcscoutingapp2022cf9ff8af",
                   "-",
                   {
                     "Ref": "env"
@@ -97,12 +97,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "frcscoutingapp2022LambdaRoled5543d2a",
+            "frcscoutingapp2022LambdaRole62222598",
             {
               "Fn::Join": [
                 "",
                 [
-                  "frcscoutingapp2022LambdaRoled5543d2a",
+                  "frcscoutingapp2022LambdaRole62222598",
                   "-",
                   {
                     "Ref": "env"
@@ -182,14 +182,14 @@
               ],
               "Resource": [
                 {
-                  "Ref": "storagefrcScoutingAppDynamoDB2022Arn"
+                  "Ref": "storagedynamod4649fccArn"
                 },
                 {
                   "Fn::Join": [
                     "/",
                     [
                       {
-                        "Ref": "storagefrcScoutingAppDynamoDB2022Arn"
+                        "Ref": "storagedynamod4649fccArn"
                       },
                       "index/*"
                     ]
