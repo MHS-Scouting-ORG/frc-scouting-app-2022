@@ -40,6 +40,19 @@ const SummaryTable = (props) => {
             setData(null);
         }*/
 
+        const tData = [];
+
+        const teamObject = {
+            TeamNumber: 0,
+            Strategy: '',
+            AveragePoints: 0,
+            AverageLowHubShots: 0,
+            AverageLowHubAccuracy: 0,
+            AverageUpperHubShots: 0,
+            AverageUpperHubAccuracy: 0,
+            AverageHangar: 0,
+        }
+
         fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
             .catch(err => console.log(err))
@@ -50,20 +63,12 @@ const SummaryTable = (props) => {
                     tData.push(teamAverages);
                 });
             })
+
+        return tData;
     }
 
-    const tData = [];
 
-    const teamObject = {
-        TeamNumber: 0,
-        Strategy: '',
-        AveragePoints: 0,
-        AverageLowHubShots: 0,
-        AverageLowHubAccuracy: 0,
-        AverageUpperHubShots: 0,
-        AverageUpperHubAccuracy: 0,
-        AverageHangar: 0,
-    }
+
 
     
     
@@ -75,6 +80,7 @@ const SummaryTable = (props) => {
         return info;
     }
     
+    const tData = getTeams();
     console.log(tData);
 
     const data = React.useMemo(
