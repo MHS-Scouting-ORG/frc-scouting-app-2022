@@ -16,9 +16,11 @@ class Form extends React.Component{
         this.changeMatchType = this.changeMatchType.bind(this);
         this.changeTypeNumber = this.changeTypeNumber.bind(this);
         this.changeMatchNumber = this.changeMatchNumber.bind(this);
+        this.makeMatchTypeNumberDropdown = this.makeMatchTypeNumberDropdown.bind(this);
         this.makeMatchDropdown = this.makeMatchDropdown.bind(this);
 
         this.getMatchTeams = this.getMatchTeams.bind(this);
+        this.changeTeam = this.changeTeam.bind(this);
         this.makeTeamDropdown = this.makeTeamDropdown.bind(this);
         //this.changeMatchNumber = this.changeMatchNumber.bind(this);
 
@@ -57,8 +59,9 @@ class Form extends React.Component{
             matchType:"",
             number:"",
             matchNumber:"",
-            teams:"",
+            teams:["team1","team2","team3","team4","team5","team6"],
             dropDownBoxValues:["","","",""],
+            matchData:[],
             autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0,0],
             checkBoxValues:[false,false,false,false,false,false,false,false,false,false,false],
@@ -129,21 +132,31 @@ class Form extends React.Component{
         this.setState({matchNumber:event.target.value});
     }
 
+    makeMatchTypeNumberDropdown(matchType){
+        if(matchType === 'qf' || matchType === 'sf' || matchType === 'f'){
+            
+        }
+        return (
+            <input onChange={this.changeTypeNumber}></input>
+        )
+    }
+
     makeMatchDropdown(){
         return (
             <div>
                 <MatchDropdown
                     setMatchType={this.changeMatchType}
                     setTypeNumber={this.changeTypeNumber}
+                    //makeNumberDropdown={this.makeMatchTypeNumberDropdown}
                     setMatchNumber={this.changeMatchNumber}
                 />
             </div>
         )
     }
 
-    getMatchTeams(match){
-        let matchKey = this.state.matchType + this.state.number + "m" + this.state.matchNumber;
-        const matches = (match) => {
+    getMatchTeams(){
+        let matchKey = /*put this years event key here*/ "2016nytr" + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+        const teams = () => {
             fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
                 mode: 'cors',
                 headers:{
@@ -152,24 +165,62 @@ class Form extends React.Component{
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 data.map((matches) => {
                     if(matches.key === matchKey){
-                        this.setState({teams:data[matches].alliances.blue.team_keys.concat(data[matches].alliances.red.team_keys)});
-                        console.log(data[matches].alliances.blue.team_keys.concat(data[matches].alliances.red.team_keys));
+                        this.setState({matchData:matches})
+                        this.setState({teams:matches.alliances.blue.team_keys.concat(matches.alliances.red.team_keys)});
+                        console.log(matches.alliances.blue.team_keys.concat(matches.alliances.red.team_keys));
                     }
                 })
             })
             .catch(err => console.log(err))
         }
         console.log(matchKey);
-        matches();
+        teams();
+    }
+
+    changeTeam(event){
+        this.setState({teamNumber:event.target.value});
+        let data = this.state.matchData;
+        let chosenTeam = event.target.value
+        let teamColor = "";
+        data.alliances.blue.map((team) => {
+            if(team === chosenTeam){
+                teamColor = 'blue';
+            }
+            else{
+                teamColor = 'red'
+            }
+        })
+        let whoWon = '';
+        if(data.alliances.blue.score > data.alliances.red.score){
+            whoWon = 'blue';
+        }
+        else if(data.alliances.blue.score < data.alliances.red.score){
+            whoWon = 'red';
+        }
+        else{
+            whoWon = 'tied'
+        }
+
+        if(teamColor === whoWon){
+            this.setState({rankingPoints:2});
+        }
+        else if(whoWon === 'tied'){
+            this.setState({rankingPoints:1});
+        }
+        else{
+            this.setState({rankingPoints:0})
+        }
     }
 
     makeTeamDropdown(){
-        let alliances = [1,2,3] /*///this.getMatchTeams(1); //this.getMatchTeams();*/
+        let alliances = this.state.teams; //this.getMatchTeams();*/
         return (
             <div>
-                <select>
+                <select onChange={this.changeTeam}>
+                    <option></option>
                     {alliances.map((alliance) => <option key={alliance}> {alliance} </option>)}
                 </select>
             </div>
@@ -379,16 +430,14 @@ class Form extends React.Component{
             <div>
                 <h1>FORM</h1>
                 <Initials changeInitials={this.initialsChange}/>
-                <Input setState={this.changeMatchNumber} label={"Match Number: "}></Input>
-                <br></br>
                 <br></br>
                 {this.makeMatchDropdown()}
+                <button onClick={this.getMatchTeams}>GET MATCH TEAMS</button>
                 {this.makeTeamDropdown()}
-                <button onClick={this.getMatchTeams}>MATCH TEAMS</button>
-                <br></br>
                 <br></br>
                 <Input setState={this.changeTeamNumber} label={"Team Number: "}></Input>
                 {this.makeDropDownBox("Alliance Color: ",["Blue","Red"],0)}
+                <br></br>
                 <h3>AUTONOMOUS</h3>
                 {this.makeInputBox("# Low Hub Made: ",0)}
                 {this.makeInputBox("# Low Hub Missed: ",1)}
@@ -397,6 +446,7 @@ class Form extends React.Component{
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],1)}
                 <img onClick={this.onClickCreate} src='./images/TARRRRRMAC.PNG'/>
                 {/* */}
+                <br></br>
                 <h3>TELE-OP</h3>
                 {this.makeInputBox("# Low Hub Made: ",4)}
                 {this.makeInputBox("# Low Hub Missed: ",5)}
@@ -412,12 +462,14 @@ class Form extends React.Component{
                 {this.makeBonusBox("Hangar Bonus: ", 4)}
                 {this.makeBonusBox("Cargo Bonus: ", 5)}
                 {this.makeDropDownBox("Ranking Points: ",[0,1,2,3,4],3)}
+                <br></br>
                 <h3>PRIORITIES & STRATEGIES</h3>
                 {this.makeStrategyBox("Low Hub Shooter: ", 6)}
                 {this.makeStrategyBox("Upper Hub Shooter: ", 7)}
                 {this.makeStrategyBox("Launchpad Shooter: ", 8)}
                 {this.makeStrategyBox("Hangar: ", 9)}
                 {this.makeStrategyBox("Defense: ", 10)}
+                <br></br>
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
