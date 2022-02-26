@@ -4,35 +4,45 @@ import { useTable, useSortBy } from "react-table";
 class TestTable extends React.Component{
     constructor(props){
         super(props);
-        this.renderInfo = this.renderInfo.bind(this);
+        this.getInfo = this.getInfo.bind(this);
+
+        this.state = {
+            data: [],
+            columns: [],
+            rows: "",
+        }
     }
 
-    renderInfo(){
+    getInfo(){
         let info = this.props.information;
         let keys = Object.keys(info[0]).slice(2);
-        let row = info.map(input => {
-            let values = [];
 
-            for(let i=0; i<keys.length; i++){
-                values.push(<td>{input[i]}</td>);
-            }
+        let rows = info.map(input => {
+
+            let values = info.map(obj => {
+                let cells = keys.map(key => obj.key);
+            });
 
             return (
-                <tr>
-                    {input.forEach(val => {
-                        <td> {val} </td>
-                    })}
-                </tr>
+                <tr key={input.TeamName}>{input}</tr>
             );
             
         });
-        return row;
+        this.setState({
+            data: info,
+            columns: keys
+        });
     }
 
     render(){
+
         return(
             <table>
-                {this.renderInfo}
+                <thead>
+                    <tr>
+                        {this.state.columns.map(key => '<th>{key}</th>')}
+                    </tr>
+                </thead>
             </table>
         );
     };

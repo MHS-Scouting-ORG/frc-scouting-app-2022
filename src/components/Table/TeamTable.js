@@ -3,8 +3,7 @@ import { useTable, useSortBy } from "react-table";
 import SampleData from "./Data";
 
 /*
- * Fix Test Table
- * Display Total Points at the front of Table
+ * Fix Test/Team Table
  *  Dsiplay averages
  */
 
@@ -13,21 +12,20 @@ const TeamTable = (tData) => {
 
   const data = SampleData();
 
-  const makeColumns = function (a) {
+  const makeColumns = (a) => {
     return {
       Header: a,
       accessor: a,
     }
   }
 
-  let keys = Object.keys(data[0]);
-  let columnValues = Object.keys(data[0]).slice(2);
-  columnValues.splice(1, 0, "TotalPoints")
+  //let keys = Object.keys(data[0]);
+  let columnValues = Object.keys(data[0]).slice(4);
+  columnValues.splice(1, 0, "TotalPoints");
 
   const columns = React.useMemo(
     () =>
-      columnValues.map(makeColumns),
-      []
+      columnValues.map(makeColumns), []
   )
 
   const tableInstance = useTable({ columns, data }, useSortBy);
