@@ -1,63 +1,51 @@
 {
   "master": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-frcscoutingapp2022-master-141756-authRole",
-      "UnauthRoleArn": "arn:aws:iam::308692676076:role/amplify-frcscoutingapp2022-master-141756-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::308692676076:role/amplify-frcscoutingapp2022-master-141756-authRole",
-      "Region": "us-west-1",
-      "DeploymentBucketName": "amplify-frcscoutingapp2022-master-141756-deployment",
-      "UnauthRoleName": "amplify-frcscoutingapp2022-master-141756-unauthRole",
-      "StackName": "amplify-frcscoutingapp2022-master-141756",
-      "StackId": "arn:aws:cloudformation:us-west-1:308692676076:stack/amplify-frcscoutingapp2022-master-141756/9a4a5d00-70e1-11ec-aa0f-066c5758675d",
-      "AmplifyAppId": "d1bxofie4hejc2",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-frcscoutingapp2022-master-141756-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "AuthRoleName": "amplify-frcscoutingapp2022-master-122110-authRole",
+      "UnauthRoleArn": "arn:aws:iam::187619627858:role/amplify-frcscoutingapp2022-master-122110-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::187619627858:role/amplify-frcscoutingapp2022-master-122110-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-frcscoutingapp2022-master-122110-deployment",
+      "UnauthRoleName": "amplify-frcscoutingapp2022-master-122110-unauthRole",
+      "StackName": "amplify-frcscoutingapp2022-master-122110",
+      "StackId": "arn:aws:cloudformation:us-west-2:187619627858:stack/amplify-frcscoutingapp2022-master-122110/40101c00-91d2-11ec-af0c-023e412ae7f7",
+      "AmplifyAppId": "d1rkvaikd0s4ye",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-frcscoutingapp2022-master-122110-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d1bxofie4hejc2",
-          "type": "cicd"
-        }
-      },
       "auth": {
-        "undefined": {}
+        "frcscoutingapp20220de72d56": {}
       },
       "function": {
-        "frcScoutingLambda2022": {
-          "deploymentBucketName": "amplify-frcscoutingapp2022-master-141756-deployment",
-          "s3Key": "amplify-builds/frcScoutingLambda2022-432f6b626446694a722f-build.zip"
+        "frcscoutingapp2022cf9ff8af": {
+          "deploymentBucketName": "amplify-frcscoutingapp2022-master-122110-deployment",
+          "s3Key": "amplify-builds/frcscoutingapp2022cf9ff8af-62586c4e6a2b71314472-build.zip"
         }
       }
     }
   },
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-frcscoutingapp2022-dev-153933-authRole",
-      "UnauthRoleArn": "arn:aws:iam::308692676076:role/amplify-frcscoutingapp2022-dev-153933-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::308692676076:role/amplify-frcscoutingapp2022-dev-153933-authRole",
-      "Region": "us-west-1",
-      "DeploymentBucketName": "amplify-frcscoutingapp2022-dev-153933-deployment",
-      "UnauthRoleName": "amplify-frcscoutingapp2022-dev-153933-unauthRole",
-      "StackName": "amplify-frcscoutingapp2022-dev-153933",
-      "StackId": "arn:aws:cloudformation:us-west-1:308692676076:stack/amplify-frcscoutingapp2022-dev-153933/0049f650-70ed-11ec-8c03-022d3bcc78b1",
-      "AmplifyAppId": "d1bxofie4hejc2",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-frcscoutingapp2022-dev-153933-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "AuthRoleName": "amplify-frcscoutingapp2022-dev-133001-authRole",
+      "UnauthRoleArn": "arn:aws:iam::187619627858:role/amplify-frcscoutingapp2022-dev-133001-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::187619627858:role/amplify-frcscoutingapp2022-dev-133001-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-frcscoutingapp2022-dev-133001-deployment",
+      "UnauthRoleName": "amplify-frcscoutingapp2022-dev-133001-unauthRole",
+      "StackName": "amplify-frcscoutingapp2022-dev-133001",
+      "StackId": "arn:aws:cloudformation:us-west-2:187619627858:stack/amplify-frcscoutingapp2022-dev-133001/dcf51f80-91db-11ec-a318-0647be69fd5d",
+      "AmplifyAppId": "d1rkvaikd0s4ye",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-frcscoutingapp2022-dev-133001-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "function": {
-        "frcScoutingLambda2022": {
-          "deploymentBucketName": "amplify-frcscoutingapp2022-dev-153933-deployment",
-          "s3Key": "amplify-builds/frcScoutingLambda2022-4d4e65473843456c4b36-build.zip"
-        }
-      },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d1bxofie4hejc2",
-          "type": "cicd"
+        "frcscoutingapp2022cf9ff8af": {
+          "deploymentBucketName": "amplify-frcscoutingapp2022-dev-133001-deployment",
+          "s3Key": "amplify-builds/frcscoutingapp2022cf9ff8af-62586231656a505a4d62-build.zip"
         }
       },
       "auth": {
-        "frcscoutingapp2022": {}
+        "frcscoutingapp20220de72d56": {}
       }
     }
   }
