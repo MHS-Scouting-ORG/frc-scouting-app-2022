@@ -10,7 +10,7 @@ const Home = (props) => {
   const [teamName, setTeamName] = useState("")
   const [matchId, setMatchId] = useState(0)
   useEffect(() => {
-    api.get('frcScoutingApi','/teams')
+    api.get()
       .then(data => {
         setTeams(data)
       })
@@ -45,11 +45,11 @@ const Home = (props) => {
             <Button variant="primary" type="submit" onClick={evt => {
               evt.preventDefault()
               console.log(`updating new teams ${teamId}, ${teamName}`)
-              api.put('frcScoutingApi','/teams', {
+              api.put({
                 body: {
-                  TeamId: teamId,
-                  TeamName: teamName,
-                  MatchId: matchId
+                  TeamId: String(teamId),
+                  TeamName: String(teamName),
+                  MatchId: String(matchId)
                 }
               })
               .then(_ => {
