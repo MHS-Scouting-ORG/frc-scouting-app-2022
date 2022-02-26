@@ -4,8 +4,7 @@ import SampleData from "./Data";
 
 /*
  * Fix Test Table
- * Display Total Points at the front of Table
- *  Dsiplay averages
+ * Display averages
  */
 
 

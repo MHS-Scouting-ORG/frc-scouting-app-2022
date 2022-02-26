@@ -57,7 +57,7 @@ const SummaryTable = (props) => {
             .then(data => {
                 data.map(obj => {
                     let teamAverages = Object.create(teamObject);
-                    teamObject.TeamNumber = obj.team_number;
+                    teamAverages.TeamNumber = obj.team_number;
                     list.push(teamAverages);
                 });
             })
@@ -69,6 +69,8 @@ const SummaryTable = (props) => {
     console.log(tData)
 
     const data = SampleData();
+
+    
 
     const getTeamInfo = (cell) => { // get objects of certain team number
         let info = data.filter((x) => x.TeamNumber === cell.value)
