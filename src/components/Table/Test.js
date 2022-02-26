@@ -5,7 +5,7 @@ import TeamTable from "./TeamTable";
 class TestTable extends React.Component{
     constructor(props){
         super(props);
-        let list = this.props.information;
+        this.renderInfo = this.renderInfo.bind(this);
         this.state = {
             columns: [],
             rows: []
@@ -13,32 +13,34 @@ class TestTable extends React.Component{
     }
 
     renderInfo(){
-        this.state.rows = rows;
-        let keys = Object.keys(rows[0]).slice(2);
-        list.map(inf => {
-            rows.push(
+        let info = this.props.information;
+        let keys = Object.keys(info[0]).slice(2);
+        let row = info.map(input => {
+            let values = [];
+
+            for(let i=0; i<keys.length; i++){
+                values.push(<td>{input[i]}</td>);
+            }
+
+            console.log(values);
+
+            return (
                 <tr>
-                    {() => {
-                        
-                    }}
+                    {input.forEach(val => {
+                        <td> {values} </td>
+                    })}
                 </tr>
             );
+            
         });
-    }
-
-    makeCell(obj){
-        return obj.map(ill => {
-            <td></td>
-        });
-    }
-
-    getColumns(){
-
+        return row;
     }
 
     render(){
         return(
-            <table></table>
+            <table>
+                {this.renderInfo}
+            </table>
         );
     };
 }

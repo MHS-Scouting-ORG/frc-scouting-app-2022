@@ -5,6 +5,7 @@ import { useTable, useSortBy } from 'react-table'
 import TeamTable from '../Table/TeamTable'
 import SummaryTable from '../Table/SummaryTable'
 import TestTable from '../Table/Test'
+import SampleData from '../Table/Data'
 
 const Home = (props) => {
 
@@ -25,7 +26,7 @@ const Home = (props) => {
   return (
     <div>
       <SummaryTable />
-      <TestTable/>
+      <TestTable information={SampleData()}/>
     </div>
   )
 }

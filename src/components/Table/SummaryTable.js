@@ -3,13 +3,13 @@ import { useTable, useSortBy, useExpanded } from "react-table";
 import SampleData from "./Data";
 import Averages from './Average';
 import TeamTable from "./TeamTable";
+import TestTable from './Test';
 
 const SummaryTable = (props) => {
 
-    const data = SampleData();
 
     const getTeams = () => {
-        let list = data.map( (o) => {
+        /*let list = data.map( (o) => {
                 return o.TeamNumber;
         });
 
@@ -22,29 +22,53 @@ const SummaryTable = (props) => {
         });
 
         return finList;
+        */
 
-        /*let list = [];
+        /*try{
+            const dat = await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
+            if(!dat.ok){
+                throw new Error(
+                    'Error ' + dat.status
+                );
+            }
+            let actual = await dat.json();
+            setData(actual);
+        }
+        catch (err){
+            setData(null);
+        }*/
+
+        const teamObject = {
+            TeamNumber: 0,
+            Strategy: '',
+            AveragePoints: 0,
+            AverageLowHubShots: 0,
+            AverageLowHubAccuracy: 0,
+            AverageUpperHubShots: 0,
+            AverageUpperHubAccuracy: 0,
+            AverageHangar: 0,
+        }
+
+        let list = [];
 
         fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
+            .catch(err => console.log(err))
             .then(data => {
                 data.map(obj => {
-                    list.push(obj.team_number);
+                    let teamAverages = Object.create(teamObject);
+                    teamObject.TeamNumber = obj.team_number;
+                    list.push(teamAverages);
                 });
             })
-            .catch(err => console.log(err));
+
         return list;
-        */
     }
 
-    /*const teams = getTeams();
-    console.log(teams)
+    const tData = getTeams();
+    console.log(tData)
 
-
-    const data = teams.forEach(team => 
-        Averages(team)
-    );
-    */
+    const data = SampleData();
 
     const getTeamInfo = (cell) => { // get objects of certain team number
         let info = data.filter((x) => x.TeamNumber === cell.value)
@@ -104,7 +128,7 @@ const SummaryTable = (props) => {
     const renderRowSubComponent = React.useCallback(
         ({ row }) => (
           <pre>
-            <div>{<TeamTable/>}</div>
+            <div>{<TestTable information={data} />}</div>
           </pre>
         ),
         []

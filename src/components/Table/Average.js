@@ -155,7 +155,9 @@ const Averages = (teamNumber) => {
         AverageUpperHubShots: upperHubShots(),
         AverageUpperHubAccuracy: upperHubAccuracies(),
         AverageHangar: hangar(),
-    });
+    }
+    
+    );
 
    
 
