@@ -1,15 +1,10 @@
 import React from "react";
 import { useTable, useSortBy } from "react-table";
-import TeamTable from "./TeamTable";
 
 class TestTable extends React.Component{
     constructor(props){
         super(props);
         this.renderInfo = this.renderInfo.bind(this);
-        this.state = {
-            columns: [],
-            rows: []
-        }
     }
 
     renderInfo(){
@@ -22,12 +17,10 @@ class TestTable extends React.Component{
                 values.push(<td>{input[i]}</td>);
             }
 
-            console.log(values);
-
             return (
                 <tr>
                     {input.forEach(val => {
-                        <td> {values} </td>
+                        <td> {val} </td>
                     })}
                 </tr>
             );

@@ -128,7 +128,7 @@ const SummaryTable = (props) => {
     const renderRowSubComponent = React.useCallback(
         ({ row }) => (
           <pre>
-            <div>{<TestTable information={data} />}</div>
+            <div>{<TestTable information={data} />} {<TeamTable/>} </div>
           </pre>
         ),
         []
