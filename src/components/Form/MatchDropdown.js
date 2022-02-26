@@ -5,14 +5,13 @@ class MatchDropdown extends React.Component{
         super(props);
         this.changeMatchType = this.changeMatchType.bind(this);
         this.makeMatchTypeNumberDropdown = this.makeMatchTypeNumberDropdown.bind(this);
-        this.displayFinalMatchs = this.displayFinalMatchs.bind(this)
         this.state = {
             matchType:'',
             displayMatch: true
         }
     }
 
-    displayFinalMatchs(){
+    displayNumberInput(){
         this.setState({displayMatch: !this.state.displayMatch})
     }
 
@@ -21,7 +20,6 @@ class MatchDropdown extends React.Component{
         if(matchType === "Qualification"){
             this.props.setMatchType('q');
             this.setState({matchType:'q'})
-            this.displayFinalMatchs(!this.props.setTypeNumber)
         } 
         else if(matchType === "Quarterfinal"){
             this.props.setMatchType('qf');
@@ -35,10 +33,13 @@ class MatchDropdown extends React.Component{
             this.props.setMatchType('f');
             this.setState({matchType:'f'})
         }
+        return(
+            <input></input>
+        )
     }
 
     makeMatchTypeNumberDropdown(){
-        this.props.makeNumberDropdown(this.state.matchType);
+        //this.props.makeNumberDropdown(this.state.matchType);
     }
 
     render(){
@@ -53,11 +54,12 @@ class MatchDropdown extends React.Component{
                         <option> Finals </option>
                     </select> {"  "}
                     {/*this.makeMatchTypeNumberDropdown*/}
-                    { this.state.displayMatch?
+                    {/* this.state.displayMatch?
                         <input onChange={this.props.setTypeNumber}></input>
                         :null
-                    }
-                    { }
+                    */}
+                    {}
+                    <input onChange={this.props.setTypeNumber}></input>
                     {" "} Match: {" "}
                     <input onChange={this.props.setMatchNumber}></input>
                 </label>

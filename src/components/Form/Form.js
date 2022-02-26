@@ -6,13 +6,14 @@ import Initials from "./Initials";
 import Dropdown from "./Dropdown";
 import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
+import Header from "./Header"
 
 class Form extends React.Component{
     constructor(props){
         super(props);
         //this.initialsChange = this.initialsChange.bind(this);
-
         //this.changeTeamNumber = this.changeTeamNumber.bind(this);
+
         this.changeMatchType = this.changeMatchType.bind(this);
         this.changeTypeNumber = this.changeTypeNumber.bind(this);
         this.changeMatchNumber = this.changeMatchNumber.bind(this);
@@ -40,35 +41,32 @@ class Form extends React.Component{
 
         this.penaltyBoxClicked = this.penaltyBoxClicked.bind(this);
         this.makePenaltyBox = this.makePenaltyBox.bind(this);
-        this.bonusBoxClicked = this.penaltyBoxClicked.bind(this);
-        this.makeBonusBox = this.makePenaltyBox.bind(this);
-        this.strategyyBoxClicked = this.penaltyBoxClicked.bind(this);
-        this.makeStrategyyBox = this.makePenaltyBox.bind(this);
+        this.bonusBoxClicked = this.bonusBoxClicked.bind(this);
+        this.makeBonusBox = this.makeBonusBox.bind(this);
+        this.strategyBoxClicked = this.strategyBoxClicked.bind(this);
+        this.makeStrategyyBox = this.makeStrategyBox.bind(this);
 
         this.setComment = this.setComment.bind(this);
         this.scaleChange = this.scaleChange.bind(this);
         this.submitStates = this.submitStates.bind(this);
 
         this.state = {
-            statistics: {
-                totalPoints: 0,
-                lowHubAccuracy: 0,
-                highHubAccuracy: 0
-            },
+            totalPoints: 0,
+            lowHubAccuracy: 0,
+            highHubAccuracy: 0,
             scouterInitials:"",
             matchType:"",
             number:"",
             matchNumber:"",
             teams:["team1","team2","team3","team4","team5","team6"],
-            dropDownBoxValues:["","","",""],
+            dropDownBoxValues:["","",],
             matchData:[],
             autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0,0],
-            checkBoxValues:[false,false,false,false,false,false,false,false,false,false,false],
             penaltyValues:[false,false,false,false],
             bonusValues:[false,false],
             strategyValues:[false,false,false,false,false],
-            rankingPoints:"",
+            rankingPoints:0,
             strategy:'',
             comment:"",
             scale:0,
@@ -133,8 +131,12 @@ class Form extends React.Component{
     }
 
     makeMatchTypeNumberDropdown(matchType){
+        let display = false;
         if(matchType === 'qf' || matchType === 'sf' || matchType === 'f'){
             
+        }
+        else if(matchType === 'q'){
+
         }
         return (
             <input onChange={this.changeTypeNumber}></input>
@@ -147,7 +149,7 @@ class Form extends React.Component{
                 <MatchDropdown
                     setMatchType={this.changeMatchType}
                     setTypeNumber={this.changeTypeNumber}
-                    //makeNumberDropdown={this.makeMatchTypeNumberDropdown}
+                    makeNumberDropdown={this.makeMatchTypeNumberDropdown}
                     setMatchNumber={this.changeMatchNumber}
                 />
             </div>
@@ -185,7 +187,7 @@ class Form extends React.Component{
         let data = this.state.matchData;
         let chosenTeam = event.target.value
         let teamColor = "";
-        data.alliances.blue.map((team) => {
+        data.alliances.blue.team_keys.map((team) => {
             if(team === chosenTeam){
                 teamColor = 'blue';
             }
@@ -253,6 +255,10 @@ class Form extends React.Component{
         )
     }
 
+
+
+    //--------------------------------------------------------------------------------------------------------------------------
+
     inputBoxChanged(event,i){
         let inputStates = this.state.inputBoxValues;
         inputStates[i] = event.target.value;
@@ -277,12 +283,15 @@ class Form extends React.Component{
                     setState={this.inputBoxChanged}
                     place={i}
                     state={inputStates[i]}
-                    /*minusButton={this.buttonMinus}
-                    plusButton={this.buttonPlus}*/
+                    minusButton={this.buttonMinus}
+                    plusButton={this.buttonPlus}
                 />
             </div>
         )
     }
+
+    //--------------------------------------------------------------------------------------------------------------------------
+
 
     newElement(xPos,yPos){
         /**insert good code here */
@@ -339,6 +348,12 @@ class Form extends React.Component{
     bonusBoxClicked(i){
         let bonusStates = this.state.bonusValues;
         bonusStates[i] = !bonusStates[i];
+        if(!bonusStates[i] === true){
+            this.setState({rankingPoints:this.state.rankingPoints - 1});
+        }
+        else if(!bonusStates[i] === false){
+            this.setState({rankingPoints:this.state.rankingPoints + 1});
+        }
     }
 
     makeBonusBox(name,i){
@@ -413,11 +428,9 @@ class Form extends React.Component{
         let highAccuracy = 100 * (( highTeleMade + highAutoMade ) / ( highMissed + highAutoMade + highTeleMade ))
             
         this.setState({
-            statistics: {
-                totalPoints: points,
-                lowHubAccuracy: lowAccuracy,
-                highHubAccuracy: highAccuracy,
-            }
+            totalPoints: points,
+            lowHubAccuracy: lowAccuracy,
+            highHubAccuracy: highAccuracy,
         })
 
         console.log(this.state);
@@ -435,15 +448,12 @@ class Form extends React.Component{
                 <button onClick={this.getMatchTeams}>GET MATCH TEAMS</button>
                 {this.makeTeamDropdown()}
                 <br></br>
-                <Input setState={this.changeTeamNumber} label={"Team Number: "}></Input>
-                {this.makeDropDownBox("Alliance Color: ",["Blue","Red"],0)}
-                <br></br>
                 <h3>AUTONOMOUS</h3>
                 {this.makeInputBox("# Low Hub Made: ",0)}
                 {this.makeInputBox("# Low Hub Missed: ",1)}
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
-                {this.makeDropDownBox("Taxi: ",["No","Yes"],1)}
+                {this.makeDropDownBox("Taxi: ",["No","Yes"],0)}
                 <img onClick={this.onClickCreate} src='./images/TARRRRRMAC.PNG'/>
                 {/* */}
                 <br></br>
@@ -452,23 +462,24 @@ class Form extends React.Component{
                 {this.makeInputBox("# Low Hub Missed: ",5)}
                 {this.makeInputBox("# Upper Hub Made: ",6)}
                 {this.makeInputBox("# Upper Hub Missed: ",7)}
-                {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)}
+                {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],1)}
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
                 {this.makePenaltyBox("Yellow card: ",0)}
                 {this.makePenaltyBox("Red card: ", 1)}
                 {this.makePenaltyBox("Disabled: ", 2)}
                 {this.makePenaltyBox("Disqualifed: ", 3)}
-                {this.makeBonusBox("Hangar Bonus: ", 4)}
-                {this.makeBonusBox("Cargo Bonus: ", 5)}
-                {this.makeDropDownBox("Ranking Points: ",[0,1,2,3,4],3)}
+                {this.makePenaltyBox("Bot Broke: ", 4)}
+                {this.makeBonusBox("Hangar Bonus: ", 0)}
+                {this.makeBonusBox("Cargo Bonus: ", 1)}
+                <Header display={this.state.rankingPoints}/>
                 <br></br>
                 <h3>PRIORITIES & STRATEGIES</h3>
-                {this.makeStrategyBox("Low Hub Shooter: ", 6)}
-                {this.makeStrategyBox("Upper Hub Shooter: ", 7)}
-                {this.makeStrategyBox("Launchpad Shooter: ", 8)}
-                {this.makeStrategyBox("Hangar: ", 9)}
-                {this.makeStrategyBox("Defense: ", 10)}
+                {this.makeStrategyBox("Low Hub Shooter: ", 0)}
+                {this.makeStrategyBox("Upper Hub Shooter: ", 1)}
+                {this.makeStrategyBox("Launchpad Shooter: ", 2)}
+                {this.makeStrategyBox("Hangar: ", 3)}
+                {this.makeStrategyBox("Defense: ", 4)}
                 <br></br>
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
