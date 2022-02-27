@@ -64,10 +64,10 @@ class Form extends React.Component{
             autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0,0],
             penaltyValues:[false,false,false,false],
+            whoWon:'',
             bonusValues:[false,false],
             strategyValues:[false,false,false,false,false],
             rankingPoints:0,
-            strategy:'',
             comment:"",
             scale:0,
         };
@@ -119,6 +119,10 @@ class Form extends React.Component{
     }*/
 
     changeMatchType(event){
+        let matchType = event;
+        if(matchType === 'q'){
+            this.setState({number:''});
+        }
         this.setState({matchType:event});
     }
     
@@ -131,16 +135,11 @@ class Form extends React.Component{
     }
 
     makeMatchTypeNumberDropdown(matchType){
-        let display = false;
-        if(matchType === 'qf' || matchType === 'sf' || matchType === 'f'){
-            
+        if(matchType === 'qf' || matchType === 'sf' || matchType === 'f'){    
+            return (
+                <input onChange={this.changeTypeNumber}></input>
+            )
         }
-        else if(matchType === 'q'){
-
-        }
-        return (
-            <input onChange={this.changeTypeNumber}></input>
-        )
     }
 
     makeMatchDropdown(){
@@ -182,6 +181,8 @@ class Form extends React.Component{
         teams();
     }
 
+//--------------------------------------------------------------------------------------------------------------------
+    
     changeTeam(event){
         this.setState({teamNumber:event.target.value});
         let data = this.state.matchData;
@@ -215,7 +216,12 @@ class Form extends React.Component{
         else{
             this.setState({rankingPoints:0})
         }
+        this.setState({bonusValues:[false,false]});
     }
+
+//--------------------------------------------------------------------------------------------------------------------
+
+
 
     makeTeamDropdown(){
         let alliances = this.state.teams; //this.getMatchTeams();*/
@@ -266,12 +272,22 @@ class Form extends React.Component{
 
     buttonMinus(event,i){
         let inputStates = this.state.inputBoxValues;
-        inputStates[i] = parseInt(inputStates[i]) - 1;
+        if(inputStates[i] > 0){
+            inputStates[i] = parseInt(inputStates[i]) - 1;
+        }
+        else if(inputStates[i] <= 0){
+            inputStates[i] = 0;
+        }
     }
 
     buttonPlus(event,i){
         let inputStates = this.state.inputBoxValues;
-        inputStates[i] = parseInt(inputStates[i]) + 1;
+        if(inputStates[i] >= 0){
+            inputStates[i] = parseInt(inputStates[i]) + 1;
+        }
+        else if(inputStates[i] < 0){
+            inputStates[i] = 0;
+        }
     }
 
     makeInputBox(title,i){
@@ -363,6 +379,7 @@ class Form extends React.Component{
                     label={name}
                     changeState={this.bonusBoxClicked}
                     place={i}
+                    checked={this.state.bonusValues[i]}
                 />
             </div>
         )
@@ -442,7 +459,7 @@ class Form extends React.Component{
         return(
             <div>
                 <h1>FORM</h1>
-                <Initials changeInitials={this.initialsChange}/>
+                {/*<Initials changeInitials={this.initialsChange}/>*/}
                 <br></br>
                 {this.makeMatchDropdown()}
                 <button onClick={this.getMatchTeams}>GET MATCH TEAMS</button>
@@ -472,7 +489,7 @@ class Form extends React.Component{
                 {this.makePenaltyBox("Bot Broke: ", 4)}
                 {this.makeBonusBox("Hangar Bonus: ", 0)}
                 {this.makeBonusBox("Cargo Bonus: ", 1)}
-                <Header display={this.state.rankingPoints}/>
+                <Header display={this.state.rankingPoints} bonus={this.state.bonusValues}/>
                 <br></br>
                 <h3>PRIORITIES & STRATEGIES</h3>
                 {this.makeStrategyBox("Low Hub Shooter: ", 0)}

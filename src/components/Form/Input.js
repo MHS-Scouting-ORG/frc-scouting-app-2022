@@ -13,16 +13,30 @@ class Input extends React.Component{
 
     buttonMinus(event){
         this.props.minusButton(event,this.props.place);
-        const input = document.getElementById(this.props.state);
-        this.setState({inputValue:parseInt(this.state.inputValue) - 1})
-        input.value = parseInt(this.state.inputValue) - 1;
+        const input = document.getElementById(this.props.place);
+        let value = parseInt(this.state.inputValue);
+        if(value > 0){
+            this.setState({inputValue:parseInt(this.state.inputValue) - 1})
+            input.value = parseInt(this.state.inputValue) - 1;
+        }
+        else if(value <= 0){
+            this.setState({inputValue:0})
+            input.value = 0;
+        }
     }
 
     buttonPlus(event){
         this.props.plusButton(event,this.props.place);
-        const input = document.getElementById(this.props.state);
-        this.setState({inputValue:parseInt(this.state.inputValue) + 1})
-        input.value = parseInt(this.state.inputValue) + 1;
+        const input = document.getElementById(this.props.place);
+        let value = parseInt(this.state.inputValue);
+        if(value >= 0){
+            this.setState({inputValue:parseInt(this.state.inputValue) + 1})
+            input.value = parseInt(this.state.inputValue) + 1;
+        }
+        else if(value < 0){
+            this.setState({inputValue:0});
+            input.value = 0;
+        }
     }
 
     inputChange(event){
@@ -35,7 +49,7 @@ class Input extends React.Component{
             <div>
                 <label> {this.props.label}
                     <button value={this.props.state} onClick={this.buttonMinus}> - </button>
-                    <input type='number' min={0} id={this.props.state} onChange={this.inputChange}></input>
+                    <input type='number' min={0} id={this.props.place} onChange={this.inputChange}></input>
                     <button value={this.props.state} onClick={this.buttonPlus}> + </button>
                 </label>
             </div>

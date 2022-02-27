@@ -7,13 +7,12 @@ class MatchDropdown extends React.Component{
         this.makeMatchTypeNumberDropdown = this.makeMatchTypeNumberDropdown.bind(this);
         this.state = {
             matchType:'',
-            displayMatch: true
         }
     }
 
-    displayNumberInput(){
+    /*displayNumberInput(){
         this.setState({displayMatch: !this.state.displayMatch})
-    }
+    }*/
 
     changeMatchType(event){
         let matchType = event.target.value;
@@ -33,13 +32,12 @@ class MatchDropdown extends React.Component{
             this.props.setMatchType('f');
             this.setState({matchType:'f'})
         }
-        return(
-            <input></input>
-        )
     }
 
-    makeMatchTypeNumberDropdown(){
-        //this.props.makeNumberDropdown(this.state.matchType);
+    makeMatchTypeNumberDropdown(){ 
+        return (
+            this.props.makeNumberDropdown(this.state.matchType)
+        )
     }
 
     render(){
@@ -53,24 +51,10 @@ class MatchDropdown extends React.Component{
                         <option> Semifinal </option>
                         <option> Finals </option>
                     </select> {"  "}
-                    {/*this.makeMatchTypeNumberDropdown*/}
-                    {/* this.state.displayMatch?
-                        <input onChange={this.props.setTypeNumber}></input>
-                        :null
-                    */}
-                    {}
-                    <input onChange={this.props.setTypeNumber}></input>
+                    {this.makeMatchTypeNumberDropdown()}
                     {" "} Match: {" "}
                     <input onChange={this.props.setMatchNumber}></input>
                 </label>
-                
-                {/*
-                    <label> {this.props.title}
-                        <select onChange={this.dropDownChange}>
-                            <option></option>
-                            {this.props.choices.map((choice) => <option key={choice} > {choice} </option>)}
-                        </select>
-                    </label>*/}
             </div>
         )
     }
