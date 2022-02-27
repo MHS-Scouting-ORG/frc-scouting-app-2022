@@ -11,8 +11,6 @@ class MatchDropdown extends React.Component{
             matchType:'',
             displayMatch: true
         }
-        this.changeTeamNumber = this.changeTeamNumber.bind(this)
-
     }
 
     displayFinalMatchs(){
