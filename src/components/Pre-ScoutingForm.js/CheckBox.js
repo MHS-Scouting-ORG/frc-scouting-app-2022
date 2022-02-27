@@ -1,7 +1,6 @@
 import React from "react";
-import Checkbox from "../Form/Checkbox";
 
-class checkbox extends React.Component{
+class Checkbox extends React.Component{
     constructor(props){
         super(props);
         this.changeState = this.changeState.bind(this);

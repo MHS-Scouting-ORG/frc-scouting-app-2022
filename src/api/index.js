@@ -14,7 +14,7 @@ const {
 const api = {}
 
 api.get = use_remote ? API.get.bind(API, api_name, endpoint) : async function() {
-  return Promise.resolve({})
+  return Promise.resolve([])
 }
 
 const verify_sec = async user => {

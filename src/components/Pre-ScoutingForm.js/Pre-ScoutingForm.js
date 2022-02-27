@@ -80,6 +80,8 @@ class PreScoutingForm extends React.Component{
                 <h1>PRE-SCOUTING FORM</h1>
                 <Input setState={this.teamNumberScouted} label={"Team Number: "}></Input>
                 {this.setBrokenBot("Broken Robot: ", 0)}
+                <br></br>
+                <br></br>
                 <h2> PRIORITIES & STRATEGIES </h2>
                 {this.makeStrategyBox("Low Hub Shooter: ", 0)}
                 {this.makeStrategyBox("Upper Hub Shooter: ", 1)}

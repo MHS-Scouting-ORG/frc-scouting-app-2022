@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "./Input";
 import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
@@ -6,6 +6,7 @@ import Initials from "./Initials";
 import Dropdown from "./Dropdown";
 import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
+import ImageMarker from "react-image-marker";
 
 class Form extends React.Component{
     constructor(props){
@@ -13,7 +14,7 @@ class Form extends React.Component{
         //this.initialsChange = this.initialsChange.bind(this);
 
         //this.changeTeamNumber = this.changeTeamNumber.bind(this);
-        this.getMatches = this.getMatches.bind(this);
+        //this.getMatches = this.getMatches.bind(this);
         this.makeMatchDropdown = this.makeMatchDropdown.bind(this);
         //this.changeMatchNumber = this.changeMatchNumber.bind(this);
 
@@ -42,6 +43,10 @@ class Form extends React.Component{
         this.scaleChange = this.scaleChange.bind(this);
         this.submitStates = this.submitStates.bind(this);
 
+        this.setMarkers = this.setMarkers.bind(this);
+
+
+
         this.state = {
             statistics: {
                 totalPoints: 0,
@@ -62,9 +67,14 @@ class Form extends React.Component{
             strategy:'',
             comment:"",
             scale:0,
+            markers: [],
         };
     }
     
+        setMarkers(event){
+            this.setState({markers: [event[0]]})
+            console.log(event)
+        }
     /* {
             Summary: {
                 TotalPoints: 45,
@@ -106,6 +116,7 @@ class Form extends React.Component{
     
     */
 
+
     /*initialsChange(event){
         this.setState({scouterInitials:event.target.value.toUpperCase()});
     }*/
@@ -125,12 +136,6 @@ class Form extends React.Component{
         }
         matches();
     }*/
-
-
-
-
-
-
     
     makeMatchDropdown(){
         return (
@@ -141,10 +146,6 @@ class Form extends React.Component{
             </div>
         )
     }
-
-
-
-
 
     changeMatchNumber(event,fill){
         this.setState({matchNumber:event.target.value});
@@ -360,7 +361,7 @@ class Form extends React.Component{
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],1)}
-                <img onClick={this.onClickCreate} src='./images/TARRRRRMAC.PNG'/>
+                <ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>
                 {/* */}
                 <h3>TELE-OP</h3>
                 {this.makeInputBox("# Low Hub Made: ",4)}
@@ -395,4 +396,3 @@ class Form extends React.Component{
 }
 
 export default Form;
-
