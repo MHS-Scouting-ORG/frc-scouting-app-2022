@@ -1,16 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTable, useSortBy, useExpanded } from "react-table";
 import SampleData from "./Data";
-import Averages from './Average';
 import TeamTable from "./TeamTable";
 import TestTable from './Test';
+import api from '../../api';
 
 const SummaryTable = (props) => {
 
     //const data = React.useMemo([], []);
 
 
-    const getTeams = () => {
+    const getTeams = async () => {
         /*let list = data.map( (o) => {
                 return o.TeamNumber;
         });
@@ -40,72 +40,146 @@ const SummaryTable = (props) => {
             setData(null);
         }*/
 
-        const tData = [];
-
-        const teamObject = {
-            TeamNumber: 0,
-            Strategy: '',
-            AveragePoints: 0,
-            AverageLowHubShots: 0,
-            AverageLowHubAccuracy: 0,
-            AverageUpperHubShots: 0,
-            AverageUpperHubAccuracy: 0,
-            AverageHangar: 0,
-        }
-
-        fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
+        return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
-            .catch(err => console.log(err))
-            .then(values => { 
-                values.map(obj => {
-                    let teamAverages = Object.create(teamObject);
-                    teamAverages.TeamNumber = obj.team_number;
-                    tData.push(teamAverages);
+            .then(values => {
+                return values.map(obj => {
+                    return {
+                        TeamNumber: obj.team_number,
+                        Strategy: '',
+                        AveragePoints: 0,
+                        AverageLowHubShots: 0,
+                        AverageLowHubAccuracy: 0,
+                        AverageUpperHubShots: 0,
+                        AverageUpperHubAccuracy: 0,
+                        AverageHangar: 0,
+                    };
                 });
             })
-
-        return tData;
+            .catch(err => console.log(err))
     }
 
-
-
-
-    
-    
-    //const data = SampleData();
+    const [teamNumbers, setTeamNumbers] = useState([]);
+    const [teamData, setTeamData] = useState([]);
 
     const getTeamInfo = (cell) => { // get objects of certain team number
-        let info = tData.filter((x) => x.TeamNumber === cell.value)
+        let info = SampleData().filter((x) => x.TeamNumber === cell)
         console.log(info)
         return info;
     }
-    
-    const tData = getTeams();
-    console.log(tData);
+
 
     const data = React.useMemo(
-        () => [
-            tData, []
-        ]
+        () => teamNumbers.map(team => {
+            let teamStats = teamData.filter(x => x.TeamNumber === team);
+
+                let individualPoints = teamStats.map(value => value.TotalPoints)
+                let totalPoints = 0;
+                    for(let i=0; i<individualPoints.length; i++){
+                        totalPoints = totalPoints + individualPoints[i]
+                    }
+                let averagePoints = totalPoints / individualPoints.length;
+            
+            /*let stratList = [];
+                teamStats.forEach(teamObject => {
+
+                })*/
+            
+            let lowAccuracies = teamStats.map(value => value.LowHubAccuracy)
+                let sumLowAccuracies = 0;
+                    for(let i=0; i<lowAccuracies.length; i++){
+                        sumLowAccuracies = sumLowAccuracies + lowAccuracies[i];
+                    }
+                let averageLowAccuracy = sumLowAccuracies / lowAccuracies.length;
+            
+                let lowShots = teamStats.map(value => (value.AutoLowMade + value.TeleLowMade));
+                    let sumLowShots = 0;
+                        for(let i=0; i<lowShots.length; i++){
+                            sumLowShots = sumLowShots + lowShots[i];
+                        }
+                    let averageLowShots = sumLowShots / lowShots.length;
+                
+                let upperAccuracies = teamStats.map(value => value.UpperHubAccuracy);
+                        let sumHighAccuracies = 0;
+                            for(let i=0; i<upperAccuracies.length; i++){
+                                sumHighAccuracies = sumHighAccuracies + upperAccuracies[i];
+                            }
+                        let averageHighAccuracy = sumHighAccuracies / upperAccuracies.length;
+
+                let upperShots = teamStats.map(value => (value.AutoUpperMade + value.TeleUpperMade));
+                        let sumUpperShots = 0;
+                            for(let i=0; i<upperShots.length; i++){
+                                sumUpperShots = sumUpperShots + upperShots[i];
+                            }
+                        let averageUpperShots = sumUpperShots / upperShots.length;
+                
+                let hangar = teamStats.map(value => {
+                    if(value.hangar === 'None' || value.Hangar === 'Attempted'){
+                        return 0;
+                    } else if(value.hangar === 'Low'){
+                        return 4;
+                    } else if(value.hangar === 'Mid'){
+                        return 6;
+                    } else if (value.hangar === 'High'){
+                        return 10;
+                    } else if(value.hangar === 'Traversal'){
+                        return 15;
+                    } else{
+                        return 0;
+                    }
+                });
+                    let sumHangar = 0;
+                        for(let i=0; i<hangar.length; i++){
+                            sumHangar = sumHangar + hangar[i];
+                        }
+                    let averageHangar = sumHangar / hangar.length;
+                
+                return {
+                    TeamNumber: team,
+                    //Strategy: 
+                    AveragePoint: averagePoints,
+                    AverageLowHubAccuracy: averageLowAccuracy,
+                     Average
+                };
+
+        }), [teamData]
+
     )
+
+    useEffect(() => {
+        getTeams()
+            .then(data => {
+                setTeamNumbers(data);
+            })
+    }, [])
+
+    useEffect(() => {
+        api.get()
+            .then(data => {
+                setTeamData(data)
+            })
+    }, [teamNumbers])
+
+    //const data = SampleData();
 
 
     const columns = React.useMemo(
         () => [
-            { id:'exp',
+            {
+                id: 'exp',
                 Header: () => null,
                 accessor: 'TeamNumber',
-                Cell: ({row}) => 
-                   (
-                        <span {...row.getToggleRowExpandedProps()}>
-                            {row.isExpanded ? '-' : '+'}
-                        </span>
-                    ),
+                Cell: ({ row }) =>
+                (
+                    <span {...row.getToggleRowExpandedProps()}>
+                        {row.isExpanded ? '-' : '+'}
+                    </span>
+                ),
             },
             {
                 Header: 'Team #',
                 accessor: 'TeamNumber'
-            },  
+            },
             {
                 Header: 'Priority / Strategy',
                 accessor: 'Strategy'
@@ -140,12 +214,12 @@ const SummaryTable = (props) => {
 
     const renderRowSubComponent = React.useCallback(
         ({ row }) => (
-          <pre>
-            <div> {<TeamTable/>} </div>
-          </pre>
+            <pre>
+                <div> {<TeamTable />} </div>
+            </pre>
         ),
         []
-      )
+    )
 
     const tableInstance = useTable({ columns, data }, useSortBy, useExpanded);
 
@@ -194,14 +268,14 @@ const SummaryTable = (props) => {
                         rows.map(row => {
                             prepareRow(row)
 
-                            return ( <React.Fragment  >
-                                
+                            return (<React.Fragment  >
+
                                 <tr {...row.getRowProps()}>
                                     {
                                         row.cells.map(cell => {
                                             return (
                                                 <td
-                                                    onClick = {() => {
+                                                    onClick={() => {
                                                         getTeamInfo(cell)
                                                     }}
                                                     {...cell.getCellProps()}
@@ -228,8 +302,8 @@ const SummaryTable = (props) => {
                                     </tr>
                                 ) : null}
 
-                                
-                                </React.Fragment>
+
+                            </React.Fragment>
                             )
                         }
                         )

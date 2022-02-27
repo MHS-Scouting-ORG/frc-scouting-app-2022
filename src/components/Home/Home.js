@@ -6,6 +6,7 @@ import TeamTable from '../Table/TeamTable'
 import SummaryTable from '../Table/SummaryTable'
 import TestTable from '../Table/Test'
 import SampleData from '../Table/Data'
+import api from '../../api'
 
 const Home = (props) => {
 
