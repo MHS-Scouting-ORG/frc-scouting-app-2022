@@ -1,4 +1,5 @@
 import React from 'react';
+import api from '../../api/index';
 
 class MatchDropdown extends React.Component{
     constructor(props){
@@ -8,6 +9,8 @@ class MatchDropdown extends React.Component{
         this.state = {
             matchType:'',
         }
+        this.changeTeamNumber = this.changeTeamNumber.bind(this)
+
     }
 
     /*displayNumberInput(){

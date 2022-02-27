@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "./Input";
 import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
@@ -6,7 +6,8 @@ import Initials from "./Initials";
 import Dropdown from "./Dropdown";
 import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
-import Header from "./Header"
+import ImageMarker from "react-image-marker";
+import Header from './Header';
 
 class Form extends React.Component{
     constructor(props){
@@ -50,6 +51,10 @@ class Form extends React.Component{
         this.scaleChange = this.scaleChange.bind(this);
         this.submitStates = this.submitStates.bind(this);
 
+        this.setMarkers = this.setMarkers.bind(this);
+
+
+
         this.state = {
             totalPoints: 0,
             lowHubAccuracy: 0,
@@ -70,9 +75,15 @@ class Form extends React.Component{
             rankingPoints:0,
             comment:"",
             scale:0,
+            markers: [],
         };
     }
     
+    setMarkers(event){
+        this.setState({markers: [event[0]]})
+        console.log(event)
+    }
+
     /* {
             Summary: {
                 TotalPoints: 45,
@@ -113,6 +124,7 @@ class Form extends React.Component{
         }
     
     */
+
 
     /*initialsChange(event){
         this.setState({scouterInitials:event.target.value.toUpperCase()});
@@ -234,10 +246,6 @@ class Form extends React.Component{
             </div>
         )
     }
-
-
-
-
 
     changeMatchNumber(event,fill){
         this.setState({matchNumber:event.target.value});
@@ -470,8 +478,8 @@ class Form extends React.Component{
                 {this.makeInputBox("# Low Hub Missed: ",1)}
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
-                {this.makeDropDownBox("Taxi: ",["No","Yes"],0)}
-                <img onClick={this.onClickCreate} src='./images/TARRRRRMAC.PNG'/>
+                {this.makeDropDownBox("Taxi: ",["No","Yes"],1)}
+                <ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>
                 {/* */}
                 <br></br>
                 <h3>TELE-OP</h3>
@@ -510,4 +518,3 @@ class Form extends React.Component{
 }
 
 export default Form;
-
