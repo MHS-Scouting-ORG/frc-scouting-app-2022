@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTable, useSortBy, useExpanded } from "react-table";
 import SampleData from "./Data";
 import Averages from './Average';
@@ -10,7 +10,7 @@ const SummaryTable = (props) => {
     //const data = React.useMemo([], []);
 
 
-    const getTeams = () => {
+    const getTeams = async () => {
         /*let list = data.map( (o) => {
                 return o.TeamNumber;
         });
@@ -40,7 +40,7 @@ const SummaryTable = (props) => {
             setData(null);
         }*/
 
-        const tData = [];
+        const list = [];
 
         const teamObject = {
             TeamNumber: 0,
@@ -53,7 +53,7 @@ const SummaryTable = (props) => {
             AverageHangar: 0,
         }
 
-        fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
+        await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
             .catch(err => console.log(err))
             .then(values => { 
@@ -63,33 +63,27 @@ const SummaryTable = (props) => {
                     tData.push(teamAverages);
                 });
             })
-
-        return tData;
-    }
-
-
-
-
+            return list;
+        
+    } 
     
     
     //const data = SampleData();
 
-    
+    const [tData, setTData] = useState([]);
 
     const getTeamInfo = (cell) => { // get objects of certain team number
         let info = tData.filter((x) => x.TeamNumber === cell.value)
         console.log(info)
         return info;
     }
-    
-    const tData = getTeams();
-    console.log(tData);
 
     const data = React.useMemo(
-        () => [
-            tData, []
-        ]
+        () => tData, [tData]
+
     )
+
+    useEffect(getTeams, []);
 
 
     const columns = React.useMemo(
