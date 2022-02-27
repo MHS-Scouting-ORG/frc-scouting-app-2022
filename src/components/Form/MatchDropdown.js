@@ -4,63 +4,65 @@ import api from '../../api/index';
 class MatchDropdown extends React.Component{
     constructor(props){
         super(props);
+        this.changeMatchType = this.changeMatchType.bind(this);
+        this.makeMatchTypeNumberDropdown = this.makeMatchTypeNumberDropdown.bind(this);
+        this.displayFinalMatchs = this.displayFinalMatchs.bind(this)
         this.state = {
-            match: []
+            matchType:'',
+            displayMatch: true
         }
         this.changeTeamNumber = this.changeTeamNumber.bind(this)
 
     }
 
-    getMatches(url = '', data = {}){
-        const matches = () => {
-            fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
-                mode: 'cors',
-                headers:{
-                    'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
-                }
-            })
-            .then(response => response.json())
-            .then(data => console.log(data),
-            this.setState({match: data.results[0]}))
-            .catch(err => console.log(err))
-        }
-        matches();
+    displayFinalMatchs(){
+        this.setState({displayMatch: !this.state.displayMatch})
     }
 
-    changeTeamNumber(event,){
+    changeMatchType(event){
         let matchType = event.target.value;
-        if(matchType === "Qualification Match "){
-            this.setState({matcheNumber:"qm"});
-            return this.state.match.comp_level.qm;
+        if(matchType === "Qualification"){
+            this.props.setMatchType('q');
+            this.setState({matchType:'q'})
+            this.displayFinalMatchs(!this.props.setTypeNumber)
         } 
-        else if(matchType === "Quarterfinals Match "){
-            this.setState({matcheNumber:"qf"});
-            return this.state.match.comp_level.qf;
+        else if(matchType === "Quarterfinal"){
+            this.props.setMatchType('qf');
+            this.setState({matchType:'qf'})
         }
-        else if(matchType === "Semifinals Match "){
-            this.setState({matcheNumber:"sf"});
-            return this.state.match.comp_level.sf;
+        else if(matchType === "Semifinal"){
+            this.props.setMatchType('sf');
+            this.setState({matchType:'sf'})
         }
-        else if(matchType === "Finals Match "){
-            this.setState({matcheNumber:"f"});
-            return this.state.match.comp_level.f;
+        else if(matchType === "Finals"){
+            this.props.setMatchType('f');
+            this.setState({matchType:'f'})
         }
+    }
+
+    makeMatchTypeNumberDropdown(){
+        this.props.makeNumberDropdown(this.state.matchType);
     }
 
     render(){
         return (
             <div>
                 <label>
-                    <select onChange={this.changeTeamNumber}>
+                    <select onChange={this.changeMatchType}>
                         <option></option>
                         <option> Qualification </option>
                         <option> Quarterfinal </option>
                         <option> Semifinal </option>
                         <option> Finals </option>
-                    </select>
-                    <input></input>
+                    </select> {"  "}
+                    {/*this.makeMatchTypeNumberDropdown*/}
+                    { this.state.displayMatch?
+                        <input onChange={this.props.setTypeNumber}></input>
+                        :null
+                    }
+                    { }
                     {" "} Match: {" "}
-                    <input></input>
+                    <input onChange={this.props.setMatchNumber}></input>
                 </label>
                 
                 {/*
