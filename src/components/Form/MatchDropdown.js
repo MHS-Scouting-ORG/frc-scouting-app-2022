@@ -9,8 +9,6 @@ class MatchDropdown extends React.Component{
         this.state = {
             matchType:'',
         }
-        this.changeTeamNumber = this.changeTeamNumber.bind(this)
-
     }
 
     /*displayNumberInput(){
