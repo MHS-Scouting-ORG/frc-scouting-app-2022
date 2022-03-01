@@ -42,8 +42,8 @@ const SummaryTable = (props) => {
 
         return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
-            .then(values => {
-                return values.map(obj => {
+            .then(data => {
+                return data.map(obj => {
                     return {
                         TeamNumber: obj.team_number,
                         Strategy: '',
@@ -71,7 +71,7 @@ const SummaryTable = (props) => {
 
     const data = React.useMemo(
         () => teamNumbers.map(team => {
-            let teamStats = teamData.filter(x => x.TeamNumber === team);
+            let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
 
                 let individualPoints = teamStats.map(value => value.TotalPoints)
                 let totalPoints = 0;
@@ -80,10 +80,25 @@ const SummaryTable = (props) => {
                     }
                 let averagePoints = totalPoints / individualPoints.length;
             
-            /*let stratList = [];
+            let stratList = [];
                 teamStats.forEach(teamObject => {
-
-                })*/
+                    let strats = teamObject.Strategy;
+                    if(strats[0]===true && !stratList.includes("Low Hub Shooter")){
+                        stratList.push("Low Hub Shooter")
+                    }
+                    if(strats[1]===true && !stratList.includes("Upper Hub Shooter")){
+                        stratList.push("Upper Hub Shooter")
+                    }
+                    if(strats[2]===true && !stratList.includes("Launchpad User")){
+                        stratList.push("Launchpad User")
+                    }
+                    if(strats[3]===true && !stratList.includes("Hangar")){
+                        stratList.push("Hangar")
+                    }
+                    if(strats[4]===true && !stratList.includes("Defense")){
+                        stratList.push("Defense")
+                    }
+                })
             
             let lowAccuracies = teamStats.map(value => value.LowHubAccuracy)
                 let sumLowAccuracies = 0;
@@ -104,7 +119,7 @@ const SummaryTable = (props) => {
                             for(let i=0; i<upperAccuracies.length; i++){
                                 sumHighAccuracies = sumHighAccuracies + upperAccuracies[i];
                             }
-                        let averageHighAccuracy = sumHighAccuracies / upperAccuracies.length;
+                        let averageUpperAccuracy = sumHighAccuracies / upperAccuracies.length;
 
                 let upperShots = teamStats.map(value => (value.AutoUpperMade + value.TeleUpperMade));
                         let sumUpperShots = 0;
@@ -136,14 +151,16 @@ const SummaryTable = (props) => {
                 
                 return {
                     TeamNumber: team,
-                    //Strategy: 
+                    //Strategy: stratList.join(', '),
                     AveragePoint: averagePoints,
+                    AverageLowHubShots: averageLowShots,
                     AverageLowHubAccuracy: averageLowAccuracy,
-                     Average
+                    AverageUpperHubShots: averageUpperShots,
+                    AverageUpperHubAccuracy: averageUpperAccuracy,
+                    AverageHangar: averageHangar,
                 };
 
         }), [teamData]
-
     )
 
     useEffect(() => {
