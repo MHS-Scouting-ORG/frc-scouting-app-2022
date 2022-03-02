@@ -5,40 +5,33 @@ import TeamTable from "./TeamTable";
 import TestTable from './Test';
 import api from '../../api';
 
-const SummaryTable = (props) => {
+const SummaryTable = () => {
 
-    //const data = React.useMemo([], []);
+    const [teamNumbers, setTeamNumbers] = useState([]);     // List of teamNumbers from Blue Alliance
+    const [teamData, setTeamData] = useState([]);           // List of teamData from API
 
+    useEffect(() => {                                       // Sets teamNumbers state to the data
+        getTeams()
+            .then(data => {
+                setTeamNumbers(data);
+            })
+    }, [])
 
-    const getTeams = async () => {
-        /*let list = data.map( (o) => {
-                return o.TeamNumber;
-        });
+    useEffect(() => {
+        api.get()
+            .then(data => {
+                setTeamData(data)
+            })
+    }, [teamNumbers])
 
-        let finList = [];
-        
-        list.forEach(element => {
-            if (finList.includes(element) === false){
-                finList.push(element)
-            }
-        });
+    const getTeamInfo = (cell) => { // get data of certain team number from array
+        let info = SampleData().filter((x) => x.TeamNumber === cell.value)
+        console.log(info)
+        return info;
+    }
+    
 
-        return finList;
-        */
-
-        /*try{
-            const dat = await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
-            if(!dat.ok){
-                throw new Error(
-                    'Error ' + dat.status
-                );
-            }
-            let actual = await dat.json();
-            setData(actual);
-        }
-        catch (err){
-            setData(null);
-        }*/
+    const getTeams = async () => { 
 
         return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
@@ -59,21 +52,12 @@ const SummaryTable = (props) => {
             .catch(err => console.log(err))
     }
 
-    const [teamNumbers, setTeamNumbers] = useState([]);
-    const [teamData, setTeamData] = useState([]);
-
-    const getTeamInfo = (cell) => { // get objects of certain team number
-        let info = SampleData().filter((x) => x.TeamNumber === cell)
-        console.log(info)
-        return info;
-    }
-
-
     const data = React.useMemo(
         () => teamNumbers.map(team => {
-            let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
+            //let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
+            let teamStats = SampleData().filter(x => x.TeamNumber === team.TeamNumber);
 
-                let individualPoints = teamStats.map(value => value.TotalPoints)
+            let individualPoints = teamStats.map(value => value.TotalPoints)
                 let totalPoints = 0;
                     for(let i=0; i<individualPoints.length; i++){
                         totalPoints = totalPoints + individualPoints[i]
@@ -149,35 +133,20 @@ const SummaryTable = (props) => {
                         }
                     let averageHangar = sumHangar / hangar.length;
                 
+
                 return {
-                    TeamNumber: team,
-                    //Strategy: stratList.join(', '),
-                    AveragePoint: averagePoints,
-                    AverageLowHubShots: averageLowShots,
-                    AverageLowHubAccuracy: averageLowAccuracy,
-                    AverageUpperHubShots: averageUpperShots,
-                    AverageUpperHubAccuracy: averageUpperAccuracy,
-                    AverageHangar: averageHangar,
+                    TeamNumber: team.TeamNumber,
+                    Strategy: stratList.join(', '),
+                    AveragePoints: !isNaN(averagePoints) ? averagePoints : '',
+                    AverageLowHubShots: !isNaN(averageLowShots) ? averageLowShots : '',
+                    AverageLowHubAccuracy: !isNaN(averageLowAccuracy) ? averageLowAccuracy+'%' : '',
+                    AverageUpperHubShots: !isNaN(averageUpperShots) ? averageUpperShots : '',
+                    AverageUpperHubAccuracy: !isNaN(averageUpperAccuracy) ? averageUpperAccuracy+'%' : '',
+                    AverageHangar: !isNaN(averageHangar) ? averageHangar : '',
                 };
 
         }), [teamData]
     )
-
-    useEffect(() => {
-        getTeams()
-            .then(data => {
-                setTeamNumbers(data);
-            })
-    }, [])
-
-    useEffect(() => {
-        api.get()
-            .then(data => {
-                setTeamData(data)
-            })
-    }, [teamNumbers])
-
-    //const data = SampleData();
 
 
     const columns = React.useMemo(

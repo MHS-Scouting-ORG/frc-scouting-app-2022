@@ -2,8 +2,6 @@ import React from "react";
 
 const SampleData = () => {
     return (
-        React.useMemo(
-            () =>
                 [
                     {
                         LowHubAccuracy: 75,
@@ -36,7 +34,7 @@ const SampleData = () => {
                         CargoBonus: false,
                         NumberOfRankingPoints: 0,
 
-                        Strategy: [false, false, false, false, false], // low shooter, high shooter, launchpad use, hangar, defense
+                        Strategy: [true, false, false, false, false], // low shooter, high shooter, launchpad use, hangar, defense
 
                         Comments: '',
                         OpinionScale: 0
@@ -113,10 +111,8 @@ const SampleData = () => {
                         Comments: '',
                         OpinionScale: 0
                     },
-                ],
-            [],
-        )
-    );
+                ]
+    )
 }
 
 export default SampleData;
