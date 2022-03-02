@@ -7,6 +7,7 @@ import Dropdown from "./Dropdown";
 import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
 import ImageMarker from "react-image-marker";
+import api from "../../api";
 
 class Form extends React.Component{
     constructor(props){
@@ -426,9 +427,10 @@ class Form extends React.Component{
                 highHubAccuracy: highAccuracy,
             }
         })
-
         console.log(this.state);
         console.log(points, lowAccuracy, highAccuracy);
+
+        api.put(this.state)
     }
       
 
