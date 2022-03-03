@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Input from "./Input";
 import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
@@ -8,7 +8,7 @@ import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
 import ImageMarker from "react-image-marker";
 import Header from './Header';
-
+import api from "../../api";
 
 class Form extends React.Component{
     constructor(props){
@@ -57,14 +57,13 @@ class Form extends React.Component{
 
 
         this.state = {
+            teams:["team1","team2","team3","team4","team5","team6"],
+            matchNumber:"",
             totalPoints: 0,
             lowHubAccuracy: 0,
             highHubAccuracy: 0,
-            scouterInitials:"",
             matchType:"",
             number:"",
-            matchNumber:"",
-            teams:["team1","team2","team3","team4","team5","team6"],
             dropDownBoxValues:["","",],
             matchData:[],
             autoPosition:[0,0],
@@ -171,7 +170,7 @@ class Form extends React.Component{
     getMatchTeams(){
         let matchKey = /*put this years event key here*/ "2016nytr" + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = () => {
-            fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
+            fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/matches',{
                 mode: 'cors',
                 headers:{
                     'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
