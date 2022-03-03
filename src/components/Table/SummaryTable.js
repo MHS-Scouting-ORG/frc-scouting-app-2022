@@ -49,7 +49,7 @@ const SummaryTable = () => {
     const data = React.useMemo(
         () => teamNumbers.map(team => {
             //let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
-            let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
+            let teamStats = SampleData().filter(x => x.TeamNumber === team.TeamNumber);
 
             let individualPoints = teamStats.map(value => value.TotalPoints)
             let totalPoints = 0;
@@ -197,11 +197,11 @@ const SummaryTable = () => {
 
             console.log( row.values.TeamNumber )
 
-            let info = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber)
-
+            let info = SampleData().filter((x) => x.TeamNumber === row.values.TeamNumber)
+            console.log(info)
             return ((
                 <pre>
-                    <div> {<TestTable information={info}/>} </div>
+                    <div> {<TeamTable information={info}/>} </div>
                 </pre>
             ));
         }

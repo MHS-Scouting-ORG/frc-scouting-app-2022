@@ -2,6 +2,7 @@ import React from "react";
 import { useTable, useSortBy } from "react-table";
 
 function TestTable (props){
+    
     let info = props.information;
     let columns = Object.keys(info[0]).slice(1);
 

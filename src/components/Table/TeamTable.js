@@ -7,9 +7,9 @@ import SampleData from "./Data";
  */
 
 
-const TeamTable = (tData) => {
+const TeamTable = (props) => {
 
-  const data = SampleData();
+  const data = props.information;
 
   const makeColumns = (a) => {
     return {
@@ -17,7 +17,7 @@ const TeamTable = (tData) => {
       accessor: a,
     }
   }
-
+  console.log(data)
   //let keys = Object.keys(data[0]);
   let columnValues = Object.keys(data[0]).slice(1);
 
