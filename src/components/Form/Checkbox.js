@@ -14,7 +14,7 @@ class Checkbox extends React.Component{
         return(
             <div>
                 <label> {this.props.label}
-                    < input type="checkbox" onChange={this.changeState} />
+                    < input type="checkbox" checked={this.props.checked} id={this.props.label} onChange={this.changeState} />
                 </label>
             </div>
         )

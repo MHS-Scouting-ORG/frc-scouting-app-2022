@@ -6,23 +6,20 @@ class MatchDropdown extends React.Component{
         super(props);
         this.changeMatchType = this.changeMatchType.bind(this);
         this.makeMatchTypeNumberDropdown = this.makeMatchTypeNumberDropdown.bind(this);
-        this.displayFinalMatchs = this.displayFinalMatchs.bind(this)
         this.state = {
             matchType:'',
-            displayMatch: true
         }
     }
 
-    displayFinalMatchs(){
+    /*displayNumberInput(){
         this.setState({displayMatch: !this.state.displayMatch})
-    }
+    }*/
 
     changeMatchType(event){
         let matchType = event.target.value;
         if(matchType === "Qualification"){
             this.props.setMatchType('q');
             this.setState({matchType:'q'})
-            this.displayFinalMatchs(!this.props.setTypeNumber)
         } 
         else if(matchType === "Quarterfinal"){
             this.props.setMatchType('qf');
@@ -38,8 +35,10 @@ class MatchDropdown extends React.Component{
         }
     }
 
-    makeMatchTypeNumberDropdown(){
-        this.props.makeNumberDropdown(this.state.matchType);
+    makeMatchTypeNumberDropdown(){ 
+        return (
+            this.props.makeNumberDropdown(this.state.matchType)
+        )
     }
 
     render(){
@@ -53,23 +52,10 @@ class MatchDropdown extends React.Component{
                         <option> Semifinal </option>
                         <option> Finals </option>
                     </select> {"  "}
-                    {/*this.makeMatchTypeNumberDropdown*/}
-                    { this.state.displayMatch?
-                        <input onChange={this.props.setTypeNumber}></input>
-                        :null
-                    }
-                    { }
+                    {this.makeMatchTypeNumberDropdown()}
                     {" "} Match: {" "}
                     <input onChange={this.props.setMatchNumber}></input>
                 </label>
-                
-                {/*
-                    <label> {this.props.title}
-                        <select onChange={this.dropDownChange}>
-                            <option></option>
-                            {this.props.choices.map((choice) => <option key={choice} > {choice} </option>)}
-                        </select>
-                    </label>*/}
             </div>
         )
     }
