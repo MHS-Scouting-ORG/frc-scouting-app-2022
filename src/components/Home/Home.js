@@ -29,7 +29,6 @@ const Home = (props) => {
 
     <div>
       <SummaryTable />
-      <TestTable information={SampleData()}/>
     </div>
 
   )

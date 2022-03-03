@@ -24,14 +24,8 @@ const SummaryTable = () => {
             })
     }, [teamNumbers])
 
-    const getTeamInfo = (cell) => { // get data of certain team number from array
-        let info = SampleData().filter((x) => x.TeamNumber === cell.value)
-        console.log(info)
-        return info;
-    }
-    
 
-    const getTeams = async () => { 
+    const getTeams = async () => {
 
         return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
@@ -55,95 +49,95 @@ const SummaryTable = () => {
     const data = React.useMemo(
         () => teamNumbers.map(team => {
             //let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
-            let teamStats = SampleData().filter(x => x.TeamNumber === team.TeamNumber);
+            let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
 
             let individualPoints = teamStats.map(value => value.TotalPoints)
-                let totalPoints = 0;
-                    for(let i=0; i<individualPoints.length; i++){
-                        totalPoints = totalPoints + individualPoints[i]
-                    }
-                let averagePoints = totalPoints / individualPoints.length;
-            
+            let totalPoints = 0;
+            for (let i = 0; i < individualPoints.length; i++) {
+                totalPoints = totalPoints + individualPoints[i]
+            }
+            let averagePoints = totalPoints / individualPoints.length;
+
             let stratList = [];
-                teamStats.forEach(teamObject => {
-                    let strats = teamObject.Strategy;
-                    if(strats[0]===true && !stratList.includes("Low Hub Shooter")){
-                        stratList.push("Low Hub Shooter")
-                    }
-                    if(strats[1]===true && !stratList.includes("Upper Hub Shooter")){
-                        stratList.push("Upper Hub Shooter")
-                    }
-                    if(strats[2]===true && !stratList.includes("Launchpad User")){
-                        stratList.push("Launchpad User")
-                    }
-                    if(strats[3]===true && !stratList.includes("Hangar")){
-                        stratList.push("Hangar")
-                    }
-                    if(strats[4]===true && !stratList.includes("Defense")){
-                        stratList.push("Defense")
-                    }
-                })
-            
+            teamStats.forEach(teamObject => {
+                let strats = teamObject.Strategy;
+                if (strats[0] === true && !stratList.includes("Low Hub Shooter")) {
+                    stratList.push("Low Hub Shooter")
+                }
+                if (strats[1] === true && !stratList.includes("Upper Hub Shooter")) {
+                    stratList.push("Upper Hub Shooter")
+                }
+                if (strats[2] === true && !stratList.includes("Launchpad User")) {
+                    stratList.push("Launchpad User")
+                }
+                if (strats[3] === true && !stratList.includes("Hangar")) {
+                    stratList.push("Hangar")
+                }
+                if (strats[4] === true && !stratList.includes("Defense")) {
+                    stratList.push("Defense")
+                }
+            })
+
             let lowAccuracies = teamStats.map(value => value.LowHubAccuracy)
-                let sumLowAccuracies = 0;
-                    for(let i=0; i<lowAccuracies.length; i++){
-                        sumLowAccuracies = sumLowAccuracies + lowAccuracies[i];
-                    }
-                let averageLowAccuracy = sumLowAccuracies / lowAccuracies.length;
-            
-                let lowShots = teamStats.map(value => (value.AutoLowMade + value.TeleLowMade));
-                    let sumLowShots = 0;
-                        for(let i=0; i<lowShots.length; i++){
-                            sumLowShots = sumLowShots + lowShots[i];
-                        }
-                    let averageLowShots = sumLowShots / lowShots.length;
-                
-                let upperAccuracies = teamStats.map(value => value.UpperHubAccuracy);
-                        let sumHighAccuracies = 0;
-                            for(let i=0; i<upperAccuracies.length; i++){
-                                sumHighAccuracies = sumHighAccuracies + upperAccuracies[i];
-                            }
-                        let averageUpperAccuracy = sumHighAccuracies / upperAccuracies.length;
+            let sumLowAccuracies = 0;
+            for (let i = 0; i < lowAccuracies.length; i++) {
+                sumLowAccuracies = sumLowAccuracies + lowAccuracies[i];
+            }
+            let averageLowAccuracy = sumLowAccuracies / lowAccuracies.length;
 
-                let upperShots = teamStats.map(value => (value.AutoUpperMade + value.TeleUpperMade));
-                        let sumUpperShots = 0;
-                            for(let i=0; i<upperShots.length; i++){
-                                sumUpperShots = sumUpperShots + upperShots[i];
-                            }
-                        let averageUpperShots = sumUpperShots / upperShots.length;
-                
-                let hangar = teamStats.map(value => {
-                    if(value.hangar === 'None' || value.Hangar === 'Attempted'){
-                        return 0;
-                    } else if(value.hangar === 'Low'){
-                        return 4;
-                    } else if(value.hangar === 'Mid'){
-                        return 6;
-                    } else if (value.hangar === 'High'){
-                        return 10;
-                    } else if(value.hangar === 'Traversal'){
-                        return 15;
-                    } else{
-                        return 0;
-                    }
-                });
-                    let sumHangar = 0;
-                        for(let i=0; i<hangar.length; i++){
-                            sumHangar = sumHangar + hangar[i];
-                        }
-                    let averageHangar = sumHangar / hangar.length;
-                
+            let lowShots = teamStats.map(value => (value.AutoLowMade + value.TeleLowMade));
+            let sumLowShots = 0;
+            for (let i = 0; i < lowShots.length; i++) {
+                sumLowShots = sumLowShots + lowShots[i];
+            }
+            let averageLowShots = sumLowShots / lowShots.length;
 
-                return {
-                    TeamNumber: team.TeamNumber,
-                    Strategy: stratList.join(', '),
-                    AveragePoints: !isNaN(averagePoints) ? averagePoints : '',
-                    AverageLowHubShots: !isNaN(averageLowShots) ? averageLowShots : '',
-                    AverageLowHubAccuracy: !isNaN(averageLowAccuracy) ? averageLowAccuracy+'%' : '',
-                    AverageUpperHubShots: !isNaN(averageUpperShots) ? averageUpperShots : '',
-                    AverageUpperHubAccuracy: !isNaN(averageUpperAccuracy) ? averageUpperAccuracy+'%' : '',
-                    AverageHangar: !isNaN(averageHangar) ? averageHangar : '',
-                };
+            let upperAccuracies = teamStats.map(value => value.UpperHubAccuracy);
+            let sumHighAccuracies = 0;
+            for (let i = 0; i < upperAccuracies.length; i++) {
+                sumHighAccuracies = sumHighAccuracies + upperAccuracies[i];
+            }
+            let averageUpperAccuracy = sumHighAccuracies / upperAccuracies.length;
+
+            let upperShots = teamStats.map(value => (value.AutoUpperMade + value.TeleUpperMade));
+            let sumUpperShots = 0;
+            for (let i = 0; i < upperShots.length; i++) {
+                sumUpperShots = sumUpperShots + upperShots[i];
+            }
+            let averageUpperShots = sumUpperShots / upperShots.length;
+
+            let hangar = teamStats.map(value => {
+                if (value.hangar === 'None' || value.Hangar === 'Attempted') {
+                    return 0;
+                } else if (value.hangar === 'Low') {
+                    return 4;
+                } else if (value.hangar === 'Mid') {
+                    return 6;
+                } else if (value.hangar === 'High') {
+                    return 10;
+                } else if (value.hangar === 'Traversal') {
+                    return 15;
+                } else {
+                    return 0;
+                }
+            });
+            let sumHangar = 0;
+            for (let i = 0; i < hangar.length; i++) {
+                sumHangar = sumHangar + hangar[i];
+            }
+            let averageHangar = sumHangar / hangar.length;
+
+
+            return {
+                TeamNumber: team.TeamNumber,
+                Strategy: stratList.join(', '),
+                AveragePoints: !isNaN(averagePoints) ? averagePoints : '',
+                AverageLowHubShots: !isNaN(averageLowShots) ? averageLowShots : '',
+                AverageLowHubAccuracy: !isNaN(averageLowAccuracy) ? averageLowAccuracy + '%' : '',
+                AverageUpperHubShots: !isNaN(averageUpperShots) ? averageUpperShots : '',
+                AverageUpperHubAccuracy: !isNaN(averageUpperAccuracy) ? averageUpperAccuracy + '%' : '',
+                AverageHangar: !isNaN(averageHangar) ? averageHangar : '',
+            };
 
         }), [teamData]
     )
@@ -198,14 +192,19 @@ const SummaryTable = () => {
         []
     )
 
-    const renderRowSubComponent = React.useCallback(
-        ({ row }) => (
-            <pre>
-                <div> {<TeamTable />} </div>
-            </pre>
-        ),
-        []
-    )
+    const renderRowSubComponent =
+        ({ row }) => {
+
+            console.log( row.values.TeamNumber )
+
+            let info = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber)
+
+            return ((
+                <pre>
+                    <div> {<TestTable information={info}/>} </div>
+                </pre>
+            ));
+        }
 
     const tableInstance = useTable({ columns, data }, useSortBy, useExpanded);
 
@@ -261,9 +260,6 @@ const SummaryTable = () => {
                                         row.cells.map(cell => {
                                             return (
                                                 <td
-                                                    onClick={() => {
-                                                        getTeamInfo(cell)
-                                                    }}
                                                     {...cell.getCellProps()}
                                                     style={{
                                                         padding: '10px',

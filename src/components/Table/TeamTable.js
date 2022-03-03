@@ -4,7 +4,6 @@ import SampleData from "./Data";
 
 /*
  * Fix Test/Team Table
- *  Dsiplay averages
  */
 
 
@@ -20,8 +19,7 @@ const TeamTable = (tData) => {
   }
 
   //let keys = Object.keys(data[0]);
-  let columnValues = Object.keys(data[0]).slice(4);
-  columnValues.splice(1, 0, "TotalPoints");
+  let columnValues = Object.keys(data[0]).slice(1);
 
   const columns = React.useMemo(
     () =>
