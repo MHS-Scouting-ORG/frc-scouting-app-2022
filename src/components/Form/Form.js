@@ -68,10 +68,10 @@ class Form extends React.Component{
             matchData:[],
             autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0,0],
-            penaltyValues:[false,false,false,false],
+            penaltyValues:[' ',' ', ' ', ' ', ' '],
             whoWon:'',
-            bonusValues:[false,false],
-            strategyValues:[false,false,false,false,false],
+            bonusValues:[' ',' '],
+            strategyValues:[' ',' ',' ',' ',' '],
             rankingPoints:0,
             comment:"",
             scale:0,
@@ -170,7 +170,7 @@ class Form extends React.Component{
     getMatchTeams(){
         let matchKey = /*put this years event key here*/ "2016nytr" + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = () => {
-            fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/matches',{
+            fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
                 mode: 'cors',
                 headers:{
                     'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
@@ -352,10 +352,17 @@ class Form extends React.Component{
     }
 */
 
-    penaltyBoxClicked(i){
+    penaltyBoxClicked(i,label){
         let penaltyStates = this.state.penaltyValues;
-        penaltyStates[i] = !penaltyStates[i];
+        if(penaltyStates[i] == label){
+            penaltyStates[i] = ' ';
+        }
+        else if(penaltyStates[i] == ' '){
+            penaltyStates[i] = label;
+        }
     }
+
+
 
     makePenaltyBox(name,i){
         return (
@@ -369,14 +376,27 @@ class Form extends React.Component{
         )
     }
     
-    bonusBoxClicked(i){
+    bonusBoxClicked(i,label){
         let bonusStates = this.state.bonusValues;
-        bonusStates[i] = !bonusStates[i];
-        if(!bonusStates[i] === true){
+        let bonusClicked = '';
+        if(bonusStates[i] == ' '){
+            bonusClicked = false;
+        }
+        else if(bonusStates[i] == label){
+            bonusClicked = true;
+        }
+        if(bonusClicked === true){
             this.setState({rankingPoints:this.state.rankingPoints - 1});
         }
-        else if(!bonusStates[i] === false){
+        else if(bonusClicked === false){
             this.setState({rankingPoints:this.state.rankingPoints + 1});
+        }
+        
+        if(bonusStates[i] == label){
+            bonusStates[i] = ' ';
+        }
+        else if(bonusStates[i] == ' '){
+            bonusStates[i] = label;
         }
     }
 
@@ -393,9 +413,14 @@ class Form extends React.Component{
         )
     }
     
-    strategyBoxClicked(i){
+    strategyBoxClicked(i,label){
         let strategyStates = this.state.strategyValues;
-        strategyStates[i] = !strategyStates[i];
+        if(strategyStates[i] = label){
+            strategyStates[i] = ' ';
+        }
+        else if(strategyStates[i] = ' '){
+            strategyStates[i] = label;
+        }
     }
 
     makeStrategyBox(name,i){
@@ -447,7 +472,109 @@ class Form extends React.Component{
         } else if(hangarUsed === "None" || hangarUsed === "Attempted"){
             hangarPoints = 0;
         }
+        /*
 
+        
+        let penaltyStates = this.state.penaltyValues;
+        let strategyStates = this.state.strategyValues;
+        let bonusStates = this.state.bonusValues;
+
+        if(penaltyStates[0] == true){
+            penaltyStates[0] = "Yellow Card ";
+        }
+        else{
+            penaltyStates[0] = " ";
+        }
+
+        if(penaltyStates[1] ==  true){
+            penaltyStates[1] = "Red Card ";
+        } else{
+            penaltyStates[1] = " ";
+        }
+
+        if(penaltyStates[2] == true){
+            penaltyStates[2] = "Disabled ";
+        }
+
+        else{
+            penaltyStates[2] = " ";
+        }
+
+
+        if(penaltyStates[3] == true){
+            penaltyStates[3] = "Disqualifed "
+        }
+
+        else{
+            penaltyStates[3] = " ";
+        }
+    
+        if(penaltyStates[4] == true){
+            penaltyStates[4] = "Bot Broke ";
+        }
+    
+        else{
+            penaltyStates[4] = " ";
+        }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if(strategyStates[0] == true){
+            strategyStates[0] = "Low Hub Shooter ";
+        }
+
+        else{
+            strategyStates[0] = " ";
+        }
+
+        if(strategyStates[1] == true){
+            strategyStates[1] = "Upper Hub Shooter ";
+        }
+
+        else{
+            strategyStates[1] = " ";
+        }
+
+        if(strategyStates[2] == true){
+            strategyStates[2] = "Launchpad Shooter ";
+        }
+
+        else{
+            strategyStates[2] = " ";
+        }
+
+        if(strategyStates[3] == true){
+            strategyStates[3] = "Hangar ";
+        }
+
+        else{
+            strategyStates[3] = " ";
+        }
+
+        if(strategyStates[4] == true){
+            strategyStates[4] = "Defense ";
+        }
+        else{
+            strategyStates[4] = "";
+        }
+
+
+        if(bonusStates[0] == true){
+            bonusStates[0] = "Hangar Bonus ";
+        }
+        else{
+            bonusStates[0] = " ";
+        }
+
+        if(bonusStates[1] == true){
+            bonusStates[1] = "Cargo Bonus ";
+        }
+        else{
+            bonusStates[1] = ' ';
+        }
+
+        //*/
+        
         let points =  taxiPoints + hangarPoints + (lowTeleMade + (2 * ( lowAutoMade + highTeleMade + ( highAutoMade * 2 ))));
         let lowAccuracy = 100 * (( lowAutoMade + lowTeleMade ) / ( lowMissed + lowAutoMade + lowTeleMade ));
         let highAccuracy = 100 * (( highTeleMade + highAutoMade ) / ( highMissed + highAutoMade + highTeleMade ))
@@ -491,21 +618,21 @@ class Form extends React.Component{
                 {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],1)}
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
-                {this.makePenaltyBox("Yellow card: ",0)}
-                {this.makePenaltyBox("Red card: ", 1)}
-                {this.makePenaltyBox("Disabled: ", 2)}
-                {this.makePenaltyBox("Disqualifed: ", 3)}
-                {this.makePenaltyBox("Bot Broke: ", 4)}
-                {this.makeBonusBox("Hangar Bonus: ", 0)}
-                {this.makeBonusBox("Cargo Bonus: ", 1)}
+                {this.makePenaltyBox("Yellow card ",0)}
+                {this.makePenaltyBox("Red card ", 1)}
+                {this.makePenaltyBox("Disabled ", 2)}
+                {this.makePenaltyBox("Disqualifed ", 3)}
+                {this.makePenaltyBox("Bot Broke ", 4)}
+                {this.makeBonusBox("Hangar Bonus ", 0)}
+                {this.makeBonusBox("Cargo Bonus ", 1)}
                 <Header display={this.state.rankingPoints} bonus={this.state.bonusValues}/>
                 <br></br>
                 <h3>PRIORITIES & STRATEGIES</h3>
-                {this.makeStrategyBox("Low Hub Shooter: ", 0)}
-                {this.makeStrategyBox("Upper Hub Shooter: ", 1)}
-                {this.makeStrategyBox("Launchpad Shooter: ", 2)}
-                {this.makeStrategyBox("Hangar: ", 3)}
-                {this.makeStrategyBox("Defense: ", 4)}
+                {this.makeStrategyBox("Low Hub Shooter ", 0)}
+                {this.makeStrategyBox("Upper Hub Shooter ", 1)}
+                {this.makeStrategyBox("Launchpad Shooter ", 2)}
+                {this.makeStrategyBox("Hangar ", 3)}
+                {this.makeStrategyBox("Defense ", 4)}
                 <br></br>
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
