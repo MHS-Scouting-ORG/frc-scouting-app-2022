@@ -2,6 +2,7 @@ import { API, Auth } from 'aws-amplify'
 
 import { SSM, STS } from 'aws-sdk'
 import config from '../config.json'
+import data from './data.json'
 const use_remote = process.env.REACT_APP_ENABLE_AUTH === '1'
 const {
   api_name,
@@ -14,7 +15,7 @@ const {
 const api = {}
 
 api.get = use_remote ? API.get.bind(API, api_name, endpoint) : async function() {
-  return Promise.resolve({})
+  return Promise.resolve(data)
 }
 
 const verify_sec = async user => {
