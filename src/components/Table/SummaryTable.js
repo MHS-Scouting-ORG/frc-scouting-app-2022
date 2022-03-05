@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useTable, useSortBy, useExpanded } from "react-table";
-import SampleData from "./Data";
 import TeamTable from "./TeamTable";
-import TestTable from './Test';
 import api from '../../api';
 
 const SummaryTable = () => {
-    // dropDown tarmac line 275
+
     const [teamNumbers, setTeamNumbers] = useState([]);     // List of teamNumbers from Blue Alliance
     const [teamData, setTeamData] = useState([]);           // List of teamData from API
 
     useEffect(() => {                                       // Sets teamNumbers state to the data
         getTeams()
             .then(data => {
+                console.log(`getting team numbers ${data}`)
                 setTeamNumbers(data);
             })
     }, [])
@@ -20,7 +19,7 @@ const SummaryTable = () => {
     useEffect(() => {
         api.get()
             .then(data => {
-                //console.log(data)
+                console.log(`getting team numbers ${data}`)
                 setTeamData(data)
             })
     }, [teamNumbers])
@@ -31,7 +30,7 @@ const SummaryTable = () => {
         return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
             .then(data => {
-                return data.map(obj => { 
+                return data.map(obj => {
                     return {
                         TeamNumber: obj.team_number,
                         Strategy: '',
@@ -47,101 +46,127 @@ const SummaryTable = () => {
             .catch(err => console.log(err))
     }
 
+    const calcAveragePoints = (arr) => {
+        let individualPoints = arr.map(value => value.TotalPoints)
+        let totalPoints = 0;
+        for (let i = 0; i < individualPoints.length; i++) {
+            totalPoints = totalPoints + individualPoints[i]
+        }
+        let averagePoints = totalPoints / individualPoints.length;
+        return averagePoints;
+    }
+
+    const getStrat = (arr) => {
+        let stratList = [];
+        arr.forEach(teamObject => {
+            let strats = teamObject.Strategy;
+            if (strats[0] === "Low Hub " && !stratList.includes("Low Hub Shooter")) {
+                stratList.push("Low Hub Shooter")
+            }
+            if (strats[1] === "Upper Hub " && !stratList.includes("Upper Hub Shooter")) {
+                stratList.push("Upper Hub Shooter")
+            }
+            if (strats[2] === "Launchpad " && !stratList.includes("Launchpad User")) {
+                stratList.push("Launchpad User")
+            }
+            if (strats[3] === "Hangar " && !stratList.includes("Hangar")) {
+                stratList.push("Hangar")
+            }
+            if (strats[4] === "Defense " && !stratList.includes("Defense")) {
+                stratList.push("Defense")
+            }
+        })
+        return stratList;
+    }
+
+    const calcLowAcc = (arr) => {
+        let lowAccuracies = arr.map(value => value.LowHubAccuracy)
+        let sumLowAccuracies = 0;
+        for (let i = 0; i < lowAccuracies.length; i++) {
+            sumLowAccuracies = sumLowAccuracies + lowAccuracies[i];
+        }
+        let averageLowAccuracy = sumLowAccuracies / lowAccuracies.length;
+        return averageLowAccuracy;
+    }
+
+    const calcLowShots = (arr) => {
+        let lowShots = arr.map(value => (value.AutoLowMade + value.TeleLowMade));
+        let sumLowShots = 0;
+        for (let i = 0; i < lowShots.length; i++) {
+            sumLowShots = sumLowShots + lowShots[i];
+        }
+        let averageLowShots = sumLowShots / lowShots.length;
+        return averageLowShots;
+    }
+
+    const calcUpperAcc = (arr) => {
+        let upperAccuracies = arr.map(value => value.UpperHubAccuracy);
+        let sumHighAccuracies = 0;
+        for (let i = 0; i < upperAccuracies.length; i++) {
+            sumHighAccuracies = sumHighAccuracies + upperAccuracies[i];
+        }
+        let averageUpperAccuracy = sumHighAccuracies / upperAccuracies.length;
+        return averageUpperAccuracy;
+    }
+
+    const calcUpperShots = (arr) => {
+        let upperShots = arr.map(value => (value.AutoUpperMade + value.TeleUpperMade));
+        let sumUpperShots = 0;
+        for (let i = 0; i < upperShots.length; i++) {
+            sumUpperShots = sumUpperShots + upperShots[i];
+        }
+        let averageUpperShots = sumUpperShots / upperShots.length;
+        return averageUpperShots;
+    }
+
+    const calcHangar = (arr) => {
+        let hangar = arr.map(value => {
+            if (value.Hangar === 'None' || value.Hangar === 'Attempted') {
+                return 0;
+            } else if (value.Hangar === 'Low') {
+                return 4;
+            } else if (value.Hangar === 'Mid') {
+                return 6;
+            } else if (value.Hangar === 'High') {
+                return 10;
+            } else if (value.Hangar === 'Traversal') {
+                return 15;
+            } else {
+                return 0;
+            }
+        });
+
+        let sumHangar = 0;
+        for (let i = 0; i < hangar.length; i++) {
+            sumHangar = sumHangar + hangar[i];
+        }
+        let averageHangar = sumHangar / hangar.length;
+        return averageHangar;
+    }
+
     const data = React.useMemo(
         () => teamNumbers.map(team => {
             let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
 
-            let individualPoints = teamStats.map(value => value.TotalPoints)
-            let totalPoints = 0;
-            for (let i = 0; i < individualPoints.length; i++) {
-                totalPoints = totalPoints + individualPoints[i]
-            }
-            let averagePoints = totalPoints / individualPoints.length;
-
-            let stratList = [];
-            teamStats.forEach(teamObject => {
-                let strats = teamObject.Strategy;
-                if (strats[0] === "Low Hub " && !stratList.includes("Low Hub Shooter")) {
-                    stratList.push("Low Hub Shooter")
-                }
-                if (strats[1] === "Upper Hub " && !stratList.includes("Upper Hub Shooter")) {
-                    stratList.push("Upper Hub Shooter")
-                }
-                if (strats[2] === "Launchpad " && !stratList.includes("Launchpad User")) {
-                    stratList.push("Launchpad User")
-                }
-                if (strats[3] === "Hangar " && !stratList.includes("Hangar")) {
-                    stratList.push("Hangar")
-                }
-                if (strats[4] === "Defense " && !stratList.includes("Defense")) {
-                    stratList.push("Defense")
-                }
-            })
-
-            let lowAccuracies = teamStats.map(value => value.LowHubAccuracy)
-            let sumLowAccuracies = 0;
-            for (let i = 0; i < lowAccuracies.length; i++) {
-                sumLowAccuracies = sumLowAccuracies + lowAccuracies[i];
-            }
-            let averageLowAccuracy = sumLowAccuracies / lowAccuracies.length;
-
-            let lowShots = teamStats.map(value => (value.AutoLowMade + value.TeleLowMade));
-            let sumLowShots = 0;
-            for (let i = 0; i < lowShots.length; i++) {
-                sumLowShots = sumLowShots + lowShots[i];
-            }
-            let averageLowShots = sumLowShots / lowShots.length;
-
-            let upperAccuracies = teamStats.map(value => value.UpperHubAccuracy);
-            let sumHighAccuracies = 0;
-            for (let i = 0; i < upperAccuracies.length; i++) {
-                sumHighAccuracies = sumHighAccuracies + upperAccuracies[i];
-            }
-            let averageUpperAccuracy = sumHighAccuracies / upperAccuracies.length;
-
-            let upperShots = teamStats.map(value => (value.AutoUpperMade + value.TeleUpperMade));
-            let sumUpperShots = 0;
-            for (let i = 0; i < upperShots.length; i++) {
-                sumUpperShots = sumUpperShots + upperShots[i];
-            }
-            let averageUpperShots = sumUpperShots / upperShots.length;
-
-            let hangar = teamStats.map(value => {
-                if (value.Hangar === 'None' || value.Hangar === 'Attempted') {
-                    return 0;
-                } else if (value.Hangar === 'Low') {
-                    return 4;
-                } else if (value.Hangar === 'Mid') {
-                    return 6;
-                } else if (value.Hangar === 'High') {
-                    return 10;
-                } else if (value.Hangar === 'Traversal') {
-                    return 15;
-                } else {
-                    return 0;
-                }
-            });
-
-            let sumHangar = 0;
-            for (let i = 0; i < hangar.length; i++) {
-                sumHangar = sumHangar + hangar[i];
-            }
-            let averageHangar = sumHangar / hangar.length;
-
+            let avgPoints = calcAveragePoints(teamStats);
+            let strats = getStrat(teamStats);
+            let avgLowAccuracy = calcLowAcc(teamStats);
+            let avgLowShots = calcLowShots(teamStats);
+            let avgUpperAccuracy = calcUpperAcc(teamStats);
+            let avgUpperShots = calcUpperShots(teamStats);
+            let avgHangar = calcHangar(teamStats);
 
             return {
                 TeamNumber: team.TeamNumber,
-                Strategy: stratList.join(', '),
-                AveragePoints: !isNaN(averagePoints) ? averagePoints : '',
-                AverageLowHubShots: !isNaN(averageLowShots) ? averageLowShots : '',
-                AverageLowHubAccuracy: !isNaN(averageLowAccuracy) ? averageLowAccuracy + '%' : '',
-                AverageUpperHubShots: !isNaN(averageUpperShots) ? averageUpperShots : '',
-                AverageUpperHubAccuracy: !isNaN(averageUpperAccuracy) ? averageUpperAccuracy + '%' : '',
-                AverageHangar: !isNaN(averageHangar) ? averageHangar : '',
+                Strategy: strats.join(', '),
+                AveragePoints: !isNaN(avgPoints) ? avgPoints : '',
+                AverageLowHubShots: !isNaN(avgLowShots) ? avgLowShots : '',
+                AverageLowHubAccuracy: !isNaN(avgLowAccuracy) ? avgLowAccuracy + '%' : '',
+                AverageUpperHubShots: !isNaN(avgUpperShots) ? avgUpperShots : '',
+                AverageUpperHubAccuracy: !isNaN(avgUpperAccuracy) ? avgUpperAccuracy + '%' : '',
+                AverageHangar: !isNaN(avgHangar) ? avgHangar : '',
             };
-
-        }), [teamData]
-    )
+        }), [teamData, teamNumbers])
 
 
     const columns = React.useMemo(
@@ -196,15 +221,21 @@ const SummaryTable = () => {
     const renderRowSubComponent =
         ({ row }) => {
 
-            console.log( row.values.TeamNumber )
+            let t = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber);
 
-            let info = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber)
-            console.log(info)
-            return ((
-                <pre>
-                    <div> {<TeamTable information={info}/>} </div>
-                </pre>
-            ));
+            // let info = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber)
+
+            return t.length > 0 ?
+                (<pre>
+                    <div> {<TeamTable information={t} />} </div>
+                </pre>)
+
+                : (<pre>
+                    <div> <tr><td style={{
+                        padding: '10px',
+                        textAlign: 'center',
+                    }}> No data collected for Team {row.values.TeamNumber}. </td></tr> </div>
+                </pre>);
         }
 
     const tableInstance = useTable({ columns, data }, useSortBy, useExpanded);
@@ -293,7 +324,6 @@ const SummaryTable = () => {
                 </tbody>
 
             </table>
-
         </div>
     )
 

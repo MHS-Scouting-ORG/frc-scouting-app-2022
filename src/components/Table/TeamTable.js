@@ -1,3 +1,4 @@
+import { isModelAttributePrimaryKey } from "@aws-amplify/datastore";
 import React from "react";
 import { useTable, useSortBy } from "react-table";
 import SampleData from "./Data";
@@ -64,7 +65,6 @@ const TeamTable = (props) => {
           {
             rows.map(row => {
               prepareRow(row)
-
               return (
                 <tr {...row.getRowProps()}>
                   {
