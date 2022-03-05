@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 
-import { withAuthenticator, AmplifyAuthenticator } from '@aws-amplify/ui-react'
+import { withAuthenticator } from '@aws-amplify/ui-react'
 
 import Header from './components/Header/Header';
 import MenuDrawer from './components/MenuDrawer/MenuDrawer';
@@ -42,6 +42,6 @@ function App() {
 
 let exportApp = App
 if(process.env.REACT_APP_ENABLE_AUTH === '1')
-  exportApp = withAuthenticator(App, <AmplifyAuthenticator loginMechanisms={[]}/>)
+  exportApp = withAuthenticator(App)
 
 export default exportApp
