@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "./Input";
 import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
-import Initials from "./Initials";
 import Dropdown from "./Dropdown";
 import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
@@ -55,9 +54,13 @@ class Form extends React.Component{
         this.setMarkers = this.setMarkers.bind(this);
 
 
+        this.dropDownTarmac = this.dropDownTarmac.bind(this);
+
+
 
         this.state = {
             teams:["team1","team2","team3","team4","team5","team6"],
+            teamNumber:'',
             matchNumber:"",
             totalPoints: 0,
             lowHubAccuracy: 0,
@@ -76,6 +79,8 @@ class Form extends React.Component{
             comment:"",
             scale:0,
             markers: [],
+
+            tarmacSection: 0,
         };
     }
     
@@ -85,44 +90,43 @@ class Form extends React.Component{
     }
 
     /* {
-            Summary: {
-                TotalPoints: 45,
-                LowHubAccuracy: 75,
-                UpperHubAccuracy: 85
-            },
-
-            MatchNumber: 123,
-            TeamNumber: 12,
-
-            AutoLowMade: 4,
-            AutoLowMissed: 5,
-            AutoUpperMade: 6,
-            AutoUpperMissed: 7,
-
-            Taxi: false,
-            AutoPlacement: [x,y],
-
-            TeleLowMade: 8,
-            TeleLowMissed: 9,
-            TeleUpperMade: 10,
-            TeleUpperMissed: 11,
-
-            Hangar: 15,
-
-            NumberOfFouls: 0,
-            NumberOfTech: 0,
-            Penalties: [yellow, red, disabled, disqualified] // booleans, you can use an array
-
-            HangarBonus: false,
-            CargoBonus: false,
-            NumberOfRankingPoints: 0,
-
-            Strategy: [low shooter, high shooter, launchpad use, hangar, defense], // booleans, you can us an array
-
-            Comments: '',
-            OpinionScale: 0
-        }
-    
+        "TeamNumber": 4270,
+        "MatchNumber": 4,
+        "TotalPoints": 34,
+        "LowHubAccuracy": 87,
+        "UpperHubAccuracy": 78,
+        "AutoLowMade": 1,
+        "AutoLowMissed": 1,
+        "AutoUpperMade": 2,
+        "AutoUpperMissed": 1,
+        "Taxi": true,
+        "AutoPlacement": 3,
+        "TeleLowMade": 8,
+        "TeleLowMissed": 9,
+        "TeleUpperMade": 10,
+        "TeleUpperMissed": 11,
+        "Hangar": "Low",
+        "NumberOfFouls": 0,
+        "NumberOfTech": 0,
+        "Penalties": [
+          "Yelllow Card ",
+          " ",
+          "Disabled ",
+          " ",
+          " "
+        ],
+        "HangarCargoBonus": ["Cargo ", " "],
+        "NumberOfRankingPoints": 0,
+        "Strategy": [
+          " ",
+          "Upper Hub ",
+          " ",
+          "Hangar ",
+          "Defense "
+        ],
+        "Comments": "",
+        "OpinionScale": 0
+    }
     */
 
 
@@ -270,6 +274,11 @@ class Form extends React.Component{
     }
 
 
+    dropDownTarmac(event){
+        this.setState({tarmacSection: event.target.value})
+    }
+
+
 
     //--------------------------------------------------------------------------------------------------------------------------
 
@@ -401,13 +410,21 @@ class Form extends React.Component{
     }
 
     makeBonusBox(name,i){
+        let bonuses = this.state.bonusValues;
+        let checked;
+        if(bonuses[i] == name){
+            checked = true;
+        }
+        else if(bonuses[i] == ' '){
+            checked = false;
+        }
         return (
             <div>
                 <Checkbox
                     label={name}
                     changeState={this.bonusBoxClicked}
                     place={i}
-                    checked={this.state.bonusValues[i]}
+                    checked={checked}
                 />
             </div>
         )
@@ -472,108 +489,6 @@ class Form extends React.Component{
         } else if(hangarUsed === "None" || hangarUsed === "Attempted"){
             hangarPoints = 0;
         }
-        /*
-
-        
-        let penaltyStates = this.state.penaltyValues;
-        let strategyStates = this.state.strategyValues;
-        let bonusStates = this.state.bonusValues;
-
-        if(penaltyStates[0] == true){
-            penaltyStates[0] = "Yellow Card ";
-        }
-        else{
-            penaltyStates[0] = " ";
-        }
-
-        if(penaltyStates[1] ==  true){
-            penaltyStates[1] = "Red Card ";
-        } else{
-            penaltyStates[1] = " ";
-        }
-
-        if(penaltyStates[2] == true){
-            penaltyStates[2] = "Disabled ";
-        }
-
-        else{
-            penaltyStates[2] = " ";
-        }
-
-
-        if(penaltyStates[3] == true){
-            penaltyStates[3] = "Disqualifed "
-        }
-
-        else{
-            penaltyStates[3] = " ";
-        }
-    
-        if(penaltyStates[4] == true){
-            penaltyStates[4] = "Bot Broke ";
-        }
-    
-        else{
-            penaltyStates[4] = " ";
-        }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        if(strategyStates[0] == true){
-            strategyStates[0] = "Low Hub Shooter ";
-        }
-
-        else{
-            strategyStates[0] = " ";
-        }
-
-        if(strategyStates[1] == true){
-            strategyStates[1] = "Upper Hub Shooter ";
-        }
-
-        else{
-            strategyStates[1] = " ";
-        }
-
-        if(strategyStates[2] == true){
-            strategyStates[2] = "Launchpad Shooter ";
-        }
-
-        else{
-            strategyStates[2] = " ";
-        }
-
-        if(strategyStates[3] == true){
-            strategyStates[3] = "Hangar ";
-        }
-
-        else{
-            strategyStates[3] = " ";
-        }
-
-        if(strategyStates[4] == true){
-            strategyStates[4] = "Defense ";
-        }
-        else{
-            strategyStates[4] = "";
-        }
-
-
-        if(bonusStates[0] == true){
-            bonusStates[0] = "Hangar Bonus ";
-        }
-        else{
-            bonusStates[0] = " ";
-        }
-
-        if(bonusStates[1] == true){
-            bonusStates[1] = "Cargo Bonus ";
-        }
-        else{
-            bonusStates[1] = ' ';
-        }
-
-        //*/
         
         let points =  taxiPoints + hangarPoints + (lowTeleMade + (2 * ( lowAutoMade + highTeleMade + ( highAutoMade * 2 ))));
         let lowAccuracy = 100 * (( lowAutoMade + lowTeleMade ) / ( lowMissed + lowAutoMade + lowTeleMade ));
@@ -587,7 +502,16 @@ class Form extends React.Component{
         console.log(this.state);
         console.log(points, lowAccuracy, highAccuracy);
 
-        api.put(this.state)
+        api.put({
+            body: {
+                TeamNumber: Number(this.state.teamNumber),
+                MatchNumber: Number(this.state.matchNumber),
+                TotalPoints: points,
+                lowHubAccuracy: lowAccuracy,
+                UpperHubAccuracy: highAccuracy,
+                AutoLowMade: Number()
+            }
+        })
     }
       
 
@@ -607,7 +531,9 @@ class Form extends React.Component{
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],1)}
-                <ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>
+               {/* <ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker> */}
+               <img src={'./images/tarmac.JPG'} width="320" height="240"></img>
+                <Dropdown setState={this.dropDownTarmac} title={'Tarmac Start Placement: '} choices={[1,2,3,4,5,6,7,8]}/>
                 {/* */}
                 <br></br>
                 <h3>TELE-OP</h3>
