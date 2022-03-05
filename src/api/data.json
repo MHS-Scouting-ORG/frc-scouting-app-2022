@@ -1,0 +1,78 @@
+[
+    {
+        "Summary": {
+            "TotalPoints": 45,
+            "LowHubAccuracy": 75,
+            "UpperHubAccuracy": 85
+        },
+    
+        "MatchId": 123,
+        "TeamId": 11,
+    
+        "AutoLowMade": 4,
+        "AutoLowMissed": 5,
+        "AutoUpperMade": 6,
+        "AutoUpperMissed": 7,
+    
+        "Taxi": false,
+        "AutoPlacement": [0,0],
+    
+        "TeleLowMade": 8,
+        "TeleLowMissed": 9,
+        "TeleUpperMade": 10,
+        "TeleUpperMissed": 11,
+    
+        "Hangar": 15,
+    
+        "NumberOfFouls": 0,
+        "NumberOfTech": 0,
+        "Penalties": ["yellow", "red", "disabled", "disqualified"],
+    
+        "HangarBonus": false,
+        "CargoBonus": false,
+        "NumberOfRankingPoints": 0,
+    
+        "Strategy": ["low shooter", "high shooter", "launchpad use", "hangar", "defense"], 
+    
+        "Comments": "",
+        "OpinionScale": 0
+      },
+      {
+        "Summary": {
+            "TotalPoints": 45,
+            "LowHubAccuracy": 75,
+            "UpperHubAccuracy": 85
+        },
+    
+        "MatchId": 123,
+        "TeamId": 11,
+    
+        "AutoLowMade": 4,
+        "AutoLowMissed": 5,
+        "AutoUpperMade": 6,
+        "AutoUpperMissed": 7,
+    
+        "Taxi": false,
+        "AutoPlacement": [0,0],
+    
+        "TeleLowMade": 8,
+        "TeleLowMissed": 9,
+        "TeleUpperMade": 10,
+        "TeleUpperMissed": 11,
+    
+        "Hangar": 15,
+    
+        "NumberOfFouls": 0,
+        "NumberOfTech": 0,
+        "Penalties": ["yellow", "red", "disabled", "disqualified"],
+    
+        "HangarBonus": false,
+        "CargoBonus": false,
+        "NumberOfRankingPoints": 0,
+    
+        "Strategy": ["low shooter", "high shooter", "launchpad use", "hangar", "defense"],
+    
+        "Comments": "",
+        "OpinionScale": 0
+      }
+]
