@@ -2,10 +2,6 @@ import React from "react";
 import { useTable, useSortBy } from "react-table";
 import SampleData from "./Data";
 
-/*
- * Fix Test/Team Table
- */
-
 
 const TeamTable = (props) => {
 
@@ -17,8 +13,6 @@ const TeamTable = (props) => {
       accessor: a,
     }
   }
-  console.log(data)
-  //let keys = Object.keys(data[0]);
   let columnValues = Object.keys(data[0]).slice(1);
 
   const columns = React.useMemo(

@@ -6,7 +6,7 @@ import TestTable from './Test';
 import api from '../../api';
 
 const SummaryTable = () => {
-
+    // dropDown tarmac line 275
     const [teamNumbers, setTeamNumbers] = useState([]);     // List of teamNumbers from Blue Alliance
     const [teamData, setTeamData] = useState([]);           // List of teamData from API
 
@@ -20,6 +20,7 @@ const SummaryTable = () => {
     useEffect(() => {
         api.get()
             .then(data => {
+                //console.log(data)
                 setTeamData(data)
             })
     }, [teamNumbers])
@@ -30,7 +31,7 @@ const SummaryTable = () => {
         return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
             .then(response => response.json())
             .then(data => {
-                return data.map(obj => {
+                return data.map(obj => { 
                     return {
                         TeamNumber: obj.team_number,
                         Strategy: '',
@@ -48,8 +49,7 @@ const SummaryTable = () => {
 
     const data = React.useMemo(
         () => teamNumbers.map(team => {
-            //let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
-            let teamStats = SampleData().filter(x => x.TeamNumber === team.TeamNumber);
+            let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
 
             let individualPoints = teamStats.map(value => value.TotalPoints)
             let totalPoints = 0;
@@ -61,19 +61,19 @@ const SummaryTable = () => {
             let stratList = [];
             teamStats.forEach(teamObject => {
                 let strats = teamObject.Strategy;
-                if (strats[0] === true && !stratList.includes("Low Hub Shooter")) {
+                if (strats[0] === "Low Hub " && !stratList.includes("Low Hub Shooter")) {
                     stratList.push("Low Hub Shooter")
                 }
-                if (strats[1] === true && !stratList.includes("Upper Hub Shooter")) {
+                if (strats[1] === "Upper Hub " && !stratList.includes("Upper Hub Shooter")) {
                     stratList.push("Upper Hub Shooter")
                 }
-                if (strats[2] === true && !stratList.includes("Launchpad User")) {
+                if (strats[2] === "Launchpad " && !stratList.includes("Launchpad User")) {
                     stratList.push("Launchpad User")
                 }
-                if (strats[3] === true && !stratList.includes("Hangar")) {
+                if (strats[3] === "Hangar " && !stratList.includes("Hangar")) {
                     stratList.push("Hangar")
                 }
-                if (strats[4] === true && !stratList.includes("Defense")) {
+                if (strats[4] === "Defense " && !stratList.includes("Defense")) {
                     stratList.push("Defense")
                 }
             })
@@ -107,20 +107,21 @@ const SummaryTable = () => {
             let averageUpperShots = sumUpperShots / upperShots.length;
 
             let hangar = teamStats.map(value => {
-                if (value.hangar === 'None' || value.Hangar === 'Attempted') {
+                if (value.Hangar === 'None' || value.Hangar === 'Attempted') {
                     return 0;
-                } else if (value.hangar === 'Low') {
+                } else if (value.Hangar === 'Low') {
                     return 4;
-                } else if (value.hangar === 'Mid') {
+                } else if (value.Hangar === 'Mid') {
                     return 6;
-                } else if (value.hangar === 'High') {
+                } else if (value.Hangar === 'High') {
                     return 10;
-                } else if (value.hangar === 'Traversal') {
+                } else if (value.Hangar === 'Traversal') {
                     return 15;
                 } else {
                     return 0;
                 }
             });
+
             let sumHangar = 0;
             for (let i = 0; i < hangar.length; i++) {
                 sumHangar = sumHangar + hangar[i];
@@ -197,7 +198,7 @@ const SummaryTable = () => {
 
             console.log( row.values.TeamNumber )
 
-            let info = SampleData().filter((x) => x.TeamNumber === row.values.TeamNumber)
+            let info = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber)
             console.log(info)
             return ((
                 <pre>
@@ -221,7 +222,6 @@ const SummaryTable = () => {
     return (
         <div>
             <table {...getTableProps()} >
-
                 <thead>
                     {
                         headerGroups.map(headerGroup =>
