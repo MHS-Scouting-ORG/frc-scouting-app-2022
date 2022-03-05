@@ -533,7 +533,7 @@ class Form extends React.Component{
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],1)}
                {/* <ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker> */}
                <img src={'./images/tarmac.JPG'} width="320" height="240"></img>
-                <Dropdown setState={this.dropDownTarmac} title={'Tarmac Start Placement: '} choices={[1,2,3,4,5,6,7,8]}/>
+                {this.makeDropDownBox('Tarmac Start Placement: '), [1,2,3,4,5,6,7,8]}
                 {/* */}
                 <br></br>
                 <h3>TELE-OP</h3>
