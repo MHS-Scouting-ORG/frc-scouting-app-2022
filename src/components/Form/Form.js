@@ -64,14 +64,14 @@ class Form extends React.Component{
             number:"",
             matchNumber:"",
             teams:["team1","team2","team3","team4","team5","team6"],
-            dropDownBoxValues:["","",],
+            dropDownBoxValues:["",""],
             matchData:[],
             autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0,0],
-            penaltyValues:[false,false,false,false],
+            penaltyValues:[' ',' ',' ',' ',' '],
             whoWon:'',
-            bonusValues:[false,false],
-            strategyValues:[false,false,false,false,false],
+            bonusValues:[' ',' '],
+            strategyValues:[' ',' ',' ',' ',' '],
             rankingPoints:0,
             comment:"",
             scale:0,
@@ -228,7 +228,7 @@ class Form extends React.Component{
         else{
             this.setState({rankingPoints:0})
         }
-        this.setState({bonusValues:[false,false]});
+        this.setState({bonusValues:[' ',' ']});
     }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -352,9 +352,16 @@ class Form extends React.Component{
     }
 */
 
-    penaltyBoxClicked(i){
+//--------------------------------------------------------------------------------------------------------------------------
+
+    penaltyBoxClicked(i,label){
         let penaltyStates = this.state.penaltyValues;
-        penaltyStates[i] = !penaltyStates[i];
+        if(penaltyStates[i] === label){
+            penaltyStates[i] =  ' ';
+        }
+        else if(penaltyStates[i] === ' '){
+            penaltyStates[i] = label;
+        }
     }
 
     makePenaltyBox(name,i){
@@ -369,33 +376,52 @@ class Form extends React.Component{
         )
     }
     
-    bonusBoxClicked(i){
+    bonusBoxClicked(i,label){
         let bonusStates = this.state.bonusValues;
-        bonusStates[i] = !bonusStates[i];
-        if(!bonusStates[i] === true){
+        if(bonusStates[i] === label){
             this.setState({rankingPoints:this.state.rankingPoints - 1});
         }
-        else if(!bonusStates[i] === false){
+        else if(bonusStates[i] === ' '){
             this.setState({rankingPoints:this.state.rankingPoints + 1});
+        }
+
+        if(bonusStates[i] === label){
+            bonusStates[i] = ' ';
+        }
+        else if(bonusStates[i] === ' '){
+            bonusStates[i] = label;
         }
     }
 
     makeBonusBox(name,i){
+        let bonusStates = this.state.bonusValues;
+        let checkedValue;
+        if(bonusStates[i] === name){
+            checkedValue = true;
+        }
+        else if(bonusStates[i] === ' '){
+            checkedValue = false;
+        }
         return (
             <div>
                 <Checkbox
                     label={name}
                     changeState={this.bonusBoxClicked}
                     place={i}
-                    checked={this.state.bonusValues[i]}
+                    checked={checkedValue}
                 />
             </div>
         )
     }
     
-    strategyBoxClicked(i){
+    strategyBoxClicked(i,label){
         let strategyStates = this.state.strategyValues;
-        strategyStates[i] = !strategyStates[i];
+        if(strategyStates[i] === label){
+            strategyStates[i] = ' ';
+        }
+        else if(strategyStates[i] === ' '){
+            strategyStates[i] = label;
+        }
     }
 
     makeStrategyBox(name,i){
@@ -490,21 +516,21 @@ class Form extends React.Component{
                 {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],1)}
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
-                {this.makePenaltyBox("Yellow card: ",0)}
-                {this.makePenaltyBox("Red card: ", 1)}
-                {this.makePenaltyBox("Disabled: ", 2)}
-                {this.makePenaltyBox("Disqualifed: ", 3)}
-                {this.makePenaltyBox("Bot Broke: ", 4)}
-                {this.makeBonusBox("Hangar Bonus: ", 0)}
-                {this.makeBonusBox("Cargo Bonus: ", 1)}
+                {this.makePenaltyBox("Yellow card ",0)}
+                {this.makePenaltyBox("Red card ", 1)}
+                {this.makePenaltyBox("Disabled ", 2)}
+                {this.makePenaltyBox("Disqualifed ", 3)}
+                {this.makePenaltyBox("Bot Broke ", 4)}
+                {this.makeBonusBox("Hangar Bonus ", 0)}
+                {this.makeBonusBox("Cargo Bonus ", 1)}
                 <Header display={this.state.rankingPoints} bonus={this.state.bonusValues}/>
                 <br></br>
                 <h3>PRIORITIES & STRATEGIES</h3>
-                {this.makeStrategyBox("Low Hub Shooter: ", 0)}
-                {this.makeStrategyBox("Upper Hub Shooter: ", 1)}
-                {this.makeStrategyBox("Launchpad Shooter: ", 2)}
-                {this.makeStrategyBox("Hangar: ", 3)}
-                {this.makeStrategyBox("Defense: ", 4)}
+                {this.makeStrategyBox("Low Hub Shooter ", 0)}
+                {this.makeStrategyBox("Upper Hub Shooter ", 1)}
+                {this.makeStrategyBox("Launchpad Shooter ", 2)}
+                {this.makeStrategyBox("Hangar ", 3)}
+                {this.makeStrategyBox("Defense ", 4)}
                 <br></br>
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
