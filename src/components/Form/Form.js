@@ -6,8 +6,9 @@ import Initials from "./Initials";
 import Dropdown from "./Dropdown";
 import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
-import ImageMarker from "react-image-marker";
+//import ImageMarker from "react-image-marker";
 import Header from './Header';
+import api from "../../api/index"
 
 class Form extends React.Component{
     constructor(props){
@@ -64,10 +65,11 @@ class Form extends React.Component{
             number:"",
             matchNumber:"",
             teams:["team1","team2","team3","team4","team5","team6"],
-            dropDownBoxValues:["",""],
+            teamNumber:'',
+            dropDownBoxValues:["","",""],
             matchData:[],
-            autoPosition:[0,0],
-            inputBoxValues:[0,0,0,0,0,0,0,0,0,0,0],
+            //autoPosition:[0,0],
+            inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
             penaltyValues:[' ',' ',' ',' ',' '],
             whoWon:'',
             bonusValues:[' ',' '],
@@ -83,48 +85,6 @@ class Form extends React.Component{
         this.setState({markers: [event[0]]})
         console.log(event)
     }
-
-    /* {
-            Summary: {
-                TotalPoints: 45,
-                LowHubAccuracy: 75,
-                UpperHubAccuracy: 85
-            },
-
-            MatchNumber: 123,
-            TeamNumber: 12,
-
-            AutoLowMade: 4,
-            AutoLowMissed: 5,
-            AutoUpperMade: 6,
-            AutoUpperMissed: 7,
-
-            Taxi: false,
-            AutoPlacement: [x,y],
-
-            TeleLowMade: 8,
-            TeleLowMissed: 9,
-            TeleUpperMade: 10,
-            TeleUpperMissed: 11,
-
-            Hangar: 15,
-
-            NumberOfFouls: 0,
-            NumberOfTech: 0,
-            Penalties: [yellow, red, disabled, disqualified] // booleans, you can use an array
-
-            HangarBonus: false,
-            CargoBonus: false,
-            NumberOfRankingPoints: 0,
-
-            Strategy: [low shooter, high shooter, launchpad use, hangar, defense], // booleans, you can us an array
-
-            Comments: '',
-            OpinionScale: 0
-        }
-    
-    */
-
 
     /*initialsChange(event){
         this.setState({scouterInitials:event.target.value.toUpperCase()});
@@ -275,7 +235,12 @@ class Form extends React.Component{
 
     inputBoxChanged(event,i){
         let inputStates = this.state.inputBoxValues;
-        inputStates[i] = event.target.value;
+        if(event.target.value == ''){
+            inputStates[i] = 0;
+        }
+        else if(event.target.value === Number){
+            inputStates[i] = event.target.value;
+        }
     }
 
     buttonMinus(event,i){
@@ -453,14 +418,18 @@ class Form extends React.Component{
         let lowMissed = parseInt(vals[1]) + parseInt(vals[5]);
         let highMissed = parseInt(vals[3]) + parseInt(vals[7]);
         let checked = this.state.dropDownBoxValues;
-        let taxiBox = checked[1];
+        let taxiBox = checked[0];
+        let taxiValue;
+        let autoPosition = checked[1]
         let hangarUsed = checked[2];
         let taxiPoints = 0;
         let hangarPoints = 0;
         if(taxiBox === "Yes"){
             taxiPoints = 2;
+            taxiValue = true;
         } else if(taxiBox === "No"){
             taxiPoints = 0;
+            taxiValue = false;
         }
         if(hangarUsed === "Low"){
             hangarPoints = 4;
@@ -486,6 +455,40 @@ class Form extends React.Component{
 
         console.log(this.state);
         console.log(points, lowAccuracy, highAccuracy);
+        
+        let penalties = this.state.penaltyValues;
+        let bonuses = this.state.bonusValues;
+        let strategies = this.state.strategyValues;
+        api.put({
+            TeamNumber: Number(this.state.teamNumber),
+            MatchNumber: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
+            TotalPoints: Number(points),
+            LowHubAccuracy: lowAccuracy,
+            UpperHubAccuracy: highAccuracy,
+            AutoLowMade: Number(vals[0]),
+            AutoLowMissed: Number(vals[1]),
+            AutoUpperMade: Number(vals[2]),
+            AutoUpperMissed: Number(vals[3]),
+            Taxi: Boolean(taxiValue),
+            AutoPlacement: Number(autoPosition),
+            TeleLowMade: Number(vals[4]),
+            TeleLowMissed: Number(vals[5]),
+            TeleUpperMade: Number(vals[6]),
+            TeleUpperMissed: Number(vals[7]),
+            Hangar: String(hangarUsed),
+            NumberOfFouls: Number(vals[8]),
+            NumberOfTech: Number(vals[9]),
+            Penalties: Array(penalties),
+            HangarCargoBonus: Array(bonuses),
+            NumberOfRankingPoints: Number(this.state.rankingPoints),
+            Strategy: Array(strategies),
+            Comments: String(this.state.comment),
+            OpinionScale: Number(this.state.scale)  
+        })//*/
+        .then(window.alert("States have successfully been submitted to table"))
+        .catch(err => {
+            console.log(err)
+        })
     }
       
 
@@ -504,8 +507,10 @@ class Form extends React.Component{
                 {this.makeInputBox("# Low Hub Missed: ",1)}
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
-                {this.makeDropDownBox("Taxi: ",["No","Yes"],1)}
-                <ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>
+                {this.makeDropDownBox("Taxi: ",["No","Yes"],0)}
+                {/*<ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>*/}
+                <img src={'./images/tarmac.jpg'}></img>
+                {this.makeDropDownBox("Auto Position On Tarmac: ",[1,2,3,4,5,6,7,8],1)}
                 {/* */}
                 <br></br>
                 <h3>TELE-OP</h3>
@@ -513,7 +518,7 @@ class Form extends React.Component{
                 {this.makeInputBox("# Low Hub Missed: ",5)}
                 {this.makeInputBox("# Upper Hub Made: ",6)}
                 {this.makeInputBox("# Upper Hub Missed: ",7)}
-                {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],1)}
+                {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)}
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
                 {this.makePenaltyBox("Yellow card ",0)}
