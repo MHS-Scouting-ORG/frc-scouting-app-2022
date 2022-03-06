@@ -1,7 +1,6 @@
 import { isModelAttributePrimaryKey } from "@aws-amplify/datastore";
 import React from "react";
 import { useTable, useSortBy } from "react-table";
-import SampleData from "./Data";
 
 
 const TeamTable = (props) => {
@@ -32,8 +31,8 @@ const TeamTable = (props) => {
   } = tableInstance
 
   return (
-    <div>
-      <table {...getTableProps()} >
+    <div> 
+      <table {...getTableProps()}>
 
         <thead>
           {

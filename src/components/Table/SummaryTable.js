@@ -8,6 +8,7 @@ const SummaryTable = () => {
     const [teamNumbers, setTeamNumbers] = useState([]);     // List of teamNumbers from Blue Alliance
     const [teamData, setTeamData] = useState([]);           // List of teamData from API
 
+
     useEffect(() => {                                       // Sets teamNumbers state to the data
         getTeams()
             .then(data => {
@@ -144,6 +145,8 @@ const SummaryTable = () => {
         return averageHangar;
     }
 
+
+
     const data = React.useMemo(
         () => teamNumbers.map(team => {
             let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
@@ -230,12 +233,12 @@ const SummaryTable = () => {
                     <div> {<TeamTable information={t} />} </div>
                 </pre>)
 
-                : (<pre>
-                    <div> <tr><td style={{
+                : (
+                    <tr><td style={{
                         padding: '10px',
                         textAlign: 'center',
-                    }}> No data collected for Team {row.values.TeamNumber}. </td></tr> </div>
-                </pre>);
+                    }}> No data collected for Team {row.values.TeamNumber}. </td></tr>
+                );
         }
 
     const tableInstance = useTable({ columns, data }, useSortBy, useExpanded);

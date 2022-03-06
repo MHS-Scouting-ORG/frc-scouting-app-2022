@@ -31,7 +31,7 @@ const Home = (props) => {
     <div>
       <h4> Summary Statistics </h4>
       <br/>
-      <SummaryTable />
+      <SummaryTable/>
       <br/>
       <img src={"./images/tarmac.JPG"} width="640" height="480"></img>
     </div>
