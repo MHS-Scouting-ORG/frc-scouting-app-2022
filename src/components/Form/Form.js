@@ -420,11 +420,11 @@ class Form extends React.Component{
         let highAutoMade = parseInt(vals[2]);
         let lowMissed = parseInt(vals[1]) + parseInt(vals[5]);
         let highMissed = parseInt(vals[3]) + parseInt(vals[7]);
-        let checked = this.state.dropDownBoxValues;
-        let taxiBox = checked[0];
+        let dropboxVals = this.state.dropDownBoxValues;
+        let taxiBox = dropBoxVals[0];
         let taxiValue;
-        let autoPosition = checked[1]
-        let hangarUsed = checked[2];
+        let autoPosition = dropBoxVals[1]
+        let hangarUsed = dropBoxVals[2];
         let taxiPoints = 0;
         let hangarPoints = 0;
         if(taxiBox === "Yes"){
@@ -563,6 +563,45 @@ class Form extends React.Component{
         let penalties = this.state.penaltyValues;
         let bonuses = this.state.bonusValues;
         let strategies = this.state.strategyValues;
+        
+        let incompleteForm = false;
+        vals.filter(value => {
+            if(value == ''){
+                incompleteForm = true;
+            }
+        })
+
+        dropboxVals.filter(value => {
+            if(value == ''){
+                incompleteForm = true;
+            }
+        })
+
+        if(this.state.comment == ''){
+            incompleteForm = true;
+        }
+
+        if(this.state.teamNumber == ''){
+            incompleteForm = true;
+        }
+
+        if(this.state.matchType == 'qf' || this.state.matchType == 'sf' || this.state.matchType == 'f'){
+            if(this.state.number == ''){
+                incompleteForm = true;
+            }
+        }
+        else if(this.state.matchType == ''){
+            incompleteForm = true;
+        }
+
+        if(this.state.matchNumber == ''){
+            incompleteForm = true;
+        }
+
+
+        if(incompleteForm === true){
+            
+        }
         api.put({
             TeamNumber: Number(this.state.teamNumber),
             MatchNumber: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
@@ -586,8 +625,8 @@ class Form extends React.Component{
             HangarCargoBonus: Array(bonuses),
             NumberOfRankingPoints: Number(this.state.rankingPoints),
             Strategy: Array(strategies),
+            OpinionScale: Number(this.state.scale),
             Comments: String(this.state.comment),
-            OpinionScale: Number(this.state.scale)  
         })//*/
         .then(window.alert("States have successfully been submitted to table"))
         .catch(err => {
