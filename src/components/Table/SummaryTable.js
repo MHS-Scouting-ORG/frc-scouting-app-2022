@@ -8,6 +8,15 @@ const SummaryTable = () => {
     const [teamNumbers, setTeamNumbers] = useState([]);     // List of teamNumbers from Blue Alliance
     const [teamData, setTeamData] = useState([]);           // List of teamData from API
 
+    //const [data, setAverages] = useState([]);
+
+    const [maxAvgPoint, setMaxPt] = useState();
+    const [maxLowShot, setMaxLowShot] = useState();
+    const [maxLowAvg, setMaxLowAcc] = useState();
+    const [maxUpperShot, setMaxUpperShot] = useState();
+    const [maxUpperAcc, setMazUpperAcc] = useState();
+    const [maxHangar, setMaxHangar] = useState();
+
 
     useEffect(() => {                                       // Sets teamNumbers state to the data
         getTeams()
@@ -25,10 +34,36 @@ const SummaryTable = () => {
             })
     }, [teamNumbers])
 
+    /*useEffect(() => setAverages(teamNumbers.map(team => {
+        let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
+
+        let avgPoints = calcAveragePoints(teamStats);
+        let strats = getStrat(teamStats);
+        let avgLowAccuracy = calcLowAcc(teamStats);
+        let avgLowShots = calcLowShots(teamStats);
+        let avgUpperAccuracy = calcUpperAcc(teamStats);
+        let avgUpperShots = calcUpperShots(teamStats);
+        let avgHangar = calcHangar(teamStats);
+
+        return {
+            TeamNumber: team.TeamNumber,
+            Strategy: strats.join(', '),
+            AveragePoints: !isNaN(avgPoints) ? avgPoints : '',
+            AverageLowHubShots: !isNaN(avgLowShots) ? avgLowShots : '',
+            AverageLowHubAccuracy: !isNaN(avgLowAccuracy) ? avgLowAccuracy + '%' : '',
+            AverageUpperHubShots: !isNaN(avgUpperShots) ? avgUpperShots : '',
+            AverageUpperHubAccuracy: !isNaN(avgUpperAccuracy) ? avgUpperAccuracy + '%' : '',
+            AverageHangar: !isNaN(avgHangar) ? avgHangar : '',
+        };
+    })), [teamData, teamNumbers])*/
+
+    const getMax = (arr) => {
+        return arr.sort((a,b)=>b-a).shift();
+    }
 
     const getTeams = async () => {
-
-        return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': 'B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz' } })
+        console.log('check')
+        return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': "B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz" } })
             .then(response => response.json())
             .then(data => {
                 return data.map(obj => {
@@ -41,6 +76,13 @@ const SummaryTable = () => {
                         AverageUpperHubShots: 0,
                         AverageUpperHubAccuracy: 0,
                         AverageHangar: 0,
+
+                        ratePoints: 0,
+                        rateLowShots: 0,
+                        rateLowAccuracy: 0,
+                        rateUpperShots: 0,
+                        rateUpperAccuracy: 0,
+                        rateHangar: 0
                     };
                 });
             })
