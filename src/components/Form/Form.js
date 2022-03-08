@@ -139,7 +139,7 @@ class Form extends React.Component{
             fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
                 mode: 'cors',
                 headers:{
-                    'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
+                    'X-TBA-Auth-Key': api.getBlueAllianceAuthKey()
                 }
             })
             .then(response => response.json())
@@ -458,7 +458,7 @@ class Form extends React.Component{
         
         let points =  taxiPoints + hangarPoints + (lowTeleMade + (2 * ( lowAutoMade + highTeleMade + ( highAutoMade * 2 ))));
         let lowAccuracy = 100 * (( lowAutoMade + lowTeleMade ) / ( lowMissed + lowAutoMade + lowTeleMade ));
-        let highAccuracy = 100 * (( highTeleMade + highAutoMade ) / ( highMissed + highAutoMade + highTeleMade ))
+        let highAccuracy = 100 * (( highTeleMade + highAutoMade ) / ( highMissed + highAutoMade + highTeleMade ));
             
         this.setState({
             totalPoints: points,
@@ -468,34 +468,42 @@ class Form extends React.Component{
         console.log(this.state);
         console.log(points, lowAccuracy, highAccuracy);
         
+        let windowAlertMessage = "Form is incomplete, you still need to fill out: "
+        let completedForm = true;
+        /*if(teamNumber === false){
+            windowAlertMessage + "\n";
+        }
+        */
         let penalties = this.state.penaltyValues;
         let bonuses = this.state.bonusValues;
         let strategies = this.state.strategyValues;
         api.put({
-            TeamNumber: Number(this.state.teamNumber),
-            MatchNumber: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
-            TotalPoints: Number(points),
-            LowHubAccuracy: lowAccuracy,
-            UpperHubAccuracy: highAccuracy,
-            AutoLowMade: Number(vals[0]),
-            AutoLowMissed: Number(vals[1]),
-            AutoUpperMade: Number(vals[2]),
-            AutoUpperMissed: Number(vals[3]),
-            Taxi: Boolean(taxiValue),
-            AutoPlacement: Number(autoPosition),
-            TeleLowMade: Number(vals[4]),
-            TeleLowMissed: Number(vals[5]),
-            TeleUpperMade: Number(vals[6]),
-            TeleUpperMissed: Number(vals[7]),
-            Hangar: String(hangarUsed),
-            NumberOfFouls: Number(vals[8]),
-            NumberOfTech: Number(vals[9]),
-            Penalties: Array(penalties),
-            HangarCargoBonus: Array(bonuses),
-            NumberOfRankingPoints: Number(this.state.rankingPoints),
-            Strategy: Array(strategies),
-            Comments: String(this.state.comment),
-            OpinionScale: Number(this.state.scale)  
+            body: {
+                TeamNumberId: String(this.state.teamNumber),
+                MatchNumberId: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
+                TotalPointsId: String(points),
+                LowHubAccuracyId: lowAccuracy,
+                UpperHubAccuracyId: highAccuracy,
+                AutoLowMadeId: String(vals[0]),
+                AutoLowMissedId: String(vals[1]),
+                AutoUpperMadeId: String(vals[2]),
+                AutoUpperMissedId: String(vals[3]),
+                TaxiId: Boolean(taxiValue),
+                AutoPlacementId: String(autoPosition),
+                TeleLowMadeId: String(vals[4]),
+                TeleLowMissedId: String(vals[5]),
+                TeleUpperMadeId: String(vals[6]),
+                TeleUpperMissedId: String(vals[7]),
+                HangarId: String(hangarUsed),
+                NumberOfFoulsId: String(vals[8]),
+                NumberOfTechId: String(vals[9]),
+                PenaltiesId: Array(penalties),
+                HangarCargoBonusId: Array(bonuses),
+                NumberOfRankingPointsId: String(this.state.rankingPoints),
+                StrategyId: Array(strategies),
+                CommentsId: String(this.state.comment),
+                OpinionScaleId: String(this.state.scale) 
+            }
         })//*/
         .then(window.alert("States have successfully been submitted to table"))
         .catch(err => {
