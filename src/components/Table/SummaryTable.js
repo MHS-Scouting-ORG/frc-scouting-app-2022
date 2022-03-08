@@ -8,17 +8,17 @@ const SummaryTable = () => {
     const [teamNumbers, setTeamNumbers] = useState([]);     // List of teamNumbers from Blue Alliance
     const [teamData, setTeamData] = useState([]);           // List of teamData from API
 
-    //const [data, setAverages] = useState([]);
+    const [tdata, setAverages] = useState([]);              // temporary objects of averages
 
-    const [maxAvgPoint, setMaxPt] = useState();
+    /*const [maxAvgPoint, setMaxPt] = useState();
     const [maxLowShot, setMaxLowShot] = useState();
-    const [maxLowAvg, setMaxLowAcc] = useState();
+    const [maxLowAcc, setMaxLowAcc] = useState();
     const [maxUpperShot, setMaxUpperShot] = useState();
     const [maxUpperAcc, setMazUpperAcc] = useState();
-    const [maxHangar, setMaxHangar] = useState();
+    const [maxHangar, setMaxHangar] = useState();*/
 
 
-    useEffect(() => {                                       // Sets teamNumbers state to the data
+    useEffect(() => {                                       // Sets teamNumbers state (objects only contain team numbers)
         getTeams()
             .then(data => {
                 console.log(`getting team numbers ${data}`)
@@ -26,7 +26,7 @@ const SummaryTable = () => {
             })
     }, [])
 
-    useEffect(() => {
+    useEffect(() => {                                       // Get data from api and store into teamData state
         api.get()
             .then(data => {
                 console.log(`getting team numbers ${data}`)
@@ -34,7 +34,7 @@ const SummaryTable = () => {
             })
     }, [teamNumbers])
 
-    /*useEffect(() => setAverages(teamNumbers.map(team => {
+    useEffect(() => setAverages(teamNumbers.map(team => {
         let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
 
         let avgPoints = calcAveragePoints(teamStats);
@@ -50,20 +50,32 @@ const SummaryTable = () => {
             Strategy: strats.join(', '),
             AveragePoints: !isNaN(avgPoints) ? avgPoints : '',
             AverageLowHubShots: !isNaN(avgLowShots) ? avgLowShots : '',
-            AverageLowHubAccuracy: !isNaN(avgLowAccuracy) ? avgLowAccuracy + '%' : '',
+            AverageLowHubAccuracy: !isNaN(avgLowAccuracy) ? avgLowAccuracy : '',
             AverageUpperHubShots: !isNaN(avgUpperShots) ? avgUpperShots : '',
-            AverageUpperHubAccuracy: !isNaN(avgUpperAccuracy) ? avgUpperAccuracy + '%' : '',
+            AverageUpperHubAccuracy: !isNaN(avgUpperAccuracy) ? avgUpperAccuracy : '',
             AverageHangar: !isNaN(avgHangar) ? avgHangar : '',
+
+            ratePoints: 0,
+            rateLowShots: 0,
+            rateLowAccuracy: 0,
+            rateUpperShots: 0,
+            rateUpperAccuracy: 0,
+            rateHangar: 0
         };
-    })), [teamData, teamNumbers])*/
+    })), [teamData, teamNumbers])
+
+    useEffect(() => {
+
+
+    }, [teamData, teamNumbers])
 
     const getMax = (arr) => {
-        return arr.sort((a,b)=>b-a).shift();
+        return arr.sort((a, b) => b - a).shift();
     }
-
+    
     const getTeams = async () => {
-        console.log('check')
-        return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'X-TBA-Auth-Key': "B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz" } })
+        return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+            .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
                 return data.map(obj => {
@@ -188,8 +200,44 @@ const SummaryTable = () => {
     }
 
 
-
     const data = React.useMemo(
+        () => {
+            const maxAvgPoint = getMax(tdata.map(team => team.AveragePoints));
+            const maxLowShots = getMax(tdata.map(team => team.AverageLowHubShots));
+            const maxLowAcc = getMax(tdata.map(team => team.AverageLowHubAccuracy));
+            const maxUpperShots = getMax(tdata.map(team => team.AverageUpperHubShots));
+            const maxUpperAcc = getMax(tdata.map(team => team.AverageUpperHubAccuracy));
+            const maxHangar = getMax(tdata.map(team => team.AverageHangar));
+
+            console.log("getting max from each column")
+
+            return tdata.map(team => {
+                return {
+                    TeamNumber: team.TeamNumber,
+                    Strategy: team.Strategy,
+                    AveragePoints: team.AveragePoints,
+                    AverageLowHubShots: team.AverageLowHubShots,
+                    AverageLowHubAccuracy: team.AverageLowHubAccuracy,
+                    AverageUpperHubShots: team.AverageUpperHubShots,
+                    AverageUpperHubAccuracy: team.AverageUpperHubAccuracy,
+                    AverageHangar: team.AverageHangar,
+
+                    ratePoints: team.AveragePoints / maxAvgPoint,
+                    rateLowShots: team.AverageLowHubShots / maxLowShots,
+                    rateLowAccuracy: team.AverageLowHubAccuracy / maxLowAcc,
+                    rateUpperShots: team.AverageUpperHubShots / maxUpperShots,
+                    rateUpperAccuracy: team.AverageUpperHubAccuracy / maxUpperAcc,
+                    rateHangar: team.AverageHangar / maxHangar,
+                }
+            })
+
+        }, [tdata, teamData, teamNumbers]
+    )
+
+    console.log(`getting data ${data}`);
+
+    // Original data
+    /*const data = React.useMemo(
         () => teamNumbers.map(team => {
             let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
 
@@ -211,7 +259,7 @@ const SummaryTable = () => {
                 AverageUpperHubAccuracy: !isNaN(avgUpperAccuracy) ? avgUpperAccuracy + '%' : '',
                 AverageHangar: !isNaN(avgHangar) ? avgHangar : '',
             };
-        }), [teamData, teamNumbers])
+        }), [teamData, teamNumbers])*/
 
 
     const columns = React.useMemo(
