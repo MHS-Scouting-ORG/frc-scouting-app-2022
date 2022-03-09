@@ -52,6 +52,9 @@ class Form extends React.Component{
         this.scaleChange = this.scaleChange.bind(this);
         this.submitStates = this.submitStates.bind(this);
 
+        this.overrideChange = this.overrideChange.bind(this);
+        this.overrideCheckbox = this.overrideCheckbox.bind(this);
+
         this.setMarkers = this.setMarkers.bind(this);
 
 
@@ -77,6 +80,7 @@ class Form extends React.Component{
             comment:"",
             scale:0,
             markers: [],
+            override:false
         };
     }
     
@@ -411,6 +415,21 @@ class Form extends React.Component{
         this.setState({scale:event.target.value})
     }
 
+    overrideChange(fill,filler){
+        this.setState({override:!this.state.override});
+    }
+
+    overrideCheckbox(){
+        return(
+            <div>
+                <Checkbox
+                    label={'Override '}
+                    changeState={this.overrideChange}
+                />
+            </div>
+        )
+    }
+
     submitStates(){
         let vals = this.state.inputBoxValues;
         let lowTeleMade = parseInt(vals[4]);
@@ -638,10 +657,12 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nPartnership scale"
         }
 
-        if(incompleteForm === true){
+        let override = this.state.override;
+
+        if(incompleteForm === true && override === false){
             window.alert(windowAlertMessage);
         }
-        else if(incompleteForm === false){
+        else if(incompleteForm === false || override === true){
             api.put({
                 TeamNumber: String(this.state.teamNumber),
                 MatchNumber: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
@@ -724,6 +745,7 @@ class Form extends React.Component{
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
+                {this.overrideCheckbox()}
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>
                 </div>
