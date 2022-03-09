@@ -34,7 +34,7 @@
       "Hangar ",
       "Defense "
     ],
-    "OpinionScale": 0,
+    "OpinionScale": 10,
     "Comments": ""
   },
   {
@@ -72,7 +72,7 @@
       "Hangar ",
       "Defense "
     ],
-    "OpinionScale": 0,
+    "OpinionScale": 6,
     "Comments": ""
   },
   {
@@ -111,7 +111,7 @@
       " ",
       "Defense "
     ],
-    "OpinionScale": 0,
+    "OpinionScale": 1,
     "Comments": ""
   },
   {
@@ -149,7 +149,7 @@
       " ",
       "Defense "
     ],
-    "OpinionScale": 0,
+    "OpinionScale": 9,
     "Comments": ""
   },
   {
@@ -187,7 +187,7 @@
       "Hangar ",
       "Defense "
     ],
-    "OpinionScale": 0,
+    "OpinionScale": 4,
     "Comments": ""
   },
   {

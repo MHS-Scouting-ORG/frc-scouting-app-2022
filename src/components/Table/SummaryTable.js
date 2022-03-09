@@ -5,10 +5,14 @@ import api from '../../api';
 
 const SummaryTable = () => {
 
+
+
     const [teamNumbers, setTeamNumbers] = useState([]);     // List of teamNumbers from Blue Alliance
     const [teamData, setTeamData] = useState([]);           // List of teamData from API
-
     const [tdata, setAverages] = useState([]);              // temporary objects of averages
+
+    const [checked, setChecked] = useState([]);
+    //let checked = [];
 
     /*const [maxAvgPoint, setMaxPt] = useState();
     const [maxLowShot, setMaxLowShot] = useState();
@@ -21,7 +25,7 @@ const SummaryTable = () => {
     useEffect(() => {                                       // Sets teamNumbers state (objects only contain team numbers)
         getTeams()
             .then(data => {
-                console.log(`getting team numbers ${data}`)
+                //console.log(`getting team numbers ${data}`)
                 setTeamNumbers(data);
             })
     }, [])
@@ -29,7 +33,7 @@ const SummaryTable = () => {
     useEffect(() => {                                       // Get data from api and store into teamData state
         api.get()
             .then(data => {
-                console.log(`getting team numbers ${data}`)
+                //console.log(`getting team numbers ${data}`)
                 setTeamData(data)
             })
     }, [teamNumbers])
@@ -44,6 +48,7 @@ const SummaryTable = () => {
         let avgUpperAccuracy = calcUpperAcc(teamStats);
         let avgUpperShots = calcUpperShots(teamStats);
         let avgHangar = calcHangar(teamStats);
+        let avgRanking = calcRanking(teamStats);
 
         return {
             TeamNumber: team.TeamNumber,
@@ -54,25 +59,22 @@ const SummaryTable = () => {
             AverageUpperHubShots: !isNaN(avgUpperShots) ? avgUpperShots : '',
             AverageUpperHubAccuracy: !isNaN(avgUpperAccuracy) ? avgUpperAccuracy : '',
             AverageHangar: !isNaN(avgHangar) ? avgHangar : '',
+            AverageRating: !isNaN(avgRanking) ? avgRanking : '',
 
-            ratePoints: 0,
-            rateLowShots: 0,
-            rateLowAccuracy: 0,
-            rateUpperShots: 0,
-            rateUpperAccuracy: 0,
-            rateHangar: 0
+            RatePoints: 0,
+            RateLowShots: 0,
+            RateLowAccuracy: 0,
+            RateUpperShots: 0,
+            RateUpperAccuracy: 0,
+            RateHangar: 0,
         };
     })), [teamData, teamNumbers])
 
-    useEffect(() => {
-
-
-    }, [teamData, teamNumbers])
 
     const getMax = (arr) => {
         return arr.sort((a, b) => b - a).shift();
     }
-    
+
     const getTeams = async () => {
         return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
@@ -88,13 +90,14 @@ const SummaryTable = () => {
                         AverageUpperHubShots: 0,
                         AverageUpperHubAccuracy: 0,
                         AverageHangar: 0,
+                        AverageRating: 0,
 
-                        ratePoints: 0,
-                        rateLowShots: 0,
-                        rateLowAccuracy: 0,
-                        rateUpperShots: 0,
-                        rateUpperAccuracy: 0,
-                        rateHangar: 0
+                        RatePoints: 0,
+                        RateLowShots: 0,
+                        RateLowAccuracy: 0,
+                        RateUpperShots: 0,
+                        RateUpperAccuracy: 0,
+                        RateHangar: 0,
                     };
                 });
             })
@@ -199,6 +202,17 @@ const SummaryTable = () => {
         return averageHangar;
     }
 
+    const calcRanking = (arr) => {
+        let rankings = arr.map(value => (value.OpinionScale));
+        let sumRankings = 0;
+        for (let i = 0; i < rankings.length; i++) {
+            sumRankings = sumRankings + rankings[i];
+        }
+        let averageRanking = sumRankings / rankings.length;
+        return averageRanking;
+    }
+
+
 
     const data = React.useMemo(
         () => {
@@ -209,9 +223,11 @@ const SummaryTable = () => {
             const maxUpperAcc = getMax(tdata.map(team => team.AverageUpperHubAccuracy));
             const maxHangar = getMax(tdata.map(team => team.AverageHangar));
 
-            console.log("getting max from each column")
+            //console.log("getting max from each column")
 
+            //  return arr.sort((a, b) => b - a).shift();
             return tdata.map(team => {
+
                 return {
                     TeamNumber: team.TeamNumber,
                     Strategy: team.Strategy,
@@ -221,20 +237,20 @@ const SummaryTable = () => {
                     AverageUpperHubShots: team.AverageUpperHubShots,
                     AverageUpperHubAccuracy: team.AverageUpperHubAccuracy,
                     AverageHangar: team.AverageHangar,
+                    AverageRating: team.AverageRating,
 
-                    ratePoints: team.AveragePoints / maxAvgPoint,
-                    rateLowShots: team.AverageLowHubShots / maxLowShots,
-                    rateLowAccuracy: team.AverageLowHubAccuracy / maxLowAcc,
-                    rateUpperShots: team.AverageUpperHubShots / maxUpperShots,
-                    rateUpperAccuracy: team.AverageUpperHubAccuracy / maxUpperAcc,
-                    rateHangar: team.AverageHangar / maxHangar,
+                    RatePoints: team.AveragePoints / maxAvgPoint,
+                    RateLowShots: team.AverageLowHubShots / maxLowShots,
+                    RateLowAccuracy: team.AverageLowHubAccuracy / maxLowAcc,
+                    RateUpperShots: team.AverageUpperHubShots / maxUpperShots,
+                    RateUpperAccuracy: team.AverageUpperHubAccuracy / maxUpperAcc,
+                    RateHangar: team.AverageHangar / maxHangar,
                 }
             })
 
         }, [tdata, teamData, teamNumbers]
     )
 
-    console.log(`getting data ${data}`);
 
     // Original data
     /*const data = React.useMemo(
@@ -264,7 +280,7 @@ const SummaryTable = () => {
 
     const columns = React.useMemo(
         () => [
-            {
+           /* {
                 id: 'exp',
                 Header: () => null,
                 accessor: 'TeamNumber',
@@ -274,13 +290,18 @@ const SummaryTable = () => {
                         {row.isExpanded ? '-' : '+'}
                     </span>
                 ),
-            },
+            },*/
             {
                 Header: 'Team #',
-                accessor: 'TeamNumber'
+                accessor: 'TeamNumber',
+                Cell: ({ row }) =>
+                (
+                    <span {...row.getToggleRowExpandedProps()}>
+                        {row.values.TeamNumber}
+                    </span>)
             },
             {
-                Header: 'Priority / Strategy',
+                Header: 'Priority/Strategy',
                 accessor: 'Strategy'
             },
             {
@@ -307,6 +328,10 @@ const SummaryTable = () => {
                 Header: 'Average Hangar Points',
                 accessor: 'AverageHangar',
             },
+            {
+                Header: 'Average Rating',
+                accessor: 'AverageRating',
+            }
         ],
         []
     )
@@ -315,7 +340,6 @@ const SummaryTable = () => {
         ({ row }) => {
 
             let t = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber);
-
             // let info = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber)
 
             return t.length > 0 ?
@@ -356,7 +380,7 @@ const SummaryTable = () => {
                                     (
                                         <th
                                             {...column.getHeaderProps(column.getSortByToggleProps())}
-                                            style={{
+                                            style={{    
                                                 padding: '10px',
                                                 textAlign: 'center',
                                             }}
@@ -373,6 +397,7 @@ const SummaryTable = () => {
                 </thead>
 
                 <tbody {...getTableBodyProps()}>
+                    
                     {
                         rows.map(row => {
                             prepareRow(row)
