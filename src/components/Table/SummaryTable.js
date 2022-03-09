@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTable, useSortBy, useExpanded } from "react-table";
 import TeamTable from "./TeamTable";
+import Checkbox from './Checkbox';
 import api from '../../api';
 
 const SummaryTable = () => {
@@ -11,8 +12,7 @@ const SummaryTable = () => {
     const [teamData, setTeamData] = useState([]);           // List of teamData from API
     const [tdata, setAverages] = useState([]);              // temporary objects of averages
 
-    const [checked, setChecked] = useState([]);
-    //let checked = [];
+    let sortedColumns = [];
 
     /*const [maxAvgPoint, setMaxPt] = useState();
     const [maxLowShot, setMaxLowShot] = useState();
@@ -73,6 +73,15 @@ const SummaryTable = () => {
 
     const getMax = (arr) => {
         return arr.sort((a, b) => b - a).shift();
+    }
+
+    const addOnColumnSort = (bool, value) => {
+        if(bool === true){
+            sortedColumns.push(value);
+        } else {
+            sortedColumns = sortedColumns.filter(val => val !== value);
+        }
+        console.log(sortedColumns)
     }
 
     const getTeams = async () => {
@@ -369,6 +378,13 @@ const SummaryTable = () => {
 
     return (
         <div>
+            <div>
+                <Checkbox value="Low Hub Shooter " changeState={addOnColumnSort}/>
+                <Checkbox value="Accurate Low Hub Shooter " changeState={addOnColumnSort}/>
+                <Checkbox value="Upper Hub Shooter " changeState={addOnColumnSort}/>
+                <Checkbox value="Accurate Upper Hub Shooter " changeState={addOnColumnSort}/>
+                <Checkbox value="Hangar " changeState={addOnColumnSort}/>
+            </div>
             <table {...getTableProps()} >
                 <thead>
                     {
