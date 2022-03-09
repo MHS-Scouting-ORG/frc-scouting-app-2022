@@ -57,8 +57,6 @@ class Form extends React.Component{
 
 
         this.state = {
-            teams:["team1","team2","team3","team4","team5","team6"],
-            matchNumber:"",
             totalPoints: 0,
             lowHubAccuracy: 0,
             highHubAccuracy: 0,
@@ -129,12 +127,13 @@ class Form extends React.Component{
     }
 
     getMatchTeams(){
-        let matchKey = /*put this years event key here*/ "2016nytr" + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+        let matchKey = /*put this years event key here*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = () => {
             fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
                 mode: 'cors',
                 headers:{
                     'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
+                    //'X-TBA-Auth-Key': api.getBlueAllianceAuthKey
                 }
             })
             .then(response => response.json())
@@ -208,9 +207,9 @@ class Form extends React.Component{
         )
     }
 
-    changeMatchNumber(event,fill){
+    /*changeMatchNumber(event,fill){
         this.setState({matchNumber:event.target.value});
-    } 
+    }*/
 
     dropDownChanged(event,i){
         let dropDownStates = this.state.dropDownBoxValues;
@@ -236,7 +235,7 @@ class Form extends React.Component{
 
     inputBoxChanged(event,i){
         let inputStates = this.state.inputBoxValues;
-        if(event.target.value == ''){
+        if(event.target.value === ''){
             inputStates[i] = 0;
         }
         else if(event.target.value === Number){
@@ -421,10 +420,10 @@ class Form extends React.Component{
         let lowMissed = parseInt(vals[1]) + parseInt(vals[5]);
         let highMissed = parseInt(vals[3]) + parseInt(vals[7]);
         let dropboxVals = this.state.dropDownBoxValues;
-        let taxiBox = dropBoxVals[0];
+        let taxiBox = dropboxVals[0];
         let taxiValue;
-        let autoPosition = dropBoxVals[1]
-        let hangarUsed = dropBoxVals[2];
+        let autoPosition = dropboxVals[1]
+        let hangarUsed = dropboxVals[2];
         let taxiPoints = 0;
         let hangarPoints = 0;
         if(taxiBox === "Yes"){
@@ -563,9 +562,14 @@ class Form extends React.Component{
         let penalties = this.state.penaltyValues;
         let bonuses = this.state.bonusValues;
         let strategies = this.state.strategyValues;
-        
+        let strats = this.state.strategyValues;
+        let incompletePriorities = true;
+        let scale = parseInt(this.state.scale);
+
         let incompleteForm = false;
-        vals.filter(value => {
+        let windowAlertMessage = 'Form is incomplete, you still need to fill out: ';
+
+        /*vals.filter(value => {
             if(value == ''){
                 incompleteForm = true;
             }
@@ -575,63 +579,100 @@ class Form extends React.Component{
             if(value == ''){
                 incompleteForm = true;
             }
-        })
+        })*/
 
-        if(this.state.comment == ''){
-            incompleteForm = true;
-        }
-
-        if(this.state.teamNumber == ''){
-            incompleteForm = true;
-        }
-
-        if(this.state.matchType == 'qf' || this.state.matchType == 'sf' || this.state.matchType == 'f'){
-            if(this.state.number == ''){
+        if(this.state.matchType === 'qf' || this.state.matchType === 'sf' || this.state.matchType === 'f'){
+            if(this.state.number === ''){
                 incompleteForm = true;
+                windowAlertMessage = windowAlertMessage + "\nFinals Number"
             }
         }
-        else if(this.state.matchType == ''){
+        else if(this.state.matchType === ''){
             incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nMatch Type (Qualifications, Quarterfinals, Semifinals, Finals"
         }
 
-        if(this.state.matchNumber == ''){
+        if(this.state.matchNumber === ''){
             incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nMatch Number"
         }
 
+        if(this.state.teamNumber === ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nTeam Number"
+        }
+        
+        if(taxiBox === ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nTaxi"
+        }
+        
+        if(autoPosition === ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nPosition of robot during Autonomous"
+        }
+
+        if(hangarUsed === ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nWhat hangar the robot did"
+        }
+
+        strats.filter(strat => {
+            if(strat !== ' '){
+                incompletePriorities = false;
+            }
+        })
+
+        if(incompletePriorities === true){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nRobot priorities/strategies"
+        }
+
+        if(this.state.comment === ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nScouter comment"
+        }
+
+        if(scale == 0){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nPartnership scale"
+        }
 
         if(incompleteForm === true){
-            
+            window.alert(windowAlertMessage);
         }
-        api.put({
-            TeamNumber: Number(this.state.teamNumber),
-            MatchNumber: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
-            TotalPoints: Number(points),
-            LowHubAccuracy: lowAccuracy,
-            UpperHubAccuracy: highAccuracy,
-            AutoLowMade: Number(vals[0]),
-            AutoLowMissed: Number(vals[1]),
-            AutoUpperMade: Number(vals[2]),
-            AutoUpperMissed: Number(vals[3]),
-            Taxi: Boolean(taxiValue),
-            AutoPlacement: Number(autoPosition),
-            TeleLowMade: Number(vals[4]),
-            TeleLowMissed: Number(vals[5]),
-            TeleUpperMade: Number(vals[6]),
-            TeleUpperMissed: Number(vals[7]),
-            Hangar: String(hangarUsed),
-            NumberOfFouls: Number(vals[8]),
-            NumberOfTech: Number(vals[9]),
-            Penalties: Array(penalties),
-            HangarCargoBonus: Array(bonuses),
-            NumberOfRankingPoints: Number(this.state.rankingPoints),
-            Strategy: Array(strategies),
-            OpinionScale: Number(this.state.scale),
-            Comments: String(this.state.comment),
-        })//*/
-        .then(window.alert("States have successfully been submitted to table"))
-        .catch(err => {
-            console.log(err)
-        })
+        else if(incompleteForm === false){
+            api.put({
+                TeamNumber: String(this.state.teamNumber),
+                MatchNumber: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
+                TotalPoints: Number(points),
+                LowHubAccuracy: lowAccuracy,
+                UpperHubAccuracy: highAccuracy,
+                AutoLowMade: Number(vals[0]),
+                AutoLowMissed: Number(vals[1]),
+                AutoUpperMade: Number(vals[2]),
+                AutoUpperMissed: Number(vals[3]),
+                Taxi: Boolean(taxiValue),
+                AutoPlacement: Number(autoPosition),
+                TeleLowMade: Number(vals[4]),
+                TeleLowMissed: Number(vals[5]),
+                TeleUpperMade: Number(vals[6]),
+                TeleUpperMissed: Number(vals[7]),
+                Hangar: String(hangarUsed),
+                NumberOfFouls: Number(vals[8]),
+                NumberOfTech: Number(vals[9]),
+                Penalties: Array(penalties),
+                HangarCargoBonus: Array(bonuses),
+                NumberOfRankingPoints: Number(this.state.rankingPoints),
+                Strategy: Array(strategies),
+                OpinionScale: Number(this.state.scale),
+                Comments: String(this.state.comment),
+            })//*/
+            .then(window.alert("States have successfully been submitted to table"))
+            .catch(err => {
+                console.log(err)
+            })
+        }
     }
       
 
@@ -652,7 +693,7 @@ class Form extends React.Component{
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],0)}
                 {/*<ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>*/}
-                <img src={'./images/tarmac.jpg'}></img>
+                <img src={'./images/tarmac.jpg'} prop={"Tarmac"}></img>
                 {this.makeDropDownBox("Auto Position On Tarmac: ",[1,2,3,4,5,6,7,8],1)}
                 {/* */}
                 <br></br>
