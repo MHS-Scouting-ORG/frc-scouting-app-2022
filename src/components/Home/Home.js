@@ -15,6 +15,7 @@ const Home = (props) => {
   const [teamId, setTeamId] = useState("")
   const [teamName, setTeamName] = useState("")
   const [matchId, setMatchId] = useState(0)
+
   useEffect(() => {
 
     api.get()
@@ -28,10 +29,12 @@ const Home = (props) => {
   return (
 
     <div>
-      <SummaryTable />
-      <TestTable information={SampleData()}/>
+      <h4> Summary Statistics </h4>
+      <br/>
+      <SummaryTable/>
+      <br/>
+      <img src={"./images/tarmac.JPG"} width="640" height="480"></img>
     </div>
-
   )
 }
 

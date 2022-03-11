@@ -1,51 +1,39 @@
 import React from "react";
 import { useTable, useSortBy } from "react-table";
 
-class TestTable extends React.Component{
-    constructor(props){
-        super(props);
-        this.getInfo = this.getInfo.bind(this);
+function TestTable(props) {
 
-        this.state = {
-            data: [],
-            columns: [],
-            rows: "",
-        }
-    }
+    let info = props.information;
 
-    getInfo(){
-        let info = this.props.information;
-        let keys = Object.keys(info[0]).slice(2);
+    let columns = Object.keys(info[0]).slice(1);
 
-        let rows = info.map(input => {
+    return (
+        <table>
+            <thead>
+                <tr>
+                    {columns.map(key => <th key={key}>{key}</th>)}
+                </tr>
+            </thead>
+            <tbody>
+                {info.map(matchdata => {
+                    let data = Object.values(matchdata).slice(1)
 
-            let values = info.map(obj => {
-                let cells = keys.map(key => obj.key);
-            });
-
-            return (
-                <tr key={input.TeamName}>{input}</tr>
-            );
-            
-        });
-        this.setState({
-            data: info,
-            columns: keys
-        });
-    }
-
-    render(){
-
-        return(
-            <table>
-                <thead>
-                    <tr>
-                        {this.state.columns.map(key => '<th>{key}</th>')}
-                    </tr>
-                </thead>
-            </table>
-        );
-    };
+                    return (
+                        <tr>
+                            {data.map(value => <td
+                                style={{
+                                    padding: '10px',
+                                    border: 'solid 1px black',
+                                    textAlign: 'center',
+                                }}
+                            >{value}</td>)}
+                        </tr>
+                    )
+                })}
+            </tbody>
+        </table>
+    );
 }
+
 
 export default TestTable;

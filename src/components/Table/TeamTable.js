@@ -1,16 +1,11 @@
+import { isModelAttributePrimaryKey } from "@aws-amplify/datastore";
 import React from "react";
 import { useTable, useSortBy } from "react-table";
-import SampleData from "./Data";
-
-/*
- * Fix Test/Team Table
- *  Dsiplay averages
- */
 
 
-const TeamTable = (tData) => {
+const TeamTable = (props) => {
 
-  const data = SampleData();
+  const data = props.information;
 
   const makeColumns = (a) => {
     return {
@@ -18,10 +13,7 @@ const TeamTable = (tData) => {
       accessor: a,
     }
   }
-
-  //let keys = Object.keys(data[0]);
-  let columnValues = Object.keys(data[0]).slice(4);
-  columnValues.splice(1, 0, "TotalPoints");
+  let columnValues = Object.keys(data[0]).slice(1);
 
   const columns = React.useMemo(
     () =>
@@ -39,8 +31,8 @@ const TeamTable = (tData) => {
   } = tableInstance
 
   return (
-    <div>
-      <table {...getTableProps()} >
+    <div> 
+      <table {...getTableProps()}>
 
         <thead>
           {
@@ -72,7 +64,6 @@ const TeamTable = (tData) => {
           {
             rows.map(row => {
               prepareRow(row)
-
               return (
                 <tr {...row.getRowProps()}>
                   {

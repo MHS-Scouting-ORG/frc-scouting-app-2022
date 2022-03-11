@@ -2,6 +2,7 @@ import { API, Auth } from 'aws-amplify'
 
 import { SSM, STS } from 'aws-sdk'
 import config from '../config.json'
+import data from './data.json'
 const use_remote = process.env.REACT_APP_ENABLE_AUTH === '1'
 const {
   api_name,
@@ -14,7 +15,7 @@ const {
 const api = {}
 
 api.get = use_remote ? API.get.bind(API, api_name, endpoint) : async function() {
-  return Promise.resolve({})
+  return Promise.resolve(data)
 }
 
 const verify_sec = async user => {
@@ -60,7 +61,7 @@ api.getBlueAllianceAuthKey = use_remote ? async function() {
     ssm.getParameter({
       Name:"bluealliance_api_key",
       WithDecryption: true
-    }, (err, data) => {
+    }, (err, data) => { 
       if(err)
         reject(err)
       else
@@ -68,7 +69,7 @@ api.getBlueAllianceAuthKey = use_remote ? async function() {
     })
   })
 } : async function() {
-  return Promise.resolve("B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz")
+  return Promise.resolve("1kaGgCG8tU0MUfnvfhxdwqTf3dphRKuLULA7v2UkFlQaM96QufcZvumpKg9318pa")
 }
 
 api.put = use_remote ? async function(obj) {
