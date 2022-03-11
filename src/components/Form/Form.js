@@ -242,7 +242,7 @@ class Form extends React.Component{
         if(event.target.value === ''){
             inputStates[i] = 0;
         }
-        else if(event.target.value === Number){
+        else{
             inputStates[i] = event.target.value;
         }
     }
