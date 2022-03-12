@@ -246,7 +246,7 @@ class Form extends React.Component{
 
     inputBoxChanged(event,i){
         let inputStates = this.state.inputBoxValues;
-        if(event.target.value == ''){
+        if(event.target.value === ''){
             inputStates[i] = 0;
         }
         else if(event.target.value === Number){
