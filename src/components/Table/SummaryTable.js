@@ -160,10 +160,10 @@ const SummaryTable = () => {
         let stratList = [];
         arr.forEach(teamObject => {                             // If priority/strategy is not already in array, add to array
             let strats = teamObject.Strategy;
-            if (strats[0] === "Low Hub " && !stratList.includes("Low Hub Shooter")) {
+            if (strats[0] === "Low Hub Shooter " && !stratList.includes("Low Hub Shooter")) {
                 stratList.push("Low Hub Shooter")
             }
-            if (strats[1] === "Upper Hub " && !stratList.includes("Upper Hub Shooter")) {
+            if (strats[1] === "Upper Hub Shooter " && !stratList.includes("Upper Hub Shooter")) {
                 stratList.push("Upper Hub Shooter")
             }
             if (strats[2] === "Launchpad " && !stratList.includes("Launchpad User")) {
