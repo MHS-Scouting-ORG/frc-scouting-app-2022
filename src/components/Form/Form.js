@@ -93,6 +93,7 @@ class Form extends React.Component{
 
     /*initialsChange(event){
         this.setState({scouterInitials:event.target.value.toUpperCase()});
+        Fixed the logic for determining the scouted teams ranking points and made sure that you cannot change the match key without resetting the chosen teams
     }*/
 
     changeMatchType(event){
@@ -101,14 +102,20 @@ class Form extends React.Component{
             this.setState({number:''});
         }
         this.setState({matchType:event});
+        this.setState({teams:["team1","team2","team3","team4","team5","team6"]});
+        this.setState({teamNumber:''});
     }
     
     changeTypeNumber(event){
         this.setState({number:(event.target.value)});
+        this.setState({teams:["team1","team2","team3","team4","team5","team6"]});
+        this.setState({teamNumber:''});
     }
     
     changeMatchNumber(event){
         this.setState({matchNumber:event.target.value});
+        this.setState({teams:["team1","team2","team3","team4","team5","team6"]});
+        this.setState({teamNumber:''});
     }
 
     makeMatchTypeNumberDropdown(matchType){
@@ -165,13 +172,10 @@ class Form extends React.Component{
         this.setState({teamNumber:event.target.value});
         let data = this.state.matchData;
         let chosenTeam = event.target.value
-        let teamColor = "";
+        let teamColor = "red";
         data.alliances.blue.team_keys.map((team) => {
             if(team === chosenTeam){
                 teamColor = 'blue';
-            }
-            else{
-                teamColor = 'red'
             }
         })
         let whoWon = '';
