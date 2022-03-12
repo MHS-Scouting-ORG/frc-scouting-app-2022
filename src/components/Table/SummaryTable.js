@@ -117,7 +117,7 @@ const SummaryTable = () => {
     }
 
     const getTeams = async () => {                              // Get list of teams from the Blue Alliance
-        return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        return await fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/teams', { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
