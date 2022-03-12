@@ -1,7 +1,7 @@
 [
   {
-    "TeamNumber": 2443,
-    "MatchNumber": 47,
+    "TeamId": 2443,
+    "MatchId": 47,
     "TotalPoints": 18,
     "LowHubAccuracy": 87,
     "UpperHubAccuracy": 78,
@@ -38,8 +38,8 @@
     "Comments": ""
   },
   {
-    "TeamNumber": 4270,
-    "MatchNumber": 4,
+    "TeamId": 4270,
+    "MatchId": 4,
     "TotalPoints": 34,
     "LowHubAccuracy": 87,
     "UpperHubAccuracy": 78,
@@ -76,8 +76,8 @@
     "Comments": ""
   },
   {
-    "TeamNumber": 359,
-    "MatchNumber": 32,
+    "TeamId": 359,
+    "MatchId": 32,
     "TotalPoints": 23,
     "LowHubAccuracy": 87,
     "UpperHubAccuracy": 78,
@@ -115,8 +115,8 @@
     "Comments": ""
   },
   {
-    "TeamNumber": 2443,
-    "MatchNumber": 1,
+    "TeamId": 2443,
+    "MatchId": 1,
     "TotalPoints": 26,
     "LowHubAccuracy": 56,
     "UpperHubAccuracy": 78,
@@ -153,8 +153,8 @@
     "Comments": ""
   },
   {
-    "TeamNumber": 3008,
-    "MatchNumber": 13,
+    "TeamId": 3008,
+    "MatchId": 13,
     "TotalPoints": 12,
     "LowHubAccuracy": 56,
     "UpperHubAccuracy": 7,
@@ -191,8 +191,8 @@
     "Comments": ""
   },
   {
-    "TeamNumber": 4270,
-    "MatchNumber": 17,
+    "TeamId": 4270,
+    "MatchId": 17,
     "TotalPoints": 28,
     "LowHubAccuracy": 56,
     "UpperHubAccuracy": 78,
@@ -229,8 +229,8 @@
     "Comments": ""
   },
   {
-    "TeamNumber": 6909,
-    "MatchNumber": 23,
+    "TeamId": 6909,
+    "MatchId": 23,
     "TotalPoints": 19,
     "LowHubAccuracy": 56,
     "UpperHubAccuracy": 78,
@@ -267,8 +267,8 @@
     "Comments": ""
   },
   {
-    "TeamNumber": 368,
-    "MatchNumber": 34,
+    "TeamId": 368,
+    "MatchId": 34,
     "TotalPoints": 11,
     "LowHubAccuracy": 56,
     "UpperHubAccuracy": 78,
@@ -305,8 +305,8 @@
     "Comments": ""
   },
   {
-    "TeamNumber": 7724,
-    "MatchNumber": 43,
+    "TeamId": 7724,
+    "MatchId": 43,
     "TotalPoints": 22,
     "LowHubAccuracy": 56,
     "UpperHubAccuracy": 78,
@@ -343,8 +343,8 @@
     "Comments": ""
   },
   {
-    "TeamNumber": 8871,
-    "MatchNumber": 43,
+    "TeamId": 8871,
+    "MatchId": 43,
     "TotalPoints": 15,
     "LowHubAccuracy": 56,
     "UpperHubAccuracy": 78,

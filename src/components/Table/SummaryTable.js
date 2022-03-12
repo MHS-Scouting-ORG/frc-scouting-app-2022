@@ -7,7 +7,6 @@ import List from './List';
 
 const SummaryTable = () => {
 
-
     const [teamNumbers, setTeamNumbers] = useState([]);             // List of teamNumbers from Blue Alliance
     const [teamData, setTeamData] = useState([]);                   // List of teamData from API
     const [dataOfAverages, setAverages] = useState([]);             // Temporary objects of averages
@@ -29,12 +28,13 @@ const SummaryTable = () => {
     }, [])
 
     useEffect(() => {                                               // Get data from api and store into teamData state
+        console.log('update data')
         api.get()
             .then(data => {
                 console.log(`getting team numbers ${data}`)
                 setTeamData(data)
             })
-    }, [])
+    }, [teamNumbers])
 
 
     useEffect(() => setAverages(teamNumbers.map(team => {           // Calculate averages of each team
