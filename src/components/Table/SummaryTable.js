@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTable, useSortBy, useExpanded } from "react-table";
 import TeamTable from "./TeamTable";
 import Checkbox from './Checkbox';
@@ -12,14 +12,8 @@ const SummaryTable = () => {
     const [teamData, setTeamData] = useState([]);           // List of teamData from API
     const [tdata, setAverages] = useState([]);              // temporary objects of averages
 
-    let sortedColumns = [];
-
-    /*const [maxAvgPoint, setMaxPt] = useState();
-    const [maxLowShot, setMaxLowShot] = useState();
-    const [maxLowAcc, setMaxLowAcc] = useState();
-    const [maxUpperShot, setMaxUpperShot] = useState();
-    const [maxUpperAcc, setMazUpperAcc] = useState();
-    const [maxHangar, setMaxHangar] = useState();*/
+    //const [sortColumns, setSortColumns] = useState([]);
+    let list = [];
 
 
     useEffect(() => {                                       // Sets teamNumbers state (objects only contain team numbers)
@@ -37,6 +31,7 @@ const SummaryTable = () => {
                 setTeamData(data)
             })
     }, [teamNumbers])
+
 
     useEffect(() => setAverages(teamNumbers.map(team => {
         let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
@@ -67,6 +62,7 @@ const SummaryTable = () => {
             RateUpperShots: 0,
             RateUpperAccuracy: 0,
             RateHangar: 0,
+            SumOfSelected: 0,
         };
     })), [teamData, teamNumbers])
 
@@ -77,11 +73,18 @@ const SummaryTable = () => {
 
     const addOnColumnSort = (bool, value) => {
         if(bool === true){
-            sortedColumns.push(value);
+            list.push(value)
+            /*setSortColumns(arr => {
+                arr.push(value)
+            })*/
         } else {
-            sortedColumns = sortedColumns.filter(val => val !== value);
+            /*setSortColumns(arr => {
+                arr.filter(val => val !== value)
+            });*/
+            list = list.filter(val => val !== value)
         }
-        console.log(sortedColumns)
+
+        console.log(list)
     }
 
     const getTeams = async () => {
@@ -107,6 +110,7 @@ const SummaryTable = () => {
                         RateUpperShots: 0,
                         RateUpperAccuracy: 0,
                         RateHangar: 0,
+                        SumOfSelected: 0,
                     };
                 });
             })
@@ -221,6 +225,28 @@ const SummaryTable = () => {
         return averageRanking;
     }
 
+    const calcColumnSort = (arr, lShots, lAcc, uShots, uAcc, hangar) => {
+        let sum = 0;
+        console.log(arr)
+        if(arr.includes("Low Hub Shooter")){
+            sum = sum + lShots;
+        }   
+        if(arr.includes("Accurate Low Hub Shooter")){
+            sum = sum + lAcc;
+        }
+        if(arr.includes("Upper Hub Shooter")){
+            sum = sum + uShots;
+        }
+        if(arr.includes("Accurate Upper Hub Shooter")){
+            sum = sum + uAcc;
+        }
+        if(arr.includes("Hangar")){
+            sum = sum + hangar;
+        }
+        console.log(sum)
+
+        return sum;
+    }
 
 
     const data = React.useMemo(
@@ -236,6 +262,13 @@ const SummaryTable = () => {
 
             //  return arr.sort((a, b) => b - a).shift();
             return tdata.map(team => {
+                const rPoints = team.AveragePoints / maxAvgPoint;
+                const rLowShots = team.AverageLowHubShots / maxLowShots;
+                const rLowAcc = team.AverageLowHubAccuracy / maxLowAcc;
+                const rUpperShots = team.AverageUpperHubShots / maxUpperShots;
+                const rUpperAcc = team.AverageUpperHubAccuracy / maxUpperAcc;
+                const rHangar = team.AverageHangar / maxHangar;
+
 
                 return {
                     TeamNumber: team.TeamNumber,
@@ -248,43 +281,19 @@ const SummaryTable = () => {
                     AverageHangar: team.AverageHangar,
                     AverageRating: team.AverageRating,
 
-                    RatePoints: team.AveragePoints / maxAvgPoint,
-                    RateLowShots: team.AverageLowHubShots / maxLowShots,
-                    RateLowAccuracy: team.AverageLowHubAccuracy / maxLowAcc,
-                    RateUpperShots: team.AverageUpperHubShots / maxUpperShots,
-                    RateUpperAccuracy: team.AverageUpperHubAccuracy / maxUpperAcc,
-                    RateHangar: team.AverageHangar / maxHangar,
+                    RatePoints: rPoints,
+                    RateLowShots: rLowShots,
+                    RateLowAccuracy: rLowAcc,
+                    RateUpperShots: rUpperShots,
+                    RateUpperAccuracy: rUpperAcc,
+                    RateHangar: rHangar,
+
+                    SumOfSelected: calcColumnSort(list, rLowShots, rLowAcc, rUpperShots, rUpperAcc, rHangar),
                 }
             })
 
-        }, [tdata, teamData, teamNumbers]
+        }, [tdata]
     )
-
-
-    // Original data
-    /*const data = React.useMemo(
-        () => teamNumbers.map(team => {
-            let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
-
-            let avgPoints = calcAveragePoints(teamStats);
-            let strats = getStrat(teamStats);
-            let avgLowAccuracy = calcLowAcc(teamStats);
-            let avgLowShots = calcLowShots(teamStats);
-            let avgUpperAccuracy = calcUpperAcc(teamStats);
-            let avgUpperShots = calcUpperShots(teamStats);
-            let avgHangar = calcHangar(teamStats);
-
-            return {
-                TeamNumber: team.TeamNumber,
-                Strategy: strats.join(', '),
-                AveragePoints: !isNaN(avgPoints) ? avgPoints : '',
-                AverageLowHubShots: !isNaN(avgLowShots) ? avgLowShots : '',
-                AverageLowHubAccuracy: !isNaN(avgLowAccuracy) ? avgLowAccuracy + '%' : '',
-                AverageUpperHubShots: !isNaN(avgUpperShots) ? avgUpperShots : '',
-                AverageUpperHubAccuracy: !isNaN(avgUpperAccuracy) ? avgUpperAccuracy + '%' : '',
-                AverageHangar: !isNaN(avgHangar) ? avgHangar : '',
-            };
-        }), [teamData, teamNumbers])*/
 
 
     const columns = React.useMemo(
@@ -340,6 +349,10 @@ const SummaryTable = () => {
             {
                 Header: 'Average Rating',
                 accessor: 'AverageRating',
+            },
+            {
+                Header: 'Column Sort',
+                accessor: 'SumOfSelected'
             }
         ],
         []
@@ -379,11 +392,11 @@ const SummaryTable = () => {
     return (
         <div>
             <div>
-                <Checkbox value="Low Hub Shooter " changeState={addOnColumnSort}/>
-                <Checkbox value="Accurate Low Hub Shooter " changeState={addOnColumnSort}/>
-                <Checkbox value="Upper Hub Shooter " changeState={addOnColumnSort}/>
-                <Checkbox value="Accurate Upper Hub Shooter " changeState={addOnColumnSort}/>
-                <Checkbox value="Hangar " changeState={addOnColumnSort}/>
+                <Checkbox value="Low Hub Shooter" changeState={addOnColumnSort}/>
+                <Checkbox value="Accurate Low Hub Shooter" changeState={addOnColumnSort}/>
+                <Checkbox value="Upper Hub Shooter" changeState={addOnColumnSort}/>
+                <Checkbox value="Accurate Upper Hub Shooter" changeState={addOnColumnSort}/>
+                <Checkbox value="Hangar" changeState={addOnColumnSort}/>
             </div>
             <table {...getTableProps()} >
                 <thead>
