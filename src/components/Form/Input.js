@@ -41,9 +41,9 @@ class Input extends React.Component{
 
     inputChange(event){
         if(event.target.value == ''){
-            this.setState({inputValue:0})
+            this.setState({inputValue:0});
         }
-        else if(event.target.value === Number){
+        else{
             this.setState({inputValue:event.target.value});
         }
         this.props.setState(event,this.props.place);

@@ -15,7 +15,7 @@ class Dropdown extends React.Component{
             <div>
                 <label> {this.props.title}
                     <select onChange={this.dropDownChange}>
-                        <option></option>
+                        <option key={"empty"}></option>
                         {this.props.choices.map((choice) => <option key={choice} > {choice} </option>)}
                     </select>
                 </label>
