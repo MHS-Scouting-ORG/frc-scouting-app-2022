@@ -15,15 +15,6 @@ const SummaryTable = () => {
     const [sortColumns, setSortColumns] = useState([]);             // List of checkboxes to sort by
     const [tempData, setTempData] = useState([]);                   // List of data with grade
 
-    /* const [lowShooter, setLowShooter] = useState(false);
-    const [lowAccuracy, setLowAccurate] = useState(false);
-    const [upperShooter, setUpperShooter] = useState(false);
-    const [upperAccuracy, setUpperAccurate] = useState(false); */
-
-    // const [newData, setNewData] = useState([])
-
-    //const [data, setData] = useState([])
-
     const update = (arr) => {                                       // Update sortColumns state
         setSortColumns(arr)                                         // Used in List when one checkbox is clicked
         console.log(`[x] columns update ${arr}`)
@@ -47,7 +38,7 @@ const SummaryTable = () => {
 
 
     useEffect(() => setAverages(teamNumbers.map(team => {           // Calculate averages of each team
-        let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
+        let teamStats = teamData.filter(x => x.TeamId === team.TeamNumber);
 
         let avgPoints = calcAveragePoints(teamStats);
         let strats = getStrat(teamStats);
@@ -285,7 +276,6 @@ const SummaryTable = () => {
         return Math.round(sum * 1000) / 1000;                               // round to the nearest thousandth
     }
 
-
     const data = React.useMemo(
         () => tempData.map(team => {
             console.log("data changing")
@@ -314,34 +304,6 @@ const SummaryTable = () => {
 
         }), [tempData, sortColumns]
     )
-
-    /*useEffect(
-        () => setData(tempData.map(team => {
-            console.log("data changing")
-            const grade = calcColumnSort(team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
-            return {
-                TeamNumber: team.TeamNumber,
-                Strategy: team.Strategy,
-                AveragePoints: team.AveragePoints,
-                AverageLowHubShots: team.AverageLowHubShots,
-                AverageLowHubAccuracy: team.AverageLowHubAccuracy,
-                AverageUpperHubShots: team.AverageUpperHubShots,
-                AverageUpperHubAccuracy: team.AverageUpperHubAccuracy,
-                AverageHangar: team.AverageHangar,
-                AverageRating: team.AverageRating,
-
-                RatePoints: team.RatePoints,
-                RateLowShots: team.RateLowShots,
-                RateLowAccuracy: team.RateLowAccuracy,
-                RateUpperShots: team.RateUpperShots,
-                RateUpperAccuracy: team.RateUpperAccuracy,
-                RateHangar: team.RateHangar,
-
-                SumOfSelected: grade !== 0 ? grade : "",
-            }
-
-        })), [tempData, sortColumns]
-    )*/
 
     const columns = React.useMemo(
         () => [
