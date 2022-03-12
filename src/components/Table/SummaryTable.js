@@ -8,20 +8,22 @@ import List from './List';
 const SummaryTable = () => {
 
 
-    const [teamNumbers, setTeamNumbers] = useState([]);     // List of teamNumbers from Blue Alliance
-    const [teamData, setTeamData] = useState([]);           // List of teamData from API
-    const [dataOfAverages, setAverages] = useState([]);              // temporary objects of averages
+    const [teamNumbers, setTeamNumbers] = useState([]);             // List of teamNumbers from Blue Alliance
+    const [teamData, setTeamData] = useState([]);                   // List of teamData from API
+    const [dataOfAverages, setAverages] = useState([]);             // Temporary objects of averages
 
-    const [sortColumns, setSortColumns] = useState([]);
-    const [tempData, setTempData] = useState([]);
+    const [sortColumns, setSortColumns] = useState([]);             // List of checkboxes to sort by
+    const [tempData, setTempData] = useState([]);                   // List of data with grade
 
+    //const [data, setData] = useState([])
 
-    const update = (arr) => {
-        setSortColumns(arr)
+    const update = (arr) => {                                       // Update sortColumns state
+        setSortColumns(arr)                                         // Used in List when one checkbox is clicked
         console.log(sortColumns)
     };
 
-    useEffect(() => {                                       // Sets teamNumbers state (objects only contain team numbers)
+
+    useEffect(() => {                                               // Sets teamNumbers state (objects only contain team numbers)
         getTeams()
             .then(data => {
                 //console.log(`getting team numbers ${data}`)
@@ -29,7 +31,7 @@ const SummaryTable = () => {
             })
     }, [])
 
-    useEffect(() => {                                       // Get data from api and store into teamData state
+    useEffect(() => {                                               // Get data from api and store into teamData state
         api.get()
             .then(data => {
                 //console.log(`getting team numbers ${data}`)
@@ -38,7 +40,7 @@ const SummaryTable = () => {
     }, [teamNumbers])
 
 
-    useEffect(() => setAverages(teamNumbers.map(team => {
+    useEffect(() => setAverages(teamNumbers.map(team => {           // Calculate averages of each team
         let teamStats = teamData.filter(x => x.TeamNumber === team.TeamNumber);
 
         let avgPoints = calcAveragePoints(teamStats);
@@ -71,7 +73,7 @@ const SummaryTable = () => {
         };
     })), [teamData, teamNumbers])
 
-    useEffect(() => setTempData(dataOfAverages.map(team => {
+    useEffect(() => setTempData(dataOfAverages.map(team => {    // Calculate each team's grades for each column
         const maxAvgPoint = getMax(dataOfAverages.map(team => team.AveragePoints));
         const maxLowShots = getMax(dataOfAverages.map(team => team.AverageLowHubShots));
         const maxLowAcc = getMax(dataOfAverages.map(team => team.AverageLowHubAccuracy));
@@ -113,11 +115,11 @@ const SummaryTable = () => {
     ), [dataOfAverages])
 
 
-    const getMax = (arr) => {
+    const getMax = (arr) => {                                   // Get max of array
         return arr.sort((a, b) => b - a).shift();
     }
 
-    const getTeams = async () => {
+    const getTeams = async () => {                              // Get list of teams from the Blue Alliance
         return await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/teams', { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
@@ -147,19 +149,19 @@ const SummaryTable = () => {
             .catch(err => console.log(err))
     }
 
-    const calcAveragePoints = (arr) => {
-        let individualPoints = arr.map(value => value.TotalPoints)
+    const calcAveragePoints = (arr) => {                        // Calculate average points for each team
+        let individualPoints = arr.map(value => value.TotalPoints)      // get all team's points scored in a match
         let totalPoints = 0;
-        for (let i = 0; i < individualPoints.length; i++) {
+        for (let i = 0; i < individualPoints.length; i++) {             // find the sum
             totalPoints = totalPoints + individualPoints[i]
         }
-        let averagePoints = totalPoints / individualPoints.length;
+        let averagePoints = totalPoints / individualPoints.length;      // find average
         return averagePoints;
     }
 
-    const getStrat = (arr) => {
+    const getStrat = (arr) => {                                 // Create a list of all the priorities/strats for each team
         let stratList = [];
-        arr.forEach(teamObject => {
+        arr.forEach(teamObject => {                             // If priority/strategy is not already in array, add to array
             let strats = teamObject.Strategy;
             if (strats[0] === "Low Hub " && !stratList.includes("Low Hub Shooter")) {
                 stratList.push("Low Hub Shooter")
@@ -180,48 +182,48 @@ const SummaryTable = () => {
         return stratList;
     }
 
-    const calcLowAcc = (arr) => {
-        let lowAccuracies = arr.map(value => value.LowHubAccuracy)
+    const calcLowAcc = (arr) => {                               // Calculate average low hub accuracy shots for each team
+        let lowAccuracies = arr.map(value => value.LowHubAccuracy)      // get all team's low hub accuracies in a match
         let sumLowAccuracies = 0;
-        for (let i = 0; i < lowAccuracies.length; i++) {
+        for (let i = 0; i < lowAccuracies.length; i++) {                // find the sum
             sumLowAccuracies = sumLowAccuracies + lowAccuracies[i];
         }
-        let averageLowAccuracy = sumLowAccuracies / lowAccuracies.length;
+        let averageLowAccuracy = sumLowAccuracies / lowAccuracies.length;   // find the average
         return averageLowAccuracy;
     }
 
-    const calcLowShots = (arr) => {
+    const calcLowShots = (arr) => {                             // Calculate average low hub shots made in a match
         let lowShots = arr.map(value => (value.AutoLowMade + value.TeleLowMade));
         let sumLowShots = 0;
-        for (let i = 0; i < lowShots.length; i++) {
+        for (let i = 0; i < lowShots.length; i++) {                     // find the sum
             sumLowShots = sumLowShots + lowShots[i];
         }
-        let averageLowShots = sumLowShots / lowShots.length;
+        let averageLowShots = sumLowShots / lowShots.length;            // find the average
         return averageLowShots;
     }
 
-    const calcUpperAcc = (arr) => {
-        let upperAccuracies = arr.map(value => value.UpperHubAccuracy);
+    const calcUpperAcc = (arr) => {                             // Calculate average upper hub accuracy shots for each team
+        let upperAccuracies = arr.map(value => value.UpperHubAccuracy);         // get all team's upper hub accuracies in a match
         let sumHighAccuracies = 0;
-        for (let i = 0; i < upperAccuracies.length; i++) {
+        for (let i = 0; i < upperAccuracies.length; i++) {                      // find the sum
             sumHighAccuracies = sumHighAccuracies + upperAccuracies[i];
         }
-        let averageUpperAccuracy = sumHighAccuracies / upperAccuracies.length;
+        let averageUpperAccuracy = sumHighAccuracies / upperAccuracies.length;  // find the average
         return averageUpperAccuracy;
     }
 
-    const calcUpperShots = (arr) => {
-        let upperShots = arr.map(value => (value.AutoUpperMade + value.TeleUpperMade));
+    const calcUpperShots = (arr) => {                           // Calculate average upper hub shots made for each team
+        let upperShots = arr.map(value => (value.AutoUpperMade + value.TeleUpperMade));     // get all team's upper hub shots made in a match
         let sumUpperShots = 0;
-        for (let i = 0; i < upperShots.length; i++) {
+        for (let i = 0; i < upperShots.length; i++) {                                       // find the sum
             sumUpperShots = sumUpperShots + upperShots[i];
         }
-        let averageUpperShots = sumUpperShots / upperShots.length;
+        let averageUpperShots = sumUpperShots / upperShots.length;                          // find the average
         return averageUpperShots;
     }
 
-    const calcHangar = (arr) => {
-        let hangar = arr.map(value => {
+    const calcHangar = (arr) => {                               // Calculate average hangar points for each team
+        let hangar = arr.map(value => {                         // get all team's hangar points scored in a match
             if (value.Hangar === 'None' || value.Hangar === 'Attempted') {
                 return 0;
             } else if (value.Hangar === 'Low') {
@@ -238,48 +240,50 @@ const SummaryTable = () => {
         });
 
         let sumHangar = 0;
-        for (let i = 0; i < hangar.length; i++) {
+        for (let i = 0; i < hangar.length; i++) {               // find the sum
             sumHangar = sumHangar + hangar[i];
         }
-        let averageHangar = sumHangar / hangar.length;
+        let averageHangar = sumHangar / hangar.length;          // find the average
         return averageHangar;
     }
 
-    const calcRanking = (arr) => {
-        let rankings = arr.map(value => (value.OpinionScale));
+    const calcRanking = (arr) => {                              // Calculate average opinion scale for each team
+        let rankings = arr.map(value => (value.OpinionScale));          // get all team's opinions in a match
         let sumRankings = 0;
-        for (let i = 0; i < rankings.length; i++) {
+        for (let i = 0; i < rankings.length; i++) {                     // find the sum
             sumRankings = sumRankings + rankings[i];
         }
-        let averageRanking = sumRankings / rankings.length;
+        let averageRanking = sumRankings / rankings.length;             // find the average
         return averageRanking;
     }
 
-    const calcColumnSort = (arr, lShots, lAcc, uShots, uAcc, hangar) => {
-        let sum = 0;
+    const calcColumnSort = (lShots, lAcc, uShots, uAcc, hangar) => {        // Calculate team's grades based on checkboxes selected
+        let sum = 0;                                                        // if value is inside array, add it to grade
 
-        if (arr.includes("Low Hub Shooter")) {
+        if (sortColumns.includes("Low Hub Shooter")) {
             sum = sum + lShots;
         }
-        if (arr.includes("Accurate Low Hub Shooter")) {
+        if (sortColumns.includes("Accurate Low Hub Shooter")) {
             sum = sum + lAcc;
         }
-        if (arr.includes("Upper Hub Shooter")) {
+        if (sortColumns.includes("Upper Hub Shooter")) {
             sum = sum + uShots;
         }
-        if (arr.includes("Accurate Upper Hub Shooter")) {
+        if (sortColumns.includes("Accurate Upper Hub Shooter")) {
             sum = sum + uAcc;
         }
-        if (arr.includes("Hangar")) {
+        if (sortColumns.includes("Hangar")) {
             sum = sum + hangar;
         }
 
-        return Math.round(sum*1000) / 1000;
+        return Math.round(sum * 1000) / 1000;                               // round to the nearest thousandth
     }
 
 
     const data = React.useMemo(
         () => tempData.map(team => {
+            console.log("data changing")
+            const grade = calcColumnSort(team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
             return {
                 TeamNumber: team.TeamNumber,
                 Strategy: team.Strategy,
@@ -298,12 +302,39 @@ const SummaryTable = () => {
                 RateUpperAccuracy: team.RateUpperAccuracy,
                 RateHangar: team.RateHangar,
 
-                SumOfSelected: calcColumnSort(sortColumns, team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar),
+                SumOfSelected: grade !== 0 ? grade : "",
             }
 
-        }), [sortColumns, tempData]
+        }), [tempData, sortColumns]
     )
 
+    /*useEffect(
+        () => setData(tempData.map(team => {
+            console.log("data changing")
+            const grade = calcColumnSort(team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
+            return {
+                TeamNumber: team.TeamNumber,
+                Strategy: team.Strategy,
+                AveragePoints: team.AveragePoints,
+                AverageLowHubShots: team.AverageLowHubShots,
+                AverageLowHubAccuracy: team.AverageLowHubAccuracy,
+                AverageUpperHubShots: team.AverageUpperHubShots,
+                AverageUpperHubAccuracy: team.AverageUpperHubAccuracy,
+                AverageHangar: team.AverageHangar,
+                AverageRating: team.AverageRating,
+
+                RatePoints: team.RatePoints,
+                RateLowShots: team.RateLowShots,
+                RateLowAccuracy: team.RateLowAccuracy,
+                RateUpperShots: team.RateUpperShots,
+                RateUpperAccuracy: team.RateUpperAccuracy,
+                RateHangar: team.RateHangar,
+
+                SumOfSelected: grade !== 0 ? grade : "",
+            }
+
+        })), [tempData, sortColumns]
+    )*/
 
     const columns = React.useMemo(
         () => [
@@ -370,14 +401,12 @@ const SummaryTable = () => {
     const renderRowSubComponent = ({ row }) => {
 
         let t = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber);
-        // let info = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber)
 
-        return t.length > 0 ?
+        return t.length > 0 ?               // if there is data on team, display a table when expanded
             (<pre>
                 <div> {<TeamTable information={t} />} </div>
             </pre>)
-
-            : (
+            : (                             // else if no data, notify no data has been collected
                 <tr><td style={{
                     padding: '10px',
                     textAlign: 'center',
@@ -396,17 +425,8 @@ const SummaryTable = () => {
         visibleColumns,
     } = tableInstance
 
-
     return (
         <div>
-            {/*<div>
-                <Checkbox value="Low Hub Shooter" changeState={addOnColumnSort} />
-                <Checkbox value="Accurate Low Hub Shooter" changeState={addOnColumnSort} />
-                <Checkbox value="Upper Hub Shooter" changeState={addOnColumnSort} />
-                <Checkbox value="Accurate Upper Hub Shooter" changeState={addOnColumnSort} />
-                <Checkbox value="Hangar" changeState={addOnColumnSort} />
-            </div>*/}
-
             <List setList={update} />
             <table {...getTableProps()} >
                 <thead>
