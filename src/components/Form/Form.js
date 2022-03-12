@@ -139,9 +139,9 @@ class Form extends React.Component{
     }
 
     getMatchTeams(){
-        let matchKey = /*put this years event key here*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+        let matchKey = /*put this years event key here*/ "2022hiho_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = async () => {
-            await fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
+            await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/matches',{
                 mode: 'cors',
                 headers:{
                     //'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
@@ -668,10 +668,11 @@ class Form extends React.Component{
             window.alert(windowAlertMessage);
         }
         else if(incompleteForm === false || override === true){
+            //console.log(this.state.teamNumber.substring(4,this.state.teamNumber.length));
             api.put({
                 body: {
-                    TeamId: String(this.state.teamNumber),
-                    MatchId: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
+                    TeamId: String(this.state.teamNumber.substring(3,this.state.teamNumber.length)),
+                    MatchId: String(/* insert event year key here /*/ "2022hiho_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
                     UpperHubAccuracy: Number(highAccuracy),
@@ -696,7 +697,8 @@ class Form extends React.Component{
                     Comments: String(this.state.comment),
                 }
             })//*/
-            .then(window.alert("States have successfully been submitted to table"))
+            .then(window.alert("States have successfully been submitted to table")
+            )
             .catch(err => {
                 console.log(err)
             })
