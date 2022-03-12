@@ -11,14 +11,14 @@ class Checkbox extends React.Component{
     handleChange(){
         this.setState({checked: !this.state.checked})
 
-        this.props.changeState(!this.state.checked, this.props.value)
+        this.props.changeState(!this.state.checked, this.props.value, this.props.id)
         
     }
 
     render(){
         return (
             <div>
-                <label> {this.props.value}
+                <label> {this.props.value + " "}
                     <input type='checkbox' onChange={this.handleChange} />
                 </label>
             </div>
