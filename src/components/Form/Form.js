@@ -7,7 +7,8 @@ import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
 //import ImageMarker from "react-image-marker";
 import Header from './Header';
-import api from "../../api/index"
+import api from "../../api/index";
+//import React, { useState, useEffect } from 'react';
 
 class Form extends React.Component{
     constructor(props){
@@ -102,14 +103,20 @@ class Form extends React.Component{
             this.setState({number:''});
         }
         this.setState({matchType:event});
+        this.setState({teams:["team1","team2","team3","team4","team5","team6"]});
+        this.setState({teamNumber:''});
     }
     
     changeTypeNumber(event){
         this.setState({number:(event.target.value)});
+        this.setState({teams:["team1","team2","team3","team4","team5","team6"]});
+        this.setState({teamNumber:''});
     }
     
     changeMatchNumber(event){
         this.setState({matchNumber:event.target.value});
+        this.setState({teams:["team1","team2","team3","team4","team5","team6"]});
+        this.setState({teamNumber:''});
     }
 
     makeMatchTypeNumberDropdown(matchType){
@@ -139,6 +146,7 @@ class Form extends React.Component{
             await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/matches',{
                 mode: 'cors',
                 headers:{
+                    //'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
                     'X-TBA-Auth-Key': await api.getBlueAllianceAuthKey()
                 }
             })
@@ -165,13 +173,10 @@ class Form extends React.Component{
         this.setState({teamNumber:event.target.value});
         let data = this.state.matchData;
         let chosenTeam = event.target.value
-        let teamColor = "";
+        let teamColor = "red";
         data.alliances.blue.team_keys.map((team) => {
             if(team === chosenTeam){
                 teamColor = 'blue';
-            }
-            else{
-                teamColor = 'red'
             }
         })
         let whoWon = '';
@@ -518,7 +523,7 @@ class Form extends React.Component{
         }
         else if(this.state.matchType === ''){
             incompleteForm = true;
-            windowAlertMessage = windowAlertMessage + "\nMatch Type (Qualifications, Quarterfinals, Semifinals, Finals"
+            windowAlertMessage = windowAlertMessage + "\nMatch Type (Qualifications, Quarterfinals, Semifinals, Finals)"
         }
 
         if(this.state.matchNumber === ''){
@@ -573,13 +578,14 @@ class Form extends React.Component{
             window.alert(windowAlertMessage);
         }
         else if(incompleteForm === false || override === true){
+            //console.log(this.state.teamNumber.substring(4,this.state.teamNumber.length));
             api.put({
-                body:{
-                    TeamId: String(this.state.teamNumber),
+                body: {
+                    TeamId: String(this.state.teamNumber.substring(3,this.state.teamNumber.length)),
                     MatchId: String(/* insert event year key here /*/ "2022hiho_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
                     TotalPoints: Number(points),
-                    LowHubAccuracy: lowAccuracy,
-                    UpperHubAccuracy: highAccuracy,
+                    LowHubAccuracy: Number(lowAccuracy),
+                    UpperHubAccuracy: Number(highAccuracy),
                     AutoLowMade: Number(vals[0]),
                     AutoLowMissed: Number(vals[1]),
                     AutoUpperMade: Number(vals[2]),
@@ -601,7 +607,8 @@ class Form extends React.Component{
                     Comments: String(this.state.comment),
                 }
             })//*/
-            .then(window.alert("States have successfully been submitted to table"))
+            .then(window.alert("States have successfully been submitted to table")
+            )
             .catch(err => {
                 console.log(err)
             })
@@ -657,7 +664,8 @@ class Form extends React.Component{
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
-                {this.overrideCheckbox()}
+                {//this.overrideCheckbox()
+                }
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>
                 </div>
