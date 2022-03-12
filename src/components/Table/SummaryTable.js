@@ -38,7 +38,7 @@ const SummaryTable = () => {
 
 
     useEffect(() => setAverages(teamNumbers.map(team => {           // Calculate averages of each team
-        let teamStats = teamData.filter(x => x.TeamId === team.TeamNumber);
+        let teamStats = teamData.filter(x => parseInt(x.TeamId) === team.TeamNumber);
 
         let avgPoints = calcAveragePoints(teamStats);
         let strats = getStrat(teamStats);
