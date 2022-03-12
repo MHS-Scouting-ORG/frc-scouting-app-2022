@@ -82,8 +82,8 @@ class Form extends React.Component{
             comment:"",
             scale:0,
             markers: [],
-
             tarmacSection: 0,
+            override:false,
         };
     }
     
