@@ -40,7 +40,7 @@ class Input extends React.Component{
     }
 
     inputChange(event){
-        if(event.target.value == ''){
+        if(event.target.value === ''){
             this.setState({inputValue:0});
         }
         else{
