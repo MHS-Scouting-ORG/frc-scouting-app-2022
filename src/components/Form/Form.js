@@ -93,7 +93,6 @@ class Form extends React.Component{
 
     /*initialsChange(event){
         this.setState({scouterInitials:event.target.value.toUpperCase()});
-        Fixed the logic for determining the scouted teams ranking points and made sure that you cannot change the match key without resetting the chosen teams
     }*/
 
     changeMatchType(event){
