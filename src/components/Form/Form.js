@@ -671,7 +671,7 @@ class Form extends React.Component{
             //console.log(this.state.teamNumber.substring(4,this.state.teamNumber.length));
             api.put({
                 body: {
-                    TeamId: String(this.state.teamNumber.substring(3,this.state.teamNumber.length)),
+                    TeamId: Number(this.state.teamNumber.substring(3,this.state.teamNumber.length)),
                     MatchId: String(/* insert event year key here /*/ "2022hiho_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
