@@ -8,7 +8,8 @@ import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
 //import ImageMarker from "react-image-marker";
 import Header from './Header';
-import api from "../../api/index"
+import api from "../../api/index";
+//import React, { useState, useEffect } from 'react';
 
 class Form extends React.Component{
     constructor(props){
@@ -57,7 +58,8 @@ class Form extends React.Component{
 
         this.setMarkers = this.setMarkers.bind(this);
 
-
+        //const [teamId, setTeamId] = useState("")
+        //const [matchNumber, setMatchNumber] = useState("")
 
         this.state = {
             totalPoints: 0,
@@ -132,12 +134,12 @@ class Form extends React.Component{
 
     getMatchTeams(){
         let matchKey = /*put this years event key here*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
-        const teams = () => {
-            fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
+        const teams = async () => {
+            await fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
                 mode: 'cors',
                 headers:{
-                    'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
-                    //'X-TBA-Auth-Key': api.getBlueAllianceAuthKey
+                    //'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
+                    'X-TBA-Auth-Key': await api.getBlueAllianceAuthKey()
                 }
             })
             .then(response => response.json())
@@ -608,7 +610,7 @@ class Form extends React.Component{
         }
         else if(this.state.matchType === ''){
             incompleteForm = true;
-            windowAlertMessage = windowAlertMessage + "\nMatch Type (Qualifications, Quarterfinals, Semifinals, Finals"
+            windowAlertMessage = windowAlertMessage + "\nMatch Type (Qualifications, Quarterfinals, Semifinals, Finals)"
         }
 
         if(this.state.matchNumber === ''){
@@ -664,30 +666,32 @@ class Form extends React.Component{
         }
         else if(incompleteForm === false || override === true){
             api.put({
-                TeamNumber: String(this.state.teamNumber),
-                MatchNumber: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
-                TotalPoints: Number(points),
-                LowHubAccuracy: lowAccuracy,
-                UpperHubAccuracy: highAccuracy,
-                AutoLowMade: Number(vals[0]),
-                AutoLowMissed: Number(vals[1]),
-                AutoUpperMade: Number(vals[2]),
-                AutoUpperMissed: Number(vals[3]),
-                Taxi: Boolean(taxiValue),
-                AutoPlacement: Number(autoPosition),
-                TeleLowMade: Number(vals[4]),
-                TeleLowMissed: Number(vals[5]),
-                TeleUpperMade: Number(vals[6]),
-                TeleUpperMissed: Number(vals[7]),
-                Hangar: String(hangarUsed),
-                NumberOfFouls: Number(vals[8]),
-                NumberOfTech: Number(vals[9]),
-                Penalties: Array(penalties),
-                HangarCargoBonus: Array(bonuses),
-                NumberOfRankingPoints: Number(this.state.rankingPoints),
-                Strategy: Array(strategies),
-                OpinionScale: Number(this.state.scale),
-                Comments: String(this.state.comment),
+                body: {
+                    TeamId: String(this.state.teamNumber),
+                    MatchId: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
+                    TotalPoints: Number(points),
+                    LowHubAccuracy: Number(lowAccuracy),
+                    UpperHubAccuracy: Number(highAccuracy),
+                    AutoLowMade: Number(vals[0]),
+                    AutoLowMissed: Number(vals[1]),
+                    AutoUpperMade: Number(vals[2]),
+                    AutoUpperMissed: Number(vals[3]),
+                    Taxi: Boolean(taxiValue),
+                    AutoPlacement: Number(autoPosition),
+                    TeleLowMade: Number(vals[4]),
+                    TeleLowMissed: Number(vals[5]),
+                    TeleUpperMade: Number(vals[6]),
+                    TeleUpperMissed: Number(vals[7]),
+                    Hangar: String(hangarUsed),
+                    NumberOfFouls: Number(vals[8]),
+                    NumberOfTech: Number(vals[9]),
+                    Penalties: Array(penalties),
+                    HangarCargoBonus: Array(bonuses),
+                    NumberOfRankingPoints: Number(this.state.rankingPoints),
+                    Strategy: Array(strategies),
+                    OpinionScale: Number(this.state.scale),
+                    Comments: String(this.state.comment),
+                }
             })//*/
             .then(window.alert("States have successfully been submitted to table"))
             .catch(err => {
@@ -745,7 +749,8 @@ class Form extends React.Component{
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
-                {this.overrideCheckbox()}
+                {//this.overrideCheckbox()
+                }
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>
                 </div>
