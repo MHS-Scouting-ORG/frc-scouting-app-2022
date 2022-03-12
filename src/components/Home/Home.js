@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react-bootstrap'
 import { a, API } from 'aws-amplify'
-import { useTable, useSortBy } from 'react-table'
-import TeamTable from '../Table/TeamTable'
 import SummaryTable from '../Table/SummaryTable'
-import TestTable from '../Table/Test'
-import SampleData from '../Table/Data'
 import api from '../../api'
 
 const Home = (props) => {

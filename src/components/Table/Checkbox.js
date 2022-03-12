@@ -11,7 +11,7 @@ class Checkbox extends React.Component{
     handleChange(){
         this.setState({checked: !this.state.checked})
 
-        this.props.changeState(!this.state.checked, this.props.value)
+        this.props.changeState(!this.state.checked, this.props.value, this.props.id)
         
     }
 
