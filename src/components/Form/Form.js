@@ -134,9 +134,9 @@ class Form extends React.Component{
     }
 
     getMatchTeams(){
-        let matchKey = /*put this years event key here*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+        let matchKey = /*put this years event key here*/ "2022hiho_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = async () => {
-            await fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
+            await fetch('https://www.thebluealliance.com/api/v3/event/2022hiho/matches',{
                 mode: 'cors',
                 headers:{
                     'X-TBA-Auth-Key': await api.getBlueAllianceAuthKey()
@@ -576,7 +576,7 @@ class Form extends React.Component{
             api.put({
                 body:{
                     TeamId: String(this.state.teamNumber),
-                    MatchId: String(/* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
+                    MatchId: String(/* insert event year key here /*/ "2022hiho_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber),
                     TotalPoints: Number(points),
                     LowHubAccuracy: lowAccuracy,
                     UpperHubAccuracy: highAccuracy,
