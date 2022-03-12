@@ -31,10 +31,10 @@ const SummaryTable = () => {
     useEffect(() => {                                               // Get data from api and store into teamData state
         api.get()
             .then(data => {
-                //console.log(`getting team numbers ${data}`)
+                console.log(`getting team numbers ${data}`)
                 setTeamData(data)
             })
-    }, [teamNumbers])
+    }, [])
 
 
     useEffect(() => setAverages(teamNumbers.map(team => {           // Calculate averages of each team
