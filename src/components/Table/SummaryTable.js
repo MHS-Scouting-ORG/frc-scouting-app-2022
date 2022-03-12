@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTable, useSortBy, useExpanded } from "react-table";
 import TeamTable from "./TeamTable";
-import Checkbox from './Checkbox';
+//import Checkbox from './Checkbox';
 import api from '../../api';
 import List from './List';
 
@@ -15,14 +15,20 @@ const SummaryTable = () => {
     const [sortColumns, setSortColumns] = useState([]);             // List of checkboxes to sort by
     const [tempData, setTempData] = useState([]);                   // List of data with grade
 
+    /* const [lowShooter, setLowShooter] = useState(false);
+    const [lowAccuracy, setLowAccurate] = useState(false);
+    const [upperShooter, setUpperShooter] = useState(false);
+    const [upperAccuracy, setUpperAccurate] = useState(false); */
+
+    // const [newData, setNewData] = useState([])
+
     //const [data, setData] = useState([])
 
     const update = (arr) => {                                       // Update sortColumns state
         setSortColumns(arr)                                         // Used in List when one checkbox is clicked
-        console.log(sortColumns)
-    };
-
-
+        console.log(`[x] columns update ${arr}`)
+    }; 
+ 
     useEffect(() => {                                               // Sets teamNumbers state (objects only contain team numbers)
         getTeams()
             .then(data => {
@@ -112,7 +118,7 @@ const SummaryTable = () => {
         }
     })
 
-    ), [dataOfAverages])
+    ), [dataOfAverages, teamData, teamNumbers])
 
 
     const getMax = (arr) => {                                   // Get max of array
@@ -257,22 +263,22 @@ const SummaryTable = () => {
         return averageRanking;
     }
 
-    const calcColumnSort = (lShots, lAcc, uShots, uAcc, hangar) => {        // Calculate team's grades based on checkboxes selected
+    const calcColumnSort = (arr, lShots, lAcc, uShots, uAcc, hangar) => {        // Calculate team's grades based on checkboxes selected
         let sum = 0;                                                        // if value is inside array, add it to grade
 
-        if (sortColumns.includes("Low Hub Shooter")) {
+        if (arr.includes("Low Hub Shooter")) {
             sum = sum + lShots;
         }
-        if (sortColumns.includes("Accurate Low Hub Shooter")) {
+        if (arr.includes("Accurate Low Hub Shooter")) {
             sum = sum + lAcc;
         }
-        if (sortColumns.includes("Upper Hub Shooter")) {
+        if (arr.includes("Upper Hub Shooter")) {
             sum = sum + uShots;
         }
-        if (sortColumns.includes("Accurate Upper Hub Shooter")) {
+        if (arr.includes("Accurate Upper Hub Shooter")) {
             sum = sum + uAcc;
         }
-        if (sortColumns.includes("Hangar")) {
+        if (arr.includes("Hangar")) {
             sum = sum + hangar;
         }
 
@@ -283,7 +289,8 @@ const SummaryTable = () => {
     const data = React.useMemo(
         () => tempData.map(team => {
             console.log("data changing")
-            const grade = calcColumnSort(team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
+
+            const grade = calcColumnSort(sortColumns, team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
             return {
                 TeamNumber: team.TeamNumber,
                 Strategy: team.Strategy,
@@ -427,7 +434,14 @@ const SummaryTable = () => {
 
     return (
         <div>
-            <List setList={update} />
+            {/*<div>
+                <Checkbox value="Low Hub Shooter" changeState={this.addOnColumnSort} id={0}/>
+                <Checkbox value="Accurate Low Hub Shooter" changeState={this.addOnColumnSort} id={1}/>
+                <Checkbox value="Upper Hub Shooter" changeState={this.addOnColumnSort} id={2}/>
+                <Checkbox value="Accurate Upper Hub Shooter" changeState={this.addOnColumnSort} id={3}/>
+                <Checkbox value="Hangar" changeState={this.addOnColumnSort} id={4}/>
+            </div>*/}
+            {<List setList={setSortColumns}/>}
             <table {...getTableProps()} >
                 <thead>
                     {

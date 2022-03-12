@@ -9,14 +9,14 @@ class List extends React.Component {
     }
 
     addOnColumnSort(bool, value, id){
-        let checkboxState = this.state.list;
+        let checkboxState = Array.from(this.state.list);
 
         if (bool === true) {
             checkboxState[id] = value
         } else {
             checkboxState[id] = ""
         }
-
+        this.setState({ list: checkboxState})
         this.props.setList(checkboxState);
     }
 
