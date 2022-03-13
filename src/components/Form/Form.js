@@ -599,10 +599,10 @@ class Form extends React.Component{
                     Hangar: String(hangarUsed),
                     NumberOfFouls: Number(vals[8]),
                     NumberOfTech: Number(vals[9]),
-                    Penalties: Array(penalties),
-                    HangarCargoBonus: Array(bonuses),
+                    Penalties: penalties,
+                    HangarCargoBonus: bonuses,
                     NumberOfRankingPoints: Number(this.state.rankingPoints),
-                    Strategy: Array(strategies),
+                    Strategy: strategies,
                     OpinionScale: Number(this.state.scale),
                     Comments: String(this.state.comment),
                 }
