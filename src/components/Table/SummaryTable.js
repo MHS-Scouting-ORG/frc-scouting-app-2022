@@ -267,6 +267,7 @@ const SummaryTable = () => {
 
     const data = React.useMemo(
         () => tempData.map(team => {
+
             const grade = calcColumnSort(sortColumns, team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
             return {
                 TeamNumber: team.TeamNumber,
