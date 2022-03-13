@@ -346,8 +346,8 @@ const SummaryTable = () => {
 
     const renderRowSubComponent = ({ row }) => {
         console.log(row.values.TeamNumber)
-        console.log(t)
         let t = teamData.filter((x) => x.TeamId === row.values.TeamNumber);
+        console.log(t)
 
         return t.length > 0 ?               // if there is data on team, display a table when expanded
             (<pre>
