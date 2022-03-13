@@ -19,3 +19,9 @@
 
 .Radio {
 }
+
+@media (min-width: 420px) {
+	.Div {
+		max-width: 30rem;
+	}
+}
