@@ -669,6 +669,7 @@ class Form extends React.Component{
         }
         else if(incompleteForm === false || override === true){
             //console.log(this.state.teamNumber.substring(4,this.state.teamNumber.length));
+            console.log(penalties)
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
@@ -754,7 +755,7 @@ class Form extends React.Component{
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
-                {//this.overrideCheckbox()
+                {this.overrideCheckbox()
                 }
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>
