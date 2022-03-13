@@ -157,26 +157,15 @@ const SummaryTable = () => {
     }
 
     const getStrat = (arr) => {                                 // Create a list of all the priorities/strats for each team
-        let stratList = [];
-        arr.forEach(teamObject => {                             // If priority/strategy is not already in array, add to array
-            let strats = teamObject.Strategy;
-            if (strats[0] === "Low Hub Shooter " && !stratList.includes("Low Hub Shooter")) {
-                stratList.push("Low Hub Shooter")
-            }
-            if (strats[1] === "Upper Hub Shooter " && !stratList.includes("Upper Hub Shooter")) {
-                stratList.push("Upper Hub Shooter")
-            }
-            if (strats[2] === "Launchpad " && !stratList.includes("Launchpad User")) {
-                stratList.push("Launchpad User")
-            }
-            if (strats[3] === "Hangar " && !stratList.includes("Hangar")) {
-                stratList.push("Hangar")
-            }
-            if (strats[4] === "Defense " && !stratList.includes("Defense")) {
-                stratList.push("Defense")
-            }
+        let a = arr.map(teamObj => teamObj.Strategy).reduce((a,b) => a.concat(b), []).filter((item) => item.trim().length > 0);
+        
+        return uniqueArray(a);
+    }
+
+    const uniqueArray = (arr) => { 
+        return arr.filter((item, index) => {
+            return index === arr.indexOf(item);
         })
-        return stratList;
     }
 
     const calcLowAcc = (arr) => {                               // Calculate average low hub accuracy shots for each team
@@ -369,7 +358,7 @@ const SummaryTable = () => {
 
     const renderRowSubComponent = ({ row }) => {
 
-        let t = teamData.filter((x) => x.TeamNumber === row.values.TeamNumber);
+        let t = teamData.filter((x) => x.TeamId === row.values.TeamNumber);
 
         return t.length > 0 ?               // if there is data on team, display a table when expanded
             (<pre>
@@ -379,7 +368,7 @@ const SummaryTable = () => {
                 <tr><td style={{
                     padding: '10px',
                     textAlign: 'center',
-                }}> No data collected for Team {row.values.TeamNumber}. </td></tr>
+                }}> No data collected for Team {row.values.TeamId}. </td></tr>
             );
     }
 
