@@ -1,0 +1,15 @@
+.Div {
+	overflow: auto;
+	white-space: nowrap;
+}
+
+.Label {
+}
+
+.Button {
+	display: inline-block;
+}
+
+.Input {
+	display: inline-block;
+}
