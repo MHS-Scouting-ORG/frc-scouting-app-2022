@@ -31,7 +31,7 @@ const SummaryTable = () => {
         console.log('update data')
         api.get()
             .then(data => {
-                console.log(`getting team numbers ${data}`)
+                // /console.log(`getting team numbers ${data}`)
                 setTeamData(data)
             })
     }, [teamNumbers])
@@ -267,8 +267,6 @@ const SummaryTable = () => {
 
     const data = React.useMemo(
         () => tempData.map(team => {
-            console.log("data changing")
-
             const grade = calcColumnSort(sortColumns, team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
             return {
                 TeamNumber: team.TeamNumber,
@@ -296,17 +294,6 @@ const SummaryTable = () => {
 
     const columns = React.useMemo(
         () => [
-            /* {
-                 id: 'exp',
-                 Header: () => null,
-                 accessor: 'TeamNumber',
-                 Cell: ({ row }) =>
-                 (
-                     <span {...row.getToggleRowExpandedProps()}>
-                         {row.isExpanded ? '-' : '+'}
-                     </span>
-                 ),
-             },*/
             {
                 Header: 'Team #',
                 accessor: 'TeamNumber',
