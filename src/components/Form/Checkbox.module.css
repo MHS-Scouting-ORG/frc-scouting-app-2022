@@ -3,21 +3,13 @@
 	flex-wrap: nowrap;
 	justify-content: flex-start;
 	align-items: center;
+	gap: 1rem;
 }
 
 .Label {
-	min-width: 12rem;
-}
-
-.InnerDiv {
-	display: flex;
-	flex-wrap: nowrap;
-}
-
-.Button {
-	width: 2rem;
+	width: 12rem;
+	text-align: right;
 }
 
 .Input {
-	width: 3rem;
 }

@@ -1,23 +1,20 @@
 .Div {
 	display: flex;
 	flex-wrap: nowrap;
-	justify-content: flex-start;
+	justify-content: space-between;
 	align-items: center;
+	flex-flow: row;
 }
 
 .Label {
-	min-width: 12rem;
 }
 
 .InnerDiv {
 	display: flex;
 	flex-wrap: nowrap;
+	flex-flow: column;
+	align-items: center;
 }
 
-.Button {
-	width: 2rem;
-}
-
-.Input {
-	width: 3rem;
+.Radio {
 }

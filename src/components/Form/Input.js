@@ -54,9 +54,11 @@ class Input extends React.Component{
         return (
             <div className={classes.Div}>
                 <label className={ classes.Label }>{this.props.label}</label>
-                    <button className={classes.Button} value={this.props.state} onClick={this.buttonMinus}> - </button>
-                    <input className={classes.Input} type='number' min={0} id={this.props.place} onChange={this.inputChange}></input>
-                    <button className={classes.Button} value={this.props.state} onClick={this.buttonPlus}> + </button>
+                <div className={classes.InnerDiv}>
+	                <button className={classes.Button} value={this.props.state} onClick={this.buttonMinus}> - </button>
+	                <input className={classes.Input} type='number' min={0} id={this.props.place} onChange={this.inputChange}></input>
+	                <button className={classes.Button} value={this.props.state} onClick={this.buttonPlus}> + </button>
+                </div>
             </div>
         );
     }
