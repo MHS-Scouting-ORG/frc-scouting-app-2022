@@ -49,6 +49,24 @@ api.getYear = use_remote ? async function() {
   return Promise.resolve(2020)
 }
 
+api.getRegional = use_remote ? async function() {
+  const user = await Auth.currentCredentials()
+  const ssm = new SSM({credentials: Auth.essentialCredentials(user), region})
+  return new Promise((resolve, reject) => {
+    ssm.getParameter({
+      Name:"regional"
+    }, (err, data) => {
+      if(err)
+        reject(err)
+      else
+        resolve(data.Parameter.Value)
+    })
+  })
+  
+} : async function() {
+  return Promise.resolve(2020)
+}
+
 api.getTeamInfo = async function(api_key) {
   return fetch(`${bluealliance_api_endpoint}/team/frc2443`, { headers : { 'x-tba-auth-key' : api_key }, mode: "cors"})
     .then(res => res.json())
