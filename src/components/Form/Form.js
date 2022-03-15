@@ -632,6 +632,13 @@ class Form extends React.Component{
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nTaxi"
         }
+
+        if(taxiBox === false){
+            taxiValue = "No";
+        }
+        else if(taxiBox === true){
+            taxiValue = "Yes";
+        }
         
         if(autoPosition === ''){
             incompleteForm = true;
@@ -675,7 +682,7 @@ class Form extends React.Component{
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
-                    MatchId: /* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
+                    MatchId: /* insert event year key here /*/ "2022nytr" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
                     UpperHubAccuracy: Number(highAccuracy),
@@ -683,7 +690,7 @@ class Form extends React.Component{
                     AutoLowMissed: Number(vals[1]),
                     AutoUpperMade: Number(vals[2]),
                     AutoUpperMissed: Number(vals[3]),
-                    Taxi: Boolean(taxiValue),
+                    Taxi: String(taxiValue),
                     AutoPlacement: Number(autoPosition),
                     TeleLowMade: Number(vals[4]),
                     TeleLowMissed: Number(vals[5]),
