@@ -713,6 +713,8 @@ class Form extends React.Component{
                 console.log(err)
             })
         }
+        let regional = api.getRegional();
+        console.log(regional);
     }
       
 
