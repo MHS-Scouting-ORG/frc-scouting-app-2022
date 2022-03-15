@@ -141,9 +141,9 @@ class Form extends React.Component{
     }
 
     getMatchTeams(){
-        let matchKey = /*put this years event key here*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+        let matchKey = /*put this years event key here*/ "2022nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = async () => {
-            await fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
+            await fetch('https://www.thebluealliance.com/api/v3/event/2022nytr/matches',{
                 mode: 'cors',
                 headers:{
                     //'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
