@@ -10,6 +10,8 @@ import Header from './Header';
 import api from "../../api/index";
 //import React, { useState, useEffect } from 'react';
 
+import classes from './Form.module.css';
+
 class Form extends React.Component{
     constructor(props){
         super(props);
@@ -579,6 +581,7 @@ class Form extends React.Component{
         }
         else if(incompleteForm === false || override === true){
             //console.log(this.state.teamNumber.substring(4,this.state.teamNumber.length));
+            console.log(penalties)
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
@@ -633,7 +636,7 @@ class Form extends React.Component{
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],0)}
                 {/*<ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>*/}
-                <img src={'./images/tarmac.jpg'} prop={"Tarmac"}></img>
+                <img className={classes.TarmacImage} src={'./images/tarmac.jpg'} prop={"Tarmac"}></img>
                 {this.makeDropDownBox("Auto Position On Tarmac: ",[1,2,3,4,5,6,7,8],1)}
                 {/* */}
                 <br></br>
@@ -664,7 +667,7 @@ class Form extends React.Component{
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
-                {//this.overrideCheckbox()
+                {this.overrideCheckbox()
                 }
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>

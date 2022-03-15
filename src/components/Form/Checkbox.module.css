@@ -1,0 +1,15 @@
+.Div {
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 1rem;
+}
+
+.Label {
+	width: 12rem;
+	text-align: right;
+}
+
+.Input {
+}

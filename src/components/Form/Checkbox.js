@@ -1,5 +1,7 @@
 import React from "react";
 
+import classes from "./Checkbox.module.css";
+
 class Checkbox extends React.Component{
     constructor(props){
         super(props);
@@ -12,10 +14,11 @@ class Checkbox extends React.Component{
 
     render(){
         return(
-            <div>
-                <label> {this.props.label.substring(0,this.props.label.length - 1) + ": "}
-                    < input type="checkbox" checked={this.props.checked} id={this.props.label} onChange={this.changeState} />
+            <div className={classes.Div}>
+                <label className={classes.Label}>
+					    {this.props.label.substring(0,this.props.label.length - 1) + ": "}
                 </label>
+                < input classname={classes.Input} type="checkbox" checked={this.props.checked} id={this.props.label} onChange={this.changeState} />
             </div>
         )
     }
