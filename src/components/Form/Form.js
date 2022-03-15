@@ -437,7 +437,7 @@ class Form extends React.Component{
         )
     }
 
-    submitStates(){
+    async submitStates(){
         let vals = this.state.inputBoxValues;
         let lowTeleMade = parseInt(vals[4]);
         let lowAutoMade = parseInt(vals[0]);
@@ -470,108 +470,6 @@ class Form extends React.Component{
         } else if(hangarUsed === "None" || hangarUsed === "Attempted"){
             hangarPoints = 0;
         }
-        /*
-
-        
-        let penaltyStates = this.state.penaltyValues;
-        let strategyStates = this.state.strategyValues;
-        let bonusStates = this.state.bonusValues;
-
-        if(penaltyStates[0] == true){
-            penaltyStates[0] = "Yellow Card ";
-        }
-        else{
-            penaltyStates[0] = " ";
-        }
-
-        if(penaltyStates[1] ==  true){
-            penaltyStates[1] = "Red Card ";
-        } else{
-            penaltyStates[1] = " ";
-        }
-
-        if(penaltyStates[2] == true){
-            penaltyStates[2] = "Disabled ";
-        }
-
-        else{
-            penaltyStates[2] = " ";
-        }
-
-
-        if(penaltyStates[3] == true){
-            penaltyStates[3] = "Disqualifed "
-        }
-
-        else{
-            penaltyStates[3] = " ";
-        }
-    
-        if(penaltyStates[4] == true){
-            penaltyStates[4] = "Bot Broke ";
-        }
-    
-        else{
-            penaltyStates[4] = " ";
-        }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        if(strategyStates[0] == true){
-            strategyStates[0] = "Low Hub Shooter ";
-        }
-
-        else{
-            strategyStates[0] = " ";
-        }
-
-        if(strategyStates[1] == true){
-            strategyStates[1] = "Upper Hub Shooter ";
-        }
-
-        else{
-            strategyStates[1] = " ";
-        }
-
-        if(strategyStates[2] == true){
-            strategyStates[2] = "Launchpad Shooter ";
-        }
-
-        else{
-            strategyStates[2] = " ";
-        }
-
-        if(strategyStates[3] == true){
-            strategyStates[3] = "Hangar ";
-        }
-
-        else{
-            strategyStates[3] = " ";
-        }
-
-        if(strategyStates[4] == true){
-            strategyStates[4] = "Defense ";
-        }
-        else{
-            strategyStates[4] = "";
-        }
-
-
-        if(bonusStates[0] == true){
-            bonusStates[0] = "Hangar Bonus ";
-        }
-        else{
-            bonusStates[0] = " ";
-        }
-
-        if(bonusStates[1] == true){
-            bonusStates[1] = "Cargo Bonus ";
-        }
-        else{
-            bonusStates[1] = ' ';
-        }
-
-        //*/
         
         let points =  taxiPoints + hangarPoints + (lowTeleMade + (2 * ( lowAutoMade + highTeleMade + ( highAutoMade * 2 ))));
         let lowAccuracy = 100 * (( lowAutoMade + lowTeleMade ) / ( lowMissed + lowAutoMade + lowTeleMade ));
@@ -713,7 +611,7 @@ class Form extends React.Component{
                 console.log(err)
             })
         }
-        let regional = api.getRegional();
+        let regional = await api.getRegional();
         console.log(regional);
     }
       
