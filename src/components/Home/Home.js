@@ -29,7 +29,7 @@ const Home = (props) => {
       <br/>
       <SummaryTable/>
       <br/>
-      <img src={"./images/tarmac.JPG"} width="640" height="480"></img>
+      <img src={"./images/tarmac.jpg"} width="640" height="480"></img>
     </div>
   )
 }
