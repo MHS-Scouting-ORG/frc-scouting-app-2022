@@ -1,4 +1,5 @@
 import React from "react";
+import classes from "./Input.module.css"
 
 class Input extends React.Component{
     constructor(props){
@@ -51,12 +52,13 @@ class Input extends React.Component{
 
     render(){
         return (
-            <div>
-                <label> {this.props.label}
-                    <button value={this.props.state} onClick={this.buttonMinus}> - </button>
-                    <input type='number' min={0} id={this.props.place} onChange={this.inputChange}></input>
-                    <button value={this.props.state} onClick={this.buttonPlus}> + </button>
-                </label>
+            <div className={classes.Div}>
+                <label className={ classes.Label }>{this.props.label}</label>
+                <div className={classes.InnerDiv}>
+	                <button className={classes.Button} value={this.props.state} onClick={this.buttonMinus}> - </button>
+	                <input className={classes.Input} type='number' min={0} id={this.props.place} onChange={this.inputChange}></input>
+	                <button className={classes.Button} value={this.props.state} onClick={this.buttonPlus}> + </button>
+                </div>
             </div>
         );
     }
