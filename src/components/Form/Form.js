@@ -654,10 +654,10 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nRobot priorities/strategies"
         }
 
-        if(this.state.comment === ''){
+        /*if(this.state.comment === ''){
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nScouter comment"
-        }
+        }*/
 
         if(scale == 0){
             incompleteForm = true;
