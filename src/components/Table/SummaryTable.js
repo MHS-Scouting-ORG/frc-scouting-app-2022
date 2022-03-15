@@ -175,7 +175,7 @@ const SummaryTable = () => {
             sumLowAccuracies = sumLowAccuracies + lowAccuracies[i];
         }
         let averageLowAccuracy = sumLowAccuracies / lowAccuracies.length;   // find the average
-        return averageLowAccuracy;
+        return Math.round(averageLowAccuracy * 100) / 100;
     }
 
     const calcLowShots = (arr) => {                             // Calculate average low hub shots made in a match
@@ -195,7 +195,7 @@ const SummaryTable = () => {
             sumHighAccuracies = sumHighAccuracies + upperAccuracies[i];
         }
         let averageUpperAccuracy = sumHighAccuracies / upperAccuracies.length;  // find the average
-        return averageUpperAccuracy;
+        return Math.round(averageUpperAccuracy * 100) / 100;
     }
 
     const calcUpperShots = (arr) => {                           // Calculate average upper hub shots made for each team
