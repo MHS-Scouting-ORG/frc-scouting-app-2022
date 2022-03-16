@@ -1,5 +1,4 @@
 import React from 'react';
-import api from '../../api/index';
 
 import classes from './MatchDropdown.module.css';
 
