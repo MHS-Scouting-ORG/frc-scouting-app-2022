@@ -117,9 +117,11 @@ const SummaryTable = () => {
     }
 
     const getTeams = async () => {                              // Get list of teams from the Blue Alliance
-        const key = await api.getRegional().substring(0, 6)
-        console.log(`https://www.thebluealliance.com/api/v3/event/${key}/teams`)
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/${key}/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        const key = await api.getRegional();
+        const b = key.substring(0, 6);
+        console.log(b);
+        console.log(`https://www.thebluealliance.com/api/v3/event/${b}/teams`);
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/${b}/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
