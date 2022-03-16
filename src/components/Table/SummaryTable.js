@@ -350,7 +350,7 @@ const SummaryTable = () => {
 
     const renderRowSubComponent = ({ row }) => {
         let t = teamData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber);
-        console.log(row)
+        
         return t.length > 0 ?               // if there is data on team, display a table when expanded
             (<pre>
                 <div> {<TeamTable information={t} />} </div>
@@ -376,13 +376,6 @@ const SummaryTable = () => {
 
     return (
         <div>
-            {/*<div>
-                <Checkbox value="Low Hub Shooter" changeState={this.addOnColumnSort} id={0}/>
-                <Checkbox value="Accurate Low Hub Shooter" changeState={this.addOnColumnSort} id={1}/>
-                <Checkbox value="Upper Hub Shooter" changeState={this.addOnColumnSort} id={2}/>
-                <Checkbox value="Accurate Upper Hub Shooter" changeState={this.addOnColumnSort} id={3}/>
-                <Checkbox value="Hangar" changeState={this.addOnColumnSort} id={4}/>
-            </div>*/}
             <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
             {<List setList={setSortColumns}/>}
             <br/><br/>

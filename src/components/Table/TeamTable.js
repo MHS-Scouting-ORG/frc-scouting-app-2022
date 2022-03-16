@@ -170,7 +170,7 @@ const TeamTable = (props) => {
                         padding: '10px',
                         border: 'solid 1px black',
                         textAlign: 'center',
-                        background: 'papayawhip'
+                        background: 'steelblue'
                       }}
                     >
                       {column.render('Header')}
