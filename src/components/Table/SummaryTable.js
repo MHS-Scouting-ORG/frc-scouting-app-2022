@@ -383,7 +383,9 @@ const SummaryTable = () => {
                 <Checkbox value="Accurate Upper Hub Shooter" changeState={this.addOnColumnSort} id={3}/>
                 <Checkbox value="Hangar" changeState={this.addOnColumnSort} id={4}/>
             </div>*/}
+            <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
             {<List setList={setSortColumns}/>}
+            <br/><br/>
             <table {...getTableProps()} >
                 <thead>
                     {
