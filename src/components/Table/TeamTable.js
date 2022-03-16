@@ -14,7 +14,6 @@ const TeamTable = (props) => {
     }
   }
   const columnValues = Object.keys(data[0]);
-  console.log(columnValues.sort())
 
   const columns = React.useMemo(
     () =>

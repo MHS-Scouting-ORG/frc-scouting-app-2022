@@ -350,7 +350,7 @@ const SummaryTable = () => {
 
     const renderRowSubComponent = ({ row }) => {
         let t = teamData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber);
-
+        console.log(row)
         return t.length > 0 ?               // if there is data on team, display a table when expanded
             (<pre>
                 <div> {<TeamTable information={t} />} </div>
@@ -359,7 +359,7 @@ const SummaryTable = () => {
                 <tr><td style={{
                     padding: '10px',
                     textAlign: 'center',
-                }}> No data collected for Team {row.values.TeamId}. </td></tr>
+                }}> No data collected for Team {row.values.TeamNumber}. </td></tr>
             );
     }
 
