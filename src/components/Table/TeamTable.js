@@ -13,7 +13,8 @@ const TeamTable = (props) => {
       accessor: a,
     }
   }
-  let columnValues = Object.keys(data[0]);
+  const columnValues = Object.keys(data[0]);
+  console.log(columnValues.sort())
 
   const columns = React.useMemo(
     () =>
