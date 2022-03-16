@@ -17,7 +17,7 @@ const TeamTable = (props) => {
 
   const columns = React.useMemo(
     () =>
-      columnValues.map(makeColumns), []
+      columnValues.map(makeColumns).sort(), []
   )
 
   const tableInstance = useTable({ columns, data }, useSortBy);
