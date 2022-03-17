@@ -52,6 +52,7 @@ const SummaryTable = () => {
         return {
             TeamNumber: team.TeamNumber,
             Strategy: strats.join(', '),
+            NumberOfMatches: teamStats.length > 0 ? teamStats.length : '',
             AveragePoints: !isNaN(avgPoints) ? avgPoints : '',
             AverageLowHubShots: !isNaN(avgLowShots) ? avgLowShots : '',
             AverageLowHubAccuracy: !isNaN(avgLowAccuracy) ? avgLowAccuracy : '',
@@ -90,6 +91,7 @@ const SummaryTable = () => {
         return {
             TeamNumber: team.TeamNumber,
             Strategy: team.Strategy,
+            NumberOfMatches: team.NumberOfMatches,
             AveragePoints: team.AveragePoints,
             AverageLowHubShots: team.AverageLowHubShots,
             AverageLowHubAccuracy: team.AverageLowHubAccuracy,
@@ -276,6 +278,7 @@ const SummaryTable = () => {
             return {
                 TeamNumber: team.TeamNumber,
                 Strategy: team.Strategy,
+                NumberOfMatches: team.NumberOfMatches,
                 AveragePoints: team.AveragePoints,
                 AverageLowHubShots: team.AverageLowHubShots,
                 AverageLowHubAccuracy: team.AverageLowHubAccuracy,
@@ -307,6 +310,10 @@ const SummaryTable = () => {
                     <span {...row.getToggleRowExpandedProps()}>
                         {row.values.TeamNumber}
                     </span>)
+            },
+            {
+                Header: 'Number of Matches',
+                accessor: 'NumberOfMatches',
             },
             {
                 Header: 'Priority/Strategy',
