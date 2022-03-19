@@ -46,8 +46,12 @@ class Form extends React.Component{
 
         this.penaltyBoxClicked = this.penaltyBoxClicked.bind(this);
         this.makePenaltyBox = this.makePenaltyBox.bind(this);
+
         this.bonusBoxClicked = this.bonusBoxClicked.bind(this);
         this.makeBonusBox = this.makeBonusBox.bind(this);
+        this.whoWonClicked = this.whoWonClicked.bind(this);
+        this.whoWonButtons = this.whoWonButtons.bind(this);
+
         this.strategyBoxClicked = this.strategyBoxClicked.bind(this);
         this.makeStrategyyBox = this.makeStrategyBox.bind(this);
 
@@ -77,8 +81,8 @@ class Form extends React.Component{
             //autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
             penaltyValues:[' ',' ',' ',' ',' '],
-            whoWon:'',
             bonusValues:[' ',' '],
+            whoWon:'',
             strategyValues:[' ',' ',' ',' ',' '],
             rankingPoints:0,
             comment:"",
@@ -180,14 +184,26 @@ class Form extends React.Component{
             }
         })
         let whoWon = '';
-        if(data.alliances.blue.score > data.alliances.red.score){
+        let wonState = this.state.whoWon;
+        if(wonState === ''){
+            if(data.alliances.blue.score > data.alliances.red.score){
+                whoWon = 'blue';
+            }
+            else if(data.alliances.blue.score < data.alliances.red.score){
+                whoWon = 'red';
+            }
+            else if(data.alliances.blue.score == data.alliances.red.score){
+                whoWon = 'tied'
+            }
+        }
+        else if(wonState === 'blue'){
             whoWon = 'blue';
         }
-        else if(data.alliances.blue.score < data.alliances.red.score){
+        else if(wonState === 'red'){
             whoWon = 'red';
         }
-        else if(data.alliances.blue.score == data.alliances.red.score){
-            whoWon = 'tied'
+        else if(wonState === 'tied'){
+            whoWon = 'tied';
         }
 
         if(teamColor === whoWon){
@@ -199,6 +215,7 @@ class Form extends React.Component{
         else{
             this.setState({rankingPoints:0})
         }
+        this.setState({whoWon:''});
         this.setState({bonusValues:[' ',' ']});
     }
 
@@ -388,6 +405,40 @@ class Form extends React.Component{
                     place={i}
                     checked={checkedValue}
                 />
+            </div>
+        )
+    }
+
+    whoWonClicked(event){
+        let teamWon = event.target.value;
+        this.setState({whoWon:teamWon});
+        let data = this.state.matchData;
+        let chosenTeam = this.state.teamNumber;
+        let teamColor = "red";
+        data.alliances.blue.team_keys.map((team) => {
+            if(team === chosenTeam){
+                teamColor = 'blue';
+            }
+        })
+
+        if(teamWon === teamColor){
+            this.setState({rankingPoints:2});
+        }
+        else if(teamWon === 'tied'){
+            this.setState({rankingPoints:1});
+        }
+        else{
+            this.setState({rankingPoints:0});
+        }
+        this.setState({bonusValues:[' ',' ']})
+    }
+
+    whoWonButtons(){
+        return (
+            <div>
+                <input type='checkbox' class='radio' value='red' onClick={this.whoWonClicked}></input>
+                <input type='checkbox' class='radio' value='blue' onClick={this.whoWonClicked}></input>
+                <input type='checkbox' class='radio' value='tied' onClick={this.whoWonClicked}></input>
             </div>
         )
     }
