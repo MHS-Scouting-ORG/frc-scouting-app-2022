@@ -82,7 +82,7 @@ class Form extends React.Component{
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
             penaltyValues:[' ',' ',' ',' ',' '],
             whoWon:'',
-            whoWonChecked:[' ',' ',' '],
+            whoWonChecked:[' ',' '],
             bonusValues:[' ',' '],
             whoWon:'',
             strategyValues:[' ',' ',' ',' ',' '],
@@ -219,7 +219,7 @@ class Form extends React.Component{
         }
         this.setState({whoWon:''});
         this.setState({bonusValues:[' ',' ']});
-        this.setState({whoWonChecked:[' ',' ',' ']})
+        this.setState({whoWonChecked:[' ',' ']})
     }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -476,37 +476,53 @@ class Form extends React.Component{
         )
     }
 
-    whoWonClicked(event){
-        let teamWon = event.target.value;
-        this.setState({whoWon:teamWon});
+    whoWonClicked(i,label){
         let data = this.state.matchData;
-        let chosenTeam = this.state.teamNumber;
-        let teamColor = "red";
-        data.alliances.blue.team_keys.map((team) => {
-            if(team === chosenTeam){
-                teamColor = 'blue';
-            }
-        })
-
-        if(teamWon === teamColor){
-            this.setState({rankingPoints:2});
-        }
-        else if(teamWon === 'tied'){
-            this.setState({rankingPoints:1});
+        if(data === 'not found'){
+            window.alert("PICK A TEAM FIRST");
         }
         else{
-            this.setState({rankingPoints:0});
+            if(label === 'Team Won '){
+                this.setState({rankingPoints:2});
+            }
+            else if(label === 'Team Tied '){
+                this.setState({rankingPoints:1});
+            }
+            this.setState({bonusValues:[' ',' ']})
+
+            let whoWon = this.state.whoWonChecked
+            whoWon[i - 1] = ' ';
+            whoWon[i + 1] = ' ';
+            if(whoWon[i] === label){
+                whoWon[i] = ' ';
+            }
+            else if(whoWon[i] === ' '){
+                whoWon[i] = label;
+            }
+
+            if(whoWon[0] === ' ' && whoWon[1] === ' '){
+                this.setState({rankingPoints:0});
+            }
         }
-        this.setState({bonusValues:[' ',' ']})
     }
 
-    whoWonButtons(){
+    makeWhoWonButton(name,i){
+        let whoWon = this.state.whoWonChecked;
+        let checkedValue;
+        if(whoWon[i] === name){
+            checkedValue = true;
+        }
+        else if(whoWon[i] === ' '){
+            checkedValue = false;
+        }
+
         return (
-            <div>
-                <input type='checkbox' class='radio' value='red' onClick={this.whoWonClicked}></input>
-                <input type='checkbox' class='radio' value='blue' onClick={this.whoWonClicked}></input>
-                <input type='checkbox' class='radio' value='tied' onClick={this.whoWonClicked}></input>
-            </div>
+            <Checkbox
+                label={name}
+                changeState={this.whoWonClicked}
+                place={i}
+                checked={checkedValue}
+            />
         )
     }
     
@@ -769,9 +785,8 @@ class Form extends React.Component{
                 {this.makePenaltyBox("Disqualifed ", 3)}
                 {this.makePenaltyBox("Bot Broke ", 4)}
                 <br></br>
-                {this.makeWhoWonButton("Red Won ", 0)}
-                {this.makeWhoWonButton("Blue Won ", 1)}
-                {this.makeWhoWonButton("Tied ", 2)}
+                {this.makeWhoWonButton("Team Won ", 0)}
+                {this.makeWhoWonButton("Team Tied ", 1)}
                 {this.makeBonusBox("Hangar Bonus ", 0)}
                 {this.makeBonusBox("Cargo Bonus ", 1)}
                 <Header display={this.state.rankingPoints} bonus={this.state.bonusValues}/>
