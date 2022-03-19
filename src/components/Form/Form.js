@@ -186,7 +186,7 @@ class Form extends React.Component{
         else if(data.alliances.blue.score < data.alliances.red.score){
             whoWon = 'red';
         }
-        else{
+        else if(data.alliances.blue.score == data.alliances.red.score){
             whoWon = 'tied'
         }
 
