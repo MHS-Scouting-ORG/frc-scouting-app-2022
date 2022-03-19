@@ -84,6 +84,7 @@ class Form extends React.Component{
             whoWon:'',
             whoWonChecked:[' ',' ',' '],
             bonusValues:[' ',' '],
+            whoWon:'',
             strategyValues:[' ',' ',' ',' ',' '],
             rankingPoints:0,
             comment:"",
@@ -146,9 +147,9 @@ class Form extends React.Component{
     }
 
     getMatchTeams(){
-        let matchKey = /*put this years event key here*/ "2022nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+        let matchKey = /*put this years event key here*/ "2022casd_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = async () => {
-            await fetch('https://www.thebluealliance.com/api/v3/event/2022nytr/matches',{
+            await fetch('https://www.thebluealliance.com/api/v3/event/2022casd/matches',{
                 mode: 'cors',
                 headers:{
                     //'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
@@ -216,6 +217,7 @@ class Form extends React.Component{
         else{
             this.setState({rankingPoints:0})
         }
+        this.setState({whoWon:''});
         this.setState({bonusValues:[' ',' ']});
         this.setState({whoWonChecked:[' ',' ',' ']})
     }
@@ -473,6 +475,40 @@ class Form extends React.Component{
             </div>
         )
     }
+
+    whoWonClicked(event){
+        let teamWon = event.target.value;
+        this.setState({whoWon:teamWon});
+        let data = this.state.matchData;
+        let chosenTeam = this.state.teamNumber;
+        let teamColor = "red";
+        data.alliances.blue.team_keys.map((team) => {
+            if(team === chosenTeam){
+                teamColor = 'blue';
+            }
+        })
+
+        if(teamWon === teamColor){
+            this.setState({rankingPoints:2});
+        }
+        else if(teamWon === 'tied'){
+            this.setState({rankingPoints:1});
+        }
+        else{
+            this.setState({rankingPoints:0});
+        }
+        this.setState({bonusValues:[' ',' ']})
+    }
+
+    whoWonButtons(){
+        return (
+            <div>
+                <input type='checkbox' class='radio' value='red' onClick={this.whoWonClicked}></input>
+                <input type='checkbox' class='radio' value='blue' onClick={this.whoWonClicked}></input>
+                <input type='checkbox' class='radio' value='tied' onClick={this.whoWonClicked}></input>
+            </div>
+        )
+    }
     
     strategyBoxClicked(i,label){
         let strategyStates = this.state.strategyValues;
@@ -662,7 +698,7 @@ class Form extends React.Component{
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
-                    MatchId: /* insert event year key here /*/ "2022nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
+                    MatchId: /* insert event year key here /*/ "2022casd_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
                     UpperHubAccuracy: Number(highAccuracy),
