@@ -11,6 +11,8 @@ import Header from './Header';
 import api from "../../api/index";
 //import React, { useState, useEffect } from 'react';
 
+import classes from './Form.module.css';
+
 class Form extends React.Component{
     constructor(props){
         super(props);
@@ -44,8 +46,12 @@ class Form extends React.Component{
 
         this.penaltyBoxClicked = this.penaltyBoxClicked.bind(this);
         this.makePenaltyBox = this.makePenaltyBox.bind(this);
+
+        this.whoWonClicked = this.whoWonClicked.bind(this);
+        this.makeWhoWonButton = this.makeWhoWonButton.bind(this);
         this.bonusBoxClicked = this.bonusBoxClicked.bind(this);
         this.makeBonusBox = this.makeBonusBox.bind(this);
+
         this.strategyBoxClicked = this.strategyBoxClicked.bind(this);
         this.makeStrategyyBox = this.makeStrategyBox.bind(this);
 
@@ -71,12 +77,14 @@ class Form extends React.Component{
             teams:["team1","team2","team3","team4","team5","team6"],
             teamNumber:'',
             dropDownBoxValues:["","",""],
-            matchData:[],
+            matchData:'not found',
             //autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
             penaltyValues:[' ',' ',' ',' ',' '],
             whoWon:'',
+            whoWonChecked:[' ',' '],
             bonusValues:[' ',' '],
+            whoWon:'',
             strategyValues:[' ',' ',' ',' ',' '],
             rankingPoints:0,
             comment:"",
@@ -139,9 +147,9 @@ class Form extends React.Component{
     }
 
     getMatchTeams(){
-        let matchKey = /*put this years event key here*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+        let matchKey = /*put this years event key here*/ "2022casd_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = async () => {
-            await fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
+            await fetch('https://www.thebluealliance.com/api/v3/event/2022casd/matches',{
                 mode: 'cors',
                 headers:{
                     //'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
@@ -178,14 +186,26 @@ class Form extends React.Component{
             }
         })
         let whoWon = '';
-        if(data.alliances.blue.score > data.alliances.red.score){
+        let wonState = this.state.whoWon;
+        if(wonState === ''){
+            if(data.alliances.blue.score > data.alliances.red.score){
+                whoWon = 'blue';
+            }
+            else if(data.alliances.blue.score < data.alliances.red.score){
+                whoWon = 'red';
+            }
+            else if(data.alliances.blue.score == data.alliances.blue.score){
+                whoWon = 'tied'
+            }
+        }
+        else if(wonState === 'blue'){
             whoWon = 'blue';
         }
-        else if(data.alliances.blue.score < data.alliances.red.score){
+        else if(wonState === 'red'){
             whoWon = 'red';
         }
-        else{
-            whoWon = 'tied'
+        else if(wonState === 'tied'){
+            whoWon = 'tied';
         }
 
         if(teamColor === whoWon){
@@ -197,7 +217,9 @@ class Form extends React.Component{
         else{
             this.setState({rankingPoints:0})
         }
+        this.setState({whoWon:''});
         this.setState({bonusValues:[' ',' ']});
+        this.setState({whoWonChecked:[' ',' ']})
     }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -352,6 +374,70 @@ class Form extends React.Component{
         )
     }
     
+
+    whoWonClicked(i,label){
+        let teamWon = label;
+        this.setState({whoWon:teamWon});
+        let data = this.state.matchData;
+        console.log(data);
+        if(data === 'not found'){
+            window.alert("GET MATCH TEAMS FIRST");
+        }
+        else{
+            let chosenTeam = this.state.teamNumber;
+            let teamColor = 'Red Won ';
+            data.alliances.blue.team_keys.map((team) => {
+                if(team.substring(4,team.length) === chosenTeam){
+                    teamColor = 'Blue Won '
+                }
+            })
+
+            if(teamWon === teamColor){
+                this.setState({rankingPoints:2});
+            }
+            else if(teamWon === 'Tied '){
+                this.setState({rankingPoints:1});
+            }
+            else{
+                this.setState({rankingPoints:0});
+            }
+            this.setState({bonusValues:[' ',' ']});
+
+            let checked = this.state.whoWonChecked;
+            checked[i - 1] = ' ';
+            checked[i - 2] = ' ';
+            checked[i + 1] = ' ';
+            checked[i + 2] = ' ';
+            if(checked[i] === label){
+                checked[i] = ' ';
+            }
+            else if(checked[i] === ' '){
+                checked[i] = label;
+            }
+        }
+    }
+
+    makeWhoWonButton(name,i){
+        let whoWon = this.state.whoWonChecked;
+        let checkedValue;
+        
+        if(whoWon[i] === name){
+            checkedValue = true;
+        }
+        else if(whoWon[i] ===  ' '){
+            checkedValue = false;
+        }
+
+        return (
+            <Checkbox
+                    label={name}
+                    changeState={this.whoWonClicked}
+                    place={i}
+                    checked={checkedValue}
+            />
+        )
+    }
+
     bonusBoxClicked(i,label){
         let bonusStates = this.state.bonusValues;
         if(bonusStates[i] === label){
@@ -387,6 +473,56 @@ class Form extends React.Component{
                     checked={checkedValue}
                 />
             </div>
+        )
+    }
+
+    whoWonClicked(i,label){
+        let data = this.state.matchData;
+        if(data === 'not found'){
+            window.alert("PICK A TEAM FIRST");
+        }
+        else{
+            if(label === 'Team Won '){
+                this.setState({rankingPoints:2});
+            }
+            else if(label === 'Team Tied '){
+                this.setState({rankingPoints:1});
+            }
+            this.setState({bonusValues:[' ',' ']})
+
+            let whoWon = this.state.whoWonChecked
+            whoWon[i - 1] = ' ';
+            whoWon[i + 1] = ' ';
+            if(whoWon[i] === label){
+                whoWon[i] = ' ';
+            }
+            else if(whoWon[i] === ' '){
+                whoWon[i] = label;
+            }
+
+            if(whoWon[0] === ' ' && whoWon[1] === ' '){
+                this.setState({rankingPoints:0});
+            }
+        }
+    }
+
+    makeWhoWonButton(name,i){
+        let whoWon = this.state.whoWonChecked;
+        let checkedValue;
+        if(whoWon[i] === name){
+            checkedValue = true;
+        }
+        else if(whoWon[i] === ' '){
+            checkedValue = false;
+        }
+
+        return (
+            <Checkbox
+                label={name}
+                changeState={this.whoWonClicked}
+                place={i}
+                checked={checkedValue}
+            />
         )
     }
     
@@ -435,7 +571,7 @@ class Form extends React.Component{
         )
     }
 
-    submitStates(){
+    async submitStates(){
         let vals = this.state.inputBoxValues;
         let lowTeleMade = parseInt(vals[4]);
         let lowAutoMade = parseInt(vals[0]);
@@ -468,108 +604,6 @@ class Form extends React.Component{
         } else if(hangarUsed === "None" || hangarUsed === "Attempted"){
             hangarPoints = 0;
         }
-        /*
-
-        
-        let penaltyStates = this.state.penaltyValues;
-        let strategyStates = this.state.strategyValues;
-        let bonusStates = this.state.bonusValues;
-
-        if(penaltyStates[0] == true){
-            penaltyStates[0] = "Yellow Card ";
-        }
-        else{
-            penaltyStates[0] = " ";
-        }
-
-        if(penaltyStates[1] ==  true){
-            penaltyStates[1] = "Red Card ";
-        } else{
-            penaltyStates[1] = " ";
-        }
-
-        if(penaltyStates[2] == true){
-            penaltyStates[2] = "Disabled ";
-        }
-
-        else{
-            penaltyStates[2] = " ";
-        }
-
-
-        if(penaltyStates[3] == true){
-            penaltyStates[3] = "Disqualifed "
-        }
-
-        else{
-            penaltyStates[3] = " ";
-        }
-    
-        if(penaltyStates[4] == true){
-            penaltyStates[4] = "Bot Broke ";
-        }
-    
-        else{
-            penaltyStates[4] = " ";
-        }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        if(strategyStates[0] == true){
-            strategyStates[0] = "Low Hub Shooter ";
-        }
-
-        else{
-            strategyStates[0] = " ";
-        }
-
-        if(strategyStates[1] == true){
-            strategyStates[1] = "Upper Hub Shooter ";
-        }
-
-        else{
-            strategyStates[1] = " ";
-        }
-
-        if(strategyStates[2] == true){
-            strategyStates[2] = "Launchpad Shooter ";
-        }
-
-        else{
-            strategyStates[2] = " ";
-        }
-
-        if(strategyStates[3] == true){
-            strategyStates[3] = "Hangar ";
-        }
-
-        else{
-            strategyStates[3] = " ";
-        }
-
-        if(strategyStates[4] == true){
-            strategyStates[4] = "Defense ";
-        }
-        else{
-            strategyStates[4] = "";
-        }
-
-
-        if(bonusStates[0] == true){
-            bonusStates[0] = "Hangar Bonus ";
-        }
-        else{
-            bonusStates[0] = " ";
-        }
-
-        if(bonusStates[1] == true){
-            bonusStates[1] = "Cargo Bonus ";
-        }
-        else{
-            bonusStates[1] = ' ';
-        }
-
-        //*/
         
         let points =  taxiPoints + hangarPoints + (lowTeleMade + (2 * ( lowAutoMade + highTeleMade + ( highAutoMade * 2 ))));
         let lowAccuracy = 100 * (( lowAutoMade + lowTeleMade ) / ( lowMissed + lowAutoMade + lowTeleMade ));
@@ -630,6 +664,13 @@ class Form extends React.Component{
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nTaxi"
         }
+
+        if(taxiBox === false){
+            taxiValue = "No";
+        }
+        else if(taxiBox === true){
+            taxiValue = "Yes";
+        }
         
         if(autoPosition === ''){
             incompleteForm = true;
@@ -652,10 +693,10 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nRobot priorities/strategies"
         }
 
-        if(this.state.comment === ''){
+        /*if(this.state.comment === ''){
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nScouter comment"
-        }
+        }*/
 
         if(scale == 0){
             incompleteForm = true;
@@ -669,10 +710,11 @@ class Form extends React.Component{
         }
         else if(incompleteForm === false || override === true){
             //console.log(this.state.teamNumber.substring(4,this.state.teamNumber.length));
+            console.log(penalties)
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
-                    MatchId: /* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
+                    MatchId: /* insert event year key here /*/ "2022casd_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
                     UpperHubAccuracy: Number(highAccuracy),
@@ -680,7 +722,7 @@ class Form extends React.Component{
                     AutoLowMissed: Number(vals[1]),
                     AutoUpperMade: Number(vals[2]),
                     AutoUpperMissed: Number(vals[3]),
-                    Taxi: Boolean(taxiValue),
+                    Taxi: String(taxiValue),
                     AutoPlacement: Number(autoPosition),
                     TeleLowMade: Number(vals[4]),
                     TeleLowMissed: Number(vals[5]),
@@ -689,10 +731,10 @@ class Form extends React.Component{
                     Hangar: String(hangarUsed),
                     NumberOfFouls: Number(vals[8]),
                     NumberOfTech: Number(vals[9]),
-                    Penalties: Array(penalties),
-                    HangarCargoBonus: Array(bonuses),
+                    Penalties: penalties,
+                    HangarCargoBonus: bonuses,
                     NumberOfRankingPoints: Number(this.state.rankingPoints),
-                    Strategy: Array(strategies),
+                    Strategy: strategies,
                     OpinionScale: Number(this.state.scale),
                     Comments: String(this.state.comment),
                 }
@@ -703,6 +745,8 @@ class Form extends React.Component{
                 console.log(err)
             })
         }
+        let regional = await api.getRegional();
+        console.log(regional);
     }
       
 
@@ -717,14 +761,14 @@ class Form extends React.Component{
                 {this.makeTeamDropdown()}
                 <br></br>
                 <h3>AUTONOMOUS</h3>
+                <img className={classes.TarmacImage} src={'./images/tarmac.jpg'} prop={"Tarmac"}></img>
+                {this.makeDropDownBox("Auto Position On Tarmac: ",[1,2,3,4,5,6,7,8],1)}
                 {this.makeInputBox("# Low Hub Made: ",0)}
                 {this.makeInputBox("# Low Hub Missed: ",1)}
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],0)}
                 {/*<ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>*/}
-                <img src={'./images/tarmac.jpg'} prop={"Tarmac"}></img>
-                {this.makeDropDownBox("Auto Position On Tarmac: ",[1,2,3,4,5,6,7,8],1)}
                 {/* */}
                 <br></br>
                 <h3>TELE-OP</h3>
@@ -740,6 +784,9 @@ class Form extends React.Component{
                 {this.makePenaltyBox("Disabled ", 2)}
                 {this.makePenaltyBox("Disqualifed ", 3)}
                 {this.makePenaltyBox("Bot Broke ", 4)}
+                <br></br>
+                {this.makeWhoWonButton("Team Won ", 0)}
+                {this.makeWhoWonButton("Team Tied ", 1)}
                 {this.makeBonusBox("Hangar Bonus ", 0)}
                 {this.makeBonusBox("Cargo Bonus ", 1)}
                 <Header display={this.state.rankingPoints} bonus={this.state.bonusValues}/>
@@ -754,7 +801,7 @@ class Form extends React.Component{
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
-                {//this.overrideCheckbox()
+                {this.overrideCheckbox()
                 }
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>

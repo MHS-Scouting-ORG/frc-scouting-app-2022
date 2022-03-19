@@ -1,5 +1,6 @@
 import React from 'react';
-import api from '../../api/index';
+
+import classes from './MatchDropdown.module.css';
 
 class MatchDropdown extends React.Component{
     constructor(props){
@@ -43,19 +44,17 @@ class MatchDropdown extends React.Component{
 
     render(){
         return (
-            <div>
-                <label>
-                    <select onChange={this.changeMatchType}>
+            <div className={classes.Div}>
+                    <select className={classes.Select} onChange={this.changeMatchType}>
                         <option></option>
                         <option> Qualification </option>
                         <option> Quarterfinal </option>
                         <option> Semifinal </option>
                         <option> Finals </option>
-                    </select> {"  "}
+                    </select>
                     {this.makeMatchTypeNumberDropdown()}
-                    {" "} Match: {" "}
-                    <input onChange={this.props.setMatchNumber}></input>
-                </label>
+                    <label className={classes.Label}>Match:</label>
+                    <input className={classes.Input} onChange={this.props.setMatchNumber}></input>
             </div>
         )
     }

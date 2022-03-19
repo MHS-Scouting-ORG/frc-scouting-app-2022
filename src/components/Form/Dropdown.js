@@ -1,4 +1,5 @@
 import React from 'react';
+import classes from './Dropdown.module.css';
 
 class Dropdown extends React.Component{
     constructor(props){
@@ -12,13 +13,12 @@ class Dropdown extends React.Component{
 
     render(){
         return (
-            <div>
-                <label> {this.props.title}
-                    <select onChange={this.dropDownChange}>
-                        <option key={"empty"}></option>
-                        {this.props.choices.map((choice) => <option key={choice} > {choice} </option>)}
-                    </select>
-                </label>
+            <div className={classes.Div}>
+                <label className={classes.Label}>{this.props.title}</label>
+                <select className={classes.Select} onChange={this.dropDownChange}>
+                    <option key={"empty"}></option>
+                    {this.props.choices.map((choice) => <option key={choice} > {choice} </option>)}
+                </select>
             </div>
         )
     }
