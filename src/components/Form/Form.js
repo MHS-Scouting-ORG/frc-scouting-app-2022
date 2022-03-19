@@ -46,8 +46,12 @@ class Form extends React.Component{
 
         this.penaltyBoxClicked = this.penaltyBoxClicked.bind(this);
         this.makePenaltyBox = this.makePenaltyBox.bind(this);
+
+        this.whoWonClicked = this.whoWonClicked.bind(this);
+        this.makeWhoWonButton = this.makeWhoWonButton.bind(this);
         this.bonusBoxClicked = this.bonusBoxClicked.bind(this);
         this.makeBonusBox = this.makeBonusBox.bind(this);
+
         this.strategyBoxClicked = this.strategyBoxClicked.bind(this);
         this.makeStrategyyBox = this.makeStrategyBox.bind(this);
 
@@ -73,11 +77,12 @@ class Form extends React.Component{
             teams:["team1","team2","team3","team4","team5","team6"],
             teamNumber:'',
             dropDownBoxValues:["","",""],
-            matchData:[],
+            matchData:'not found',
             //autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
             penaltyValues:[' ',' ',' ',' ',' '],
             whoWon:'',
+            whoWonChecked:[' ',' ',' '],
             bonusValues:[' ',' '],
             strategyValues:[' ',' ',' ',' ',' '],
             rankingPoints:0,
@@ -180,14 +185,26 @@ class Form extends React.Component{
             }
         })
         let whoWon = '';
-        if(data.alliances.blue.score > data.alliances.red.score){
+        let wonState = this.state.whoWon;
+        if(wonState === ''){
+            if(data.alliances.blue.score > data.alliances.red.score){
+                whoWon = 'blue';
+            }
+            else if(data.alliances.blue.score < data.alliances.red.score){
+                whoWon = 'red';
+            }
+            else if(data.alliances.blue.score == data.alliances.blue.score){
+                whoWon = 'tied'
+            }
+        }
+        else if(wonState === 'blue'){
             whoWon = 'blue';
         }
-        else if(data.alliances.blue.score < data.alliances.red.score){
+        else if(wonState === 'red'){
             whoWon = 'red';
         }
-        else{
-            whoWon = 'tied'
+        else if(wonState === 'tied'){
+            whoWon = 'tied';
         }
 
         if(teamColor === whoWon){
@@ -200,6 +217,7 @@ class Form extends React.Component{
             this.setState({rankingPoints:0})
         }
         this.setState({bonusValues:[' ',' ']});
+        this.setState({whoWonChecked:[' ',' ',' ']})
     }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -354,6 +372,70 @@ class Form extends React.Component{
         )
     }
     
+
+    whoWonClicked(i,label){
+        let teamWon = label;
+        this.setState({whoWon:teamWon});
+        let data = this.state.matchData;
+        console.log(data);
+        if(data === 'not found'){
+            window.alert("GET MATCH TEAMS FIRST");
+        }
+        else{
+            let chosenTeam = this.state.teamNumber;
+            let teamColor = 'Red Won ';
+            data.alliances.blue.team_keys.map((team) => {
+                if(team.substring(4,team.length) === chosenTeam){
+                    teamColor = 'Blue Won '
+                }
+            })
+
+            if(teamWon === teamColor){
+                this.setState({rankingPoints:2});
+            }
+            else if(teamWon === 'Tied '){
+                this.setState({rankingPoints:1});
+            }
+            else{
+                this.setState({rankingPoints:0});
+            }
+            this.setState({bonusValues:[' ',' ']});
+
+            let checked = this.state.whoWonChecked;
+            checked[i - 1] = ' ';
+            checked[i - 2] = ' ';
+            checked[i + 1] = ' ';
+            checked[i + 2] = ' ';
+            if(checked[i] === label){
+                checked[i] = ' ';
+            }
+            else if(checked[i] === ' '){
+                checked[i] = label;
+            }
+        }
+    }
+
+    makeWhoWonButton(name,i){
+        let whoWon = this.state.whoWonChecked;
+        let checkedValue;
+        
+        if(whoWon[i] === name){
+            checkedValue = true;
+        }
+        else if(whoWon[i] ===  ' '){
+            checkedValue = false;
+        }
+
+        return (
+            <Checkbox
+                    label={name}
+                    changeState={this.whoWonClicked}
+                    place={i}
+                    checked={checkedValue}
+            />
+        )
+    }
+
     bonusBoxClicked(i,label){
         let bonusStates = this.state.bonusValues;
         if(bonusStates[i] === label){
@@ -650,6 +732,10 @@ class Form extends React.Component{
                 {this.makePenaltyBox("Disabled ", 2)}
                 {this.makePenaltyBox("Disqualifed ", 3)}
                 {this.makePenaltyBox("Bot Broke ", 4)}
+                <br></br>
+                {this.makeWhoWonButton("Red Won ", 0)}
+                {this.makeWhoWonButton("Blue Won ", 1)}
+                {this.makeWhoWonButton("Tied ", 2)}
                 {this.makeBonusBox("Hangar Bonus ", 0)}
                 {this.makeBonusBox("Cargo Bonus ", 1)}
                 <Header display={this.state.rankingPoints} bonus={this.state.bonusValues}/>
