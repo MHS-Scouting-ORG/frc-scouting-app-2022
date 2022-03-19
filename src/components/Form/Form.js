@@ -143,9 +143,9 @@ class Form extends React.Component{
     }
 
     getMatchTeams(){
-        let matchKey = /*put this years event key here*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+        let matchKey = /*put this years event key here*/ "2022nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = async () => {
-            await fetch('https://www.thebluealliance.com/api/v3/event/2016nytr/matches',{
+            await fetch('https://www.thebluealliance.com/api/v3/event/2022nytr/matches',{
                 mode: 'cors',
                 headers:{
                     //'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
@@ -444,7 +444,7 @@ class Form extends React.Component{
         )
     }
 
-    submitStates(){
+    async submitStates(){
         let vals = this.state.inputBoxValues;
         let lowTeleMade = parseInt(vals[4]);
         let lowAutoMade = parseInt(vals[0]);
@@ -542,6 +542,13 @@ class Form extends React.Component{
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nTaxi"
         }
+
+        if(taxiBox === false){
+            taxiValue = "No";
+        }
+        else if(taxiBox === true){
+            taxiValue = "Yes";
+        }
         
         if(autoPosition === ''){
             incompleteForm = true;
@@ -564,12 +571,10 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nRobot priorities/strategies"
         }
 
-        /*
-        if(this.state.comment === ''){
+        /*if(this.state.comment === ''){
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nScouter comment"
-        }
-        */
+        }*/
 
         if(scale === 0){
             incompleteForm = true;
@@ -587,7 +592,7 @@ class Form extends React.Component{
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
-                    MatchId: /* insert event year key here /*/ "2016nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
+                    MatchId: /* insert event year key here /*/ "2022nytr_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
                     UpperHubAccuracy: Number(highAccuracy),
@@ -595,7 +600,7 @@ class Form extends React.Component{
                     AutoLowMissed: Number(vals[1]),
                     AutoUpperMade: Number(vals[2]),
                     AutoUpperMissed: Number(vals[3]),
-                    Taxi: Boolean(taxiValue),
+                    Taxi: String(taxiValue),
                     AutoPlacement: Number(autoPosition),
                     TeleLowMade: Number(vals[4]),
                     TeleLowMissed: Number(vals[5]),
@@ -618,6 +623,8 @@ class Form extends React.Component{
                 console.log(err)
             })
         }
+        let regional = await api.getRegional();
+        console.log(regional);
     }
       
 
@@ -632,14 +639,14 @@ class Form extends React.Component{
                 {this.makeTeamDropdown()}
                 <br></br>
                 <h3>AUTONOMOUS</h3>
+                <img className={classes.TarmacImage} src={'./images/tarmac.jpg'} prop={"Tarmac"}></img>
+                {this.makeDropDownBox("Auto Position On Tarmac: ",[1,2,3,4,5,6,7,8],1)}
                 {this.makeInputBox("# Low Hub Made: ",0)}
                 {this.makeInputBox("# Low Hub Missed: ",1)}
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],0)}
                 {/*<ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>*/}
-                <img className={classes.TarmacImage} src={'./images/tarmac.jpg'} prop={"Tarmac"}></img>
-                {this.makeDropDownBox("Auto Position On Tarmac: ",[1,2,3,4,5,6,7,8],1)}
                 {/* */}
                 <br></br>
                 <h3>TELE-OP</h3>
