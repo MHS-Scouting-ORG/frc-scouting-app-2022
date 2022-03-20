@@ -52,6 +52,7 @@ const SummaryTable = () => {
         return {
             TeamNumber: team.TeamNumber,
             Strategy: strats.join(', '),
+            NumberOfMatches: teamStats.length > 0 ? teamStats.length : '',
             AveragePoints: !isNaN(avgPoints) ? avgPoints : '',
             AverageLowHubShots: !isNaN(avgLowShots) ? avgLowShots : '',
             AverageLowHubAccuracy: !isNaN(avgLowAccuracy) ? avgLowAccuracy : '',
@@ -90,6 +91,7 @@ const SummaryTable = () => {
         return {
             TeamNumber: team.TeamNumber,
             Strategy: team.Strategy,
+            NumberOfMatches: team.NumberOfMatches,
             AveragePoints: team.AveragePoints,
             AverageLowHubShots: team.AverageLowHubShots,
             AverageLowHubAccuracy: team.AverageLowHubAccuracy,
@@ -117,7 +119,9 @@ const SummaryTable = () => {
     }
 
     const getTeams = async () => {                              // Get list of teams from the Blue Alliance
-        return await fetch('https://www.thebluealliance.com/api/v3/event/2022nytr/teams', { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        /*const key = await api.getRegional();
+        console.log(`https://www.thebluealliance.com/api/v3/event/${key}/teams`);*/
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022casd/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
@@ -153,7 +157,7 @@ const SummaryTable = () => {
             totalPoints = totalPoints + individualPoints[i]
         }
         let averagePoints = totalPoints / individualPoints.length;      // find average
-        return averagePoints;
+        return Math.round(averagePoints * 100) / 100;
     }
 
     const getStrat = (arr) => {                                 // Create a list of all the priorities/strats for each team
@@ -185,7 +189,7 @@ const SummaryTable = () => {
             sumLowShots = sumLowShots + lowShots[i];
         }
         let averageLowShots = sumLowShots / lowShots.length;            // find the average
-        return averageLowShots;
+        return Math.round(averageLowShots * 100) / 100;
     }
 
     const calcUpperAcc = (arr) => {                             // Calculate average upper hub accuracy shots for each team
@@ -205,7 +209,7 @@ const SummaryTable = () => {
             sumUpperShots = sumUpperShots + upperShots[i];
         }
         let averageUpperShots = sumUpperShots / upperShots.length;                          // find the average
-        return averageUpperShots;
+        return Math.round(averageUpperShots * 100) / 100;
     }
 
     const calcHangar = (arr) => {                               // Calculate average hangar points for each team
@@ -230,7 +234,7 @@ const SummaryTable = () => {
             sumHangar = sumHangar + hangar[i];
         }
         let averageHangar = sumHangar / hangar.length;          // find the average
-        return averageHangar;
+        return Math.round(averageHangar * 100) / 100;
     }
 
     const calcRanking = (arr) => {                              // Calculate average opinion scale for each team
@@ -240,7 +244,7 @@ const SummaryTable = () => {
             sumRankings = sumRankings + rankings[i];
         }
         let averageRanking = sumRankings / rankings.length;             // find the average
-        return averageRanking;
+        return Math.round(averageRanking * 100) / 100;
     }
 
     const calcColumnSort = (arr, lShots, lAcc, uShots, uAcc, hangar) => {        // Calculate team's grades based on checkboxes selected
@@ -272,6 +276,7 @@ const SummaryTable = () => {
             return {
                 TeamNumber: team.TeamNumber,
                 Strategy: team.Strategy,
+                NumberOfMatches: team.NumberOfMatches,
                 AveragePoints: team.AveragePoints,
                 AverageLowHubShots: team.AverageLowHubShots,
                 AverageLowHubAccuracy: team.AverageLowHubAccuracy,
@@ -288,7 +293,7 @@ const SummaryTable = () => {
                 RateHangar: team.RateHangar,
 
                 SumOfSelected: grade !== 0 ? grade : "",
-            }
+            } 
 
         }), [tempData, sortColumns]
     )
@@ -303,6 +308,10 @@ const SummaryTable = () => {
                     <span {...row.getToggleRowExpandedProps()}>
                         {row.values.TeamNumber}
                     </span>)
+            },
+            {
+                Header: 'Number of Matches',
+                accessor: 'NumberOfMatches',
             },
             {
                 Header: 'Priority/Strategy',
@@ -346,7 +355,7 @@ const SummaryTable = () => {
 
     const renderRowSubComponent = ({ row }) => {
         let t = teamData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber);
-
+        
         return t.length > 0 ?               // if there is data on team, display a table when expanded
             (<pre>
                 <div> {<TeamTable information={t} />} </div>
@@ -355,7 +364,7 @@ const SummaryTable = () => {
                 <tr><td style={{
                     padding: '10px',
                     textAlign: 'center',
-                }}> No data collected for Team {row.values.TeamId}. </td></tr>
+                }}> No data collected for Team {row.values.TeamNumber}. </td></tr>
             );
     }
 
@@ -372,14 +381,9 @@ const SummaryTable = () => {
 
     return (
         <div>
-            {/*<div>
-                <Checkbox value="Low Hub Shooter" changeState={this.addOnColumnSort} id={0}/>
-                <Checkbox value="Accurate Low Hub Shooter" changeState={this.addOnColumnSort} id={1}/>
-                <Checkbox value="Upper Hub Shooter" changeState={this.addOnColumnSort} id={2}/>
-                <Checkbox value="Accurate Upper Hub Shooter" changeState={this.addOnColumnSort} id={3}/>
-                <Checkbox value="Hangar" changeState={this.addOnColumnSort} id={4}/>
-            </div>*/}
+            <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
             {<List setList={setSortColumns}/>}
+            <br/><br/>
             <table {...getTableProps()} >
                 <thead>
                     {
