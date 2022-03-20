@@ -31,7 +31,7 @@ const TeamTable = (props) => {
   } = tableInstance
 
   return (
-    <div> 
+    <div>
       <table {...getTableProps()}>
 
         <thead>
