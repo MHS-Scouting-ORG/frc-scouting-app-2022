@@ -293,7 +293,7 @@ const SummaryTable = () => {
                 RateHangar: team.RateHangar,
 
                 SumOfSelected: grade !== 0 ? grade : "",
-            }
+            } 
 
         }), [tempData, sortColumns]
     )
