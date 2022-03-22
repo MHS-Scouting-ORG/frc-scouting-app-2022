@@ -146,10 +146,10 @@ class Form extends React.Component{
         )
     }
 
-    getMatchTeams(){
-        let matchKey = /*put this years event key here*/ "2022casd_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+    async getMatchTeams(){
+        let matchKey = /*put this years event key here*//* "2022casd" *//* */await api.getRegional()/* */ + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = async () => {
-            await fetch('https://www.thebluealliance.com/api/v3/event/2022casd/matches',{
+            await fetch('https://www.thebluealliance.com/api/v3/event/' + /* '2022casd' */ /**/ await api.getRegional() /**/ + '/matches',{
                 mode: 'cors',
                 headers:{
                     //'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
@@ -714,7 +714,7 @@ class Form extends React.Component{
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
-                    MatchId: /* insert event year key here /*/ "2022casd_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
+                    MatchId: /* insert event key here /*/ /* "2022casd" *//* */ await api.getRegional() /* */ + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
                     UpperHubAccuracy: Number(highAccuracy),
