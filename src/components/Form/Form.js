@@ -8,7 +8,7 @@ import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
 //import ImageMarker from "react-image-marker";
 import Header from './Header';
-import api from "../../api/index";
+import api from "../../api/index"; 
 //import React, { useState, useEffect } from 'react';
 
 import classes from './Form.module.css';
