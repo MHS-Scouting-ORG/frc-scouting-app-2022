@@ -87,7 +87,7 @@ api.getBlueAllianceAuthKey = use_remote ? async function() {
     })
   })
 } : async function() {
-  return Promise.resolve("1kaGgCG8tU0MUfnvfhxdwqTf3dphRKuLULA7v2UkFlQaM96QufcZvumpKg9318pa")
+    return Promise.resolve("");
 }
 
 api.put = use_remote ? async function(obj) {
