@@ -79,14 +79,12 @@ const SummaryTable = () => {
         const maxUpperAcc = getMax(dataOfAverages.map(team => team.AverageUpperHubAccuracy));
         const maxHangar = getMax(dataOfAverages.map(team => team.AverageHangar));
 
-
         const rPoints = team.AveragePoints / maxAvgPoint;
         const rLowShots = team.AverageLowHubShots / maxLowShots;
         const rLowAcc = team.AverageLowHubAccuracy / maxLowAcc;
         const rUpperShots = team.AverageUpperHubShots / maxUpperShots;
         const rUpperAcc = team.AverageUpperHubAccuracy / maxUpperAcc;
         const rHangar = team.AverageHangar / maxHangar;
-
 
         return {
             TeamNumber: team.TeamNumber,
@@ -294,7 +292,7 @@ const SummaryTable = () => {
                 RateUpperAccuracy: team.RateUpperAccuracy,
                 RateHangar: team.RateHangar,
 
-                SumOfSelected: grade !== 0 ? `${disp.substring(0,1)}.${disp.substring(1)}` : "",
+                SumOfSelected: grade !== 0 ? `${disp.substring(disp.length-3, 1)}.${disp.substring(disp.length-3)}` : "",
             }
 
         }), [tempData, sortColumns]
