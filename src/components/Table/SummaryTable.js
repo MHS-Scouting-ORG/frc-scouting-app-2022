@@ -293,7 +293,7 @@ const SummaryTable = () => {
                 RateUpperAccuracy: team.RateUpperAccuracy,
                 RateHangar: team.RateHangar,
 
-                SumOfSelected: grade !== 0 ? (grade*1000) / 1000 : "",
+                SumOfSelected: grade !== 0 ? grade : "",
             } 
 
         }), [tempData, sortColumns]
