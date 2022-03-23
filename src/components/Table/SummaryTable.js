@@ -271,7 +271,6 @@ const SummaryTable = () => {
         () => tempData.map(team => {
 
             const grade = calcColumnSort(sortColumns, team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
-            const disp = grade * 1000 > 100 ? (grade*1000).toString() : `00${grade}`;
 
             return {
                 TeamNumber: team.TeamNumber,
@@ -292,7 +291,7 @@ const SummaryTable = () => {
                 RateUpperAccuracy: team.RateUpperAccuracy,
                 RateHangar: team.RateHangar,
 
-                SumOfSelected: grade !== 0 ? `${disp.substring(disp.length-4, disp.length-3)}.${disp.substring(disp.length-3)}   |    ${grade}` : "",
+                SumOfSelected: grade !== 0 ? grade.toFixed(3) : "",
             }
 
         }), [tempData, sortColumns]
