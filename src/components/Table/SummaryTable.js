@@ -292,7 +292,7 @@ const SummaryTable = () => {
                 RateUpperAccuracy: team.RateUpperAccuracy,
                 RateHangar: team.RateHangar,
 
-                SumOfSelected: grade !== 0 ? `${disp.substring(disp.length-3, 1)}.${disp.substring(disp.length-3)}   |    ${grade}` : "",
+                SumOfSelected: grade !== 0 ? `${disp.substring(disp.length-3, 1)}.${disp.substring(disp.length-2)}   |    ${grade}` : "",
             }
 
         }), [tempData, sortColumns]
