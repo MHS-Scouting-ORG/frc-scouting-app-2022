@@ -271,7 +271,7 @@ const SummaryTable = () => {
         () => tempData.map(team => {
 
             const grade = calcColumnSort(sortColumns, team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
-            const disp = (grade*1000).toString();
+            const disp = grade * 1000 > 100 ? (grade*1000).toString() : `00${grade}`;
 
             return {
                 TeamNumber: team.TeamNumber,
