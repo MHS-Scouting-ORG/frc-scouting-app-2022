@@ -13,6 +13,7 @@ const header = (props) => {
 				<Link to="/">Home</Link>
 				<Link to="/about">About</Link>
 				<Link to="/dashboard">Dashboard</Link>
+				<Link to="/form">Form</Link>
 			</div>
 		</div>
 	);
