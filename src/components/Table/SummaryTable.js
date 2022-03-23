@@ -291,7 +291,7 @@ const SummaryTable = () => {
                 RateUpperAccuracy: team.RateUpperAccuracy,
                 RateHangar: team.RateHangar,
 
-                SumOfSelected: grade !== 0 ? grade : "",
+                SumOfSelected: grade !== 0.000 ? grade : "",
             }
 
         }), [tempData, sortColumns]
