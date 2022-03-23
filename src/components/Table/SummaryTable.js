@@ -155,7 +155,7 @@ const SummaryTable = () => {
             totalPoints = totalPoints + individualPoints[i]
         }
         let averagePoints = totalPoints / individualPoints.length;      // find average
-        return Math.round(averagePoints * 100) / 100;
+        return averagePoints.toFixed(3);
     }
 
     const getStrat = (arr) => {                                 // Create a list of all the priorities/strats for each team
@@ -177,7 +177,7 @@ const SummaryTable = () => {
             sumLowAccuracies = sumLowAccuracies + lowAccuracies[i];
         }
         let averageLowAccuracy = sumLowAccuracies / lowAccuracies.length;   // find the average
-        return Math.round(averageLowAccuracy * 100) / 100;
+        return averageLowAccuracy.toFixed(3);
     }
 
     const calcLowShots = (arr) => {                             // Calculate average low hub shots made in a match
@@ -187,7 +187,7 @@ const SummaryTable = () => {
             sumLowShots = sumLowShots + lowShots[i];
         }
         let averageLowShots = sumLowShots / lowShots.length;            // find the average
-        return Math.round(averageLowShots * 100) / 100;
+        return averageLowShots.toFixed(3);
     }
 
     const calcUpperAcc = (arr) => {                             // Calculate average upper hub accuracy shots for each team
@@ -197,7 +197,7 @@ const SummaryTable = () => {
             sumHighAccuracies = sumHighAccuracies + upperAccuracies[i];
         }
         let averageUpperAccuracy = sumHighAccuracies / upperAccuracies.length;  // find the average
-        return Math.round(averageUpperAccuracy * 100) / 100;
+        return averageUpperAccuracy.toFixed(3);
     }
 
     const calcUpperShots = (arr) => {                           // Calculate average upper hub shots made for each team
@@ -207,7 +207,7 @@ const SummaryTable = () => {
             sumUpperShots = sumUpperShots + upperShots[i];
         }
         let averageUpperShots = sumUpperShots / upperShots.length;                          // find the average
-        return Math.round(averageUpperShots * 100) / 100;
+        return averageUpperShots.toFixed(3);
     }
 
     const calcHangar = (arr) => {                               // Calculate average hangar points for each team
@@ -232,7 +232,7 @@ const SummaryTable = () => {
             sumHangar = sumHangar + hangar[i];
         }
         let averageHangar = sumHangar / hangar.length;          // find the average
-        return Math.round(averageHangar * 100) / 100;
+        return averageHangar.toFixed(3);
     }
 
     const calcRanking = (arr) => {                              // Calculate average opinion scale for each team
@@ -242,7 +242,7 @@ const SummaryTable = () => {
             sumRankings = sumRankings + rankings[i];
         }
         let averageRanking = sumRankings / rankings.length;             // find the average
-        return Math.round(averageRanking * 100) / 100;
+        return averageRanking.toFixed(3);
     }
 
     const calcColumnSort = (arr, lShots, lAcc, uShots, uAcc, hangar) => {        // Calculate team's grades based on checkboxes selected
@@ -264,7 +264,7 @@ const SummaryTable = () => {
             sum = sum + hangar;
         }
 
-        return Math.round(sum * 1000) / 1000;                               // round to the nearest thousandth
+        return sum.toFixed(3);                                   // round to the nearest thousandth
     }
 
     const data = React.useMemo(
@@ -291,7 +291,7 @@ const SummaryTable = () => {
                 RateUpperAccuracy: team.RateUpperAccuracy,
                 RateHangar: team.RateHangar,
 
-                SumOfSelected: grade !== 0 ? grade.toFixed(3) : "",
+                SumOfSelected: grade !== 0 ? grade : "",
             }
 
         }), [tempData, sortColumns]
