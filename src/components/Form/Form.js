@@ -8,7 +8,7 @@ import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
 //import ImageMarker from "react-image-marker";
 import Header from './Header';
-import api from "../../api/index";
+import api from "../../api/index"; 
 //import React, { useState, useEffect } from 'react';
 
 import classes from './Form.module.css';
@@ -146,10 +146,10 @@ class Form extends React.Component{
         )
     }
 
-    getMatchTeams(){
-        let matchKey = /*put this years event key here*/ "2022hiho_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
+    async getMatchTeams(){
+        let matchKey = /*put this years event key here*//* "2022casd" *//* */await api.getRegional()/* */ + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber;
         const teams = async () => {
-            await fetch(`https://www.thebluealliance.com/api/v3/event/${api.getRegional()}/matches`,{
+            await fetch('https://www.thebluealliance.com/api/v3/event/' + /* '2022casd' */ /**/ await api.getRegional() /**/ + '/matches',{
                 mode: 'cors',
                 headers:{
                     //'X-TBA-Auth-Key': '47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy'
@@ -714,7 +714,7 @@ class Form extends React.Component{
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
-                    MatchId: /* insert event year key here /*/ "2022hiho_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
+                    MatchId: /* insert event key here /*/ /* "2022casd" *//* */ await api.getRegional() /* */ + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
                     UpperHubAccuracy: Number(highAccuracy),
@@ -798,7 +798,6 @@ class Form extends React.Component{
                 {this.makeStrategyBox("Hangar ", 3)}
                 {this.makeStrategyBox("Defense ", 4)}
                 <br></br>
-                <p>Comment Examples: HANG TIME MANDATORY/WHEN THEY START HANGING</p>
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
