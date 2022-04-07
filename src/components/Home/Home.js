@@ -3,7 +3,6 @@ import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react
 import { a, API } from 'aws-amplify'
 import SummaryTable from '../Table/SummaryTable'
 import api from '../../api'
-import classes from '../Form/Form.module.css'
 
 const Home = (props) => {
 
