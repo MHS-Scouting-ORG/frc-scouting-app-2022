@@ -6,7 +6,6 @@ import { withAuthenticator } from '@aws-amplify/ui-react'
 import Header from './components/Header/Header';
 import MenuDrawer from './components/MenuDrawer/MenuDrawer';
 import Home from './components/Home/Home';
-import Form from './components/Form/Form';
 import About from './components/About/About';
 import Dashboard from './components/Dashboard/Dashboard';
 
@@ -33,7 +32,6 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/about" element={<About/>}/>i
           <Route path="/dashboard" element={<Dashboard/>}/>
-          <Route path="/form" element={<Form/>}/>
         </Routes>
       </Container>
     </Router>
