@@ -77,7 +77,7 @@ class Form extends React.Component{
             matchNumber:"",
             teams:["team1","team2","team3","team4","team5","team6"],
             teamNumber:'',
-            dropDownBoxValues:["","",""],
+            dropDownBoxValues:["","","","",""],
             matchData:'not found',
             //autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
@@ -589,8 +589,10 @@ class Form extends React.Component{
         let dropboxVals = this.state.dropDownBoxValues;
         let taxiBox = dropboxVals[0];
         let taxiValue;
-        let autoPosition = dropboxVals[1]
+        let autoPosition = dropboxVals[1];
         let hangarUsed = dropboxVals[2];
+        let hangarTime = dropboxVals[3];
+        let driveStrength = dropboxVals[4];
         let taxiPoints = 0;
         let hangarPoints = 0;
 
@@ -694,6 +696,16 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nWhat hangar the robot did"
         }
 
+        if(hangarTime == ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nWhat hangar time the robot did"
+        }
+
+        if(driveStrength == ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nWhat strength is the robot drive"
+        }
+
         strats.filter(strat => {
             if(strat !== ' '){
                 incompletePriorities = false;
@@ -788,9 +800,11 @@ class Form extends React.Component{
                 {this.makeInputBox("# Low Hub Missed: ",5)}
                 {this.makeInputBox("# Upper Hub Made: ",6)}
                 {this.makeInputBox("# Upper Hub Missed: ",7)}
-                {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)}
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
+                {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)}
+                {this.makeDropDownBox("Hangar Time: ",["None","5 seconds", "10 seconds", "15 seconds", "20 seconds", "30 seconds", "40 seconds", "45 seconds", "50 seconds", "55 seconds", "60 seconds"],3)}
+                {this.makeDropDownBox("Drive: ", ["Weak Base", "Strong Base",],4)}
                 {this.makePenaltyBox("Yellow card ",0)}
                 {this.makePenaltyBox("Red card ", 1)}
                 {this.makePenaltyBox("Disabled ", 2)}
@@ -810,6 +824,7 @@ class Form extends React.Component{
                 {this.makeStrategyBox("Hangar ", 3)}
                 {this.makeStrategyBox("Defense ", 4)}
                 <br></br>
+                <p>How well is there defense if any? What is there time started for hang? How strong is there drive?</p>
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
