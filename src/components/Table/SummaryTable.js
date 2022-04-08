@@ -39,6 +39,7 @@ const SummaryTable = () => {
 
     useEffect(() => setAverages(teamNumbers.map(team => {           // Calculate averages of each team
         let teamStats = teamData.filter(x => parseInt(x.TeamId) === team.TeamNumber);
+        let teamMatches = teamStats.map(x => x.MatchId.substring(9));
 
         let avgPoints = calcAveragePoints(teamStats);
         let strats = getStrat(teamStats);
@@ -52,7 +53,7 @@ const SummaryTable = () => {
         return {
             TeamNumber: team.TeamNumber,
             Strategy: strats.join(', '),
-            NumberOfMatches: teamStats.length > 0 ? teamStats.length : '',
+            NumberOfMatches: teamStats.length > 0 ? teamMatches.sort().join(', ') : '',
             AveragePoints: !isNaN(avgPoints) ? avgPoints : '',
             AverageLowHubShots: !isNaN(avgLowShots) ? avgLowShots : '',
             AverageLowHubAccuracy: !isNaN(avgLowAccuracy) ? avgLowAccuracy : '',
@@ -119,7 +120,7 @@ const SummaryTable = () => {
     const getTeams = async () => {                              // Get list of teams from the Blue Alliance
         const key = await api.getRegional();
         console.log(`https://www.thebluealliance.com/api/v3/event/${key}/teams`);
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/${key}/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022hiho/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
@@ -309,7 +310,7 @@ const SummaryTable = () => {
                     </span>)
             },
             {
-                Header: 'Number of Matches',
+                Header: 'Matches',
                 accessor: 'NumberOfMatches',
             },
             {
@@ -339,10 +340,6 @@ const SummaryTable = () => {
             {
                 Header: 'Average Hangar Points',
                 accessor: 'AverageHangar',
-            },
-            {
-                Header: 'Average Rating',
-                accessor: 'AverageRating',
             },
             {
                 Header: 'Column Sort',

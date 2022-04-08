@@ -51,23 +51,23 @@ const TeamTable = (props) => {
         Header: 'Autonomous',
         columns: [
           {
-            Header: 'Auto Placement',
+            Header: 'Placement',
             accessor: 'AutoPlacement',
           },
           {
-            Header: 'Auto Low Made',
+            Header: 'Low Made',
             accessor: 'AutoLowMade',
           },
           {
-            Header: 'Auto Low Missed',
+            Header: 'Low Missed',
             accessor: 'AutoLowMissed',
           },
           {
-            Header: 'Auto Upper Made',
+            Header: 'Upper Made',
             accessor: 'AutoUpperMade',
           },
           {
-            Header: 'Auto Upper Missed',
+            Header: 'Upper Missed',
             accessor: 'AutoUpperMissed',
           },
           {
@@ -79,19 +79,19 @@ const TeamTable = (props) => {
         Header: 'Tele-Op',
         columns: [
           {
-            Header: 'Tele Low Made',
+            Header: 'Low Made',
             accessor: 'TeleLowMade',
           },
           {
-            Header: 'TeleLowMissed',
+            Header: 'Low Missed',
             accessor: 'TeleLowMissed',
           },
           {
-            Header: 'TeleUpperMade',
+            Header: 'Upper Made',
             accessor: 'TeleUpperMade',
           },
           {
-            Header: 'Tele Upper Missed',
+            Header: 'Upper Missed',
             accessor: 'TeleUpperMissed',
           },
           {
@@ -103,11 +103,11 @@ const TeamTable = (props) => {
         Header: 'Game Info',
         columns: [
           {
-            Header: 'Hangar and Cargo Bonus',
+            Header: 'Bonus',
             accessor: 'HangarCargoBonus',
           },
           {
-            Header: '# of Ranking Points',
+            Header: '# of RP',
             accessor: 'NumberOfRankingPoints',
           },
           {
@@ -115,7 +115,7 @@ const TeamTable = (props) => {
             accessor: 'NumberOfFouls',
           },
           {
-            Header: '# of Tech Fouls',
+            Header: '# of Tech',
             accessor: 'NumberOfTech',
           },
           {
