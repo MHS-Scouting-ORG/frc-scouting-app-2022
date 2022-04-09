@@ -35,15 +35,15 @@ const TeamTable = (props) => {
             accessor: 'Strategy',
           },
           {
-            Header: 'Total Points',
+            Header: 'Total Pts',
             accessor: 'TotalPoints',
           },
           {
-            Header: 'Low Hub Accuracy',
+            Header: 'Low Acc',
             accessor: 'LowHubAccuracy',
           },
           {
-            Header: 'Upper Hub Accuracy',
+            Header: 'Upper Acc',
             accessor: 'UpperHubAccuracy',
           },]
       },
@@ -51,24 +51,16 @@ const TeamTable = (props) => {
         Header: 'Autonomous',
         columns: [
           {
-            Header: 'Placement',
+            Header: 'Place',
             accessor: 'AutoPlacement',
           },
           {
-            Header: 'Low Made',
+            Header: 'Low',
             accessor: 'AutoLowMade',
           },
           {
-            Header: 'Low Missed',
-            accessor: 'AutoLowMissed',
-          },
-          {
-            Header: 'Upper Made',
+            Header: 'Upper',
             accessor: 'AutoUpperMade',
-          },
-          {
-            Header: 'Upper Missed',
-            accessor: 'AutoUpperMissed',
           },
           {
             Header: 'Taxi',
@@ -79,20 +71,12 @@ const TeamTable = (props) => {
         Header: 'Tele-Op',
         columns: [
           {
-            Header: 'Low Made',
+            Header: 'Low',
             accessor: 'TeleLowMade',
           },
           {
-            Header: 'Low Missed',
-            accessor: 'TeleLowMissed',
-          },
-          {
-            Header: 'Upper Made',
+            Header: 'Upper',
             accessor: 'TeleUpperMade',
-          },
-          {
-            Header: 'Upper Missed',
-            accessor: 'TeleUpperMissed',
           },
           {
             Header: 'Hangar',
@@ -107,15 +91,15 @@ const TeamTable = (props) => {
             accessor: 'HangarCargoBonus',
           },
           {
-            Header: '# of RP',
+            Header: '# RP',
             accessor: 'NumberOfRankingPoints',
           },
           {
-            Header: '# of Fouls',
+            Header: '# Fouls',
             accessor: 'NumberOfFouls',
           },
           {
-            Header: '# of Tech',
+            Header: '# Tech',
             accessor: 'NumberOfTech',
           },
           {
@@ -126,10 +110,10 @@ const TeamTable = (props) => {
       {
         Header: 'Scouter Info',
         columns: [
-          {
+        /*  {
             Header: 'Opinion',
             accessor: 'OpinionScale',
-          },
+          },  */
           {
             Header: 'Comments',
             accessor: 'Comments',
