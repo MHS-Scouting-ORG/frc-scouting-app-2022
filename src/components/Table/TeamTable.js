@@ -28,7 +28,7 @@ const TeamTable = (props) => {
         columns: [
           {
             Header: 'Match',
-            accessor: 'MatchId',
+            accessor: 'Match',
           },
           {
             Header: 'Priorities',
@@ -56,11 +56,11 @@ const TeamTable = (props) => {
           },
           {
             Header: 'Low',
-            accessor: 'AutoLowMade',
+            accessor: 'AutoLow',
           },
           {
             Header: 'Upper',
-            accessor: 'AutoUpperMade',
+            accessor: 'AutoUpper',
           },
           {
             Header: 'Taxi',
@@ -72,11 +72,11 @@ const TeamTable = (props) => {
         columns: [
           {
             Header: 'Low',
-            accessor: 'TeleLowMade',
+            accessor: 'TeleLow',
           },
           {
             Header: 'Upper',
-            accessor: 'TeleUpperMade',
+            accessor: 'TeleUpper',
           },
           {
             Header: 'Hangar',
@@ -95,12 +95,8 @@ const TeamTable = (props) => {
             accessor: 'NumberOfRankingPoints',
           },
           {
-            Header: '# Fouls',
-            accessor: 'NumberOfFouls',
-          },
-          {
-            Header: '# Tech',
-            accessor: 'NumberOfTech',
+            Header: 'Foul | Tech',
+            accessor: 'NumberOfFoulAndTech',
           },
           {
             Header: 'Penalties',
