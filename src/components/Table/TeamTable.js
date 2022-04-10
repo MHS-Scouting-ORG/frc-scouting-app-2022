@@ -1,4 +1,3 @@
-import { isModelAttributePrimaryKey } from "@aws-amplify/datastore";
 import React from "react";
 import { useTable, useSortBy } from "react-table";
 
@@ -113,6 +112,15 @@ const TeamTable = (props) => {
           {
             Header: 'Comments',
             accessor: 'Comments',
+            Cell: ({row})=> {
+              return <div
+                style={{
+                  minWidth:'450px',
+                  //overflowWrap: 'normal',
+                  whiteSpace: 'normal',
+                }}
+              >{row.values.Comments}</div>
+            }
           },
           {
             Header: 'Email',
@@ -147,7 +155,7 @@ const TeamTable = (props) => {
                     <th
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       style={{
-                        padding: '10px',
+                        padding: '5px',
                         border: 'solid 1px black',
                         textAlign: 'center',
                         background: 'steelblue'
@@ -176,7 +184,7 @@ const TeamTable = (props) => {
                         <td
                           {...cell.getCellProps()}
                           style={{
-                            padding: '10px',
+                            padding: '5px',
                             border: 'solid 1px black',
                             textAlign: 'center',
                           }}

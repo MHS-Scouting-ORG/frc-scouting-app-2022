@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useTable, useSortBy, useExpanded } from 'react-table';
+import { useTable, useSortBy, useExpanded} from 'react-table';
 import List from './List'
 import TeamTable from './TeamTable'
 import api from "../../api";
@@ -109,7 +109,7 @@ const TestTable = () => {
         const key = await api.getRegional();
         console.log(`key ${key}`)
 
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022hiho/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/${key}/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
@@ -150,12 +150,12 @@ const TestTable = () => {
                 UpperHubAccuracy: x.UpperHubAccuracy != null ? x.UpperHubAccuracy.toFixed(2) : '',
 
                 AutoPlacement: x.AutoPlacement,
-                AutoLow: `${x.AutoLowMade} / ${x.AutoLowMade + x.AutoLowMissed}`,
-                AutoUpper: `${x.AutoUpperMade} / ${x.AutoUpperMade + x.AutoUpperMissed}`,
+                AutoLow: `${x.AutoLowMade}/${x.AutoLowMade + x.AutoLowMissed}`,
+                AutoUpper: `${x.AutoUpperMade}/${x.AutoUpperMade + x.AutoUpperMissed}`,
                 Taxi: x.Taxi,
 
-                TeleLow: `${x.TeleLowMade} / ${x.TeleLowMade + x.TeleLowMissed}`,
-                TeleUpper: `${x.TeleUpperMade} / ${x.TeleUpperMade + x.TeleUpperMissed}`,
+                TeleLow: `${x.TeleLowMade}/${x.TeleLowMade + x.TeleLowMissed}`,
+                TeleUpper: `${x.TeleUpperMade}/${x.TeleUpperMade + x.TeleUpperMissed}`,
                 Hangar: x.Hangar,
 
                 HangarCargoBonus: x.HangarCargoBonus.filter(val => val.trim() != '').map(val => val.trim()).join(', '),
@@ -343,7 +343,7 @@ const TestTable = () => {
             {
                 Header: 'Team #',
                 accessor: 'TeamNumber',
-                Cell: ({ row }) =>(
+                Cell: ({ row }) => (
                     <span {...row.getToggleRowExpandedProps()}>
                         {row.values.TeamNumber}
                     </span>)
@@ -465,7 +465,11 @@ const TestTable = () => {
 
                                 {row.isExpanded ? (
                                     <tr>
-                                        <td colSpan={visibleColumns.length}>
+                                        <td colSpan={visibleColumns.length}
+                                            style = {{
+                                                maxWidth: '1000px'
+                                            }}
+                                        >
                                             {renderRowSubComponent({ row })}
                                         </td>
                                     </tr>
