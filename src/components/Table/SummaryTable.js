@@ -176,7 +176,7 @@ const TestTable = () => {
             </pre>)
             : (                             // else if no data, notify no data has been collected
                 <tr><td style={{
-                    padding: '10px',
+                    padding: '5px',
                     textAlign: 'center',
                 }}> No data collected for Team {row.values.TeamNumber}. </td></tr>
             );
@@ -419,7 +419,7 @@ const TestTable = () => {
                                         <th
                                             {...column.getHeaderProps(column.getSortByToggleProps())}
                                             style={{
-                                                padding: '10px',
+                                                padding: '5px',
                                                 textAlign: 'center',
                                             }}
                                         >
@@ -449,7 +449,7 @@ const TestTable = () => {
                                                 <td
                                                     {...cell.getCellProps()}
                                                     style={{
-                                                        padding: '10px',
+                                                        padding: '5px',
                                                         border: 'solid 1px black',
                                                         textAlign: 'center',
                                                     }}
