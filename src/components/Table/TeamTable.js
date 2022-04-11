@@ -103,6 +103,22 @@ const TeamTable = (props) => {
           },]
       },
       {
+        Header: 'Drive',
+        columns: [
+          {
+            Header: 'Speed',
+            accessor: 'DriveSpeed',
+          },
+          {
+            Header: 'Swerve?',
+            accessor: 'SwerveNoSwerve',
+          },
+          {
+            Header: 'Mobility',
+            accessor: 'DriveMobility',
+          },]
+      },
+      {
         Header: 'Scouter Info',
         columns: [
         /*  {
@@ -112,7 +128,7 @@ const TeamTable = (props) => {
           {
             Header: 'Comments',
             accessor: 'Comments',
-            Cell: ({row})=> {
+            Cell: ({row}) => {
               return <div
                 style={{
                   minWidth:'450px',

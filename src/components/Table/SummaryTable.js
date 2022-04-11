@@ -4,7 +4,7 @@ import List from './List'
 import TeamTable from './TeamTable'
 import api from "../../api";
 
-const TestTable = () => {
+const Summary = () => {
 
     const [apiData, setApiData] = useState([]);     // api data
     const [teamNumbers, setTeamNumbers] = useState([]);
@@ -32,14 +32,17 @@ const TestTable = () => {
         const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber);
         const teamMatches = teamStats.map(x => x.MatchId.substring(9));
 
+        const points = teamStats.map(x => x.TotalPoints);
         const avgPoints = calcAveragePoints(teamStats);
         const strats = getStrat(teamStats);
 
-        const lowHub = teamStats.filter(x => (x.AutoLowMade + x.AutoLowMissed + x.TeleLowMade + x.TeleLowMissed) != 0)
+        const lowHub = teamStats.filter(x => (x.AutoLowMade + x.AutoLowMissed + x.TeleLowMade + x.TeleLowMissed) != 0);
+        const lowAcc = lowHub.map(x => x.LowHubAccuracy);
         const avgLowAccuracy = calcLowAcc(lowHub);
         const avgLowShots = calcLowShots(lowHub);
 
-        const upperHub = teamStats.filter(x => (x.AutoUpperMade + x.AutoUpperMissed + x.TeleUpperMade + x.TeleUpperMissed) != 0)
+        const upperHub = teamStats.filter(x => (x.AutoUpperMade + x.AutoUpperMissed + x.TeleUpperMade + x.TeleUpperMissed) != 0);
+        const upperAcc = upperHub.map(x => x.UpperHubAccuracy);
         const avgUpperAccuracy = calcUpperAcc(upperHub);
         const avgUpperShots = calcUpperShots(upperHub);
 
@@ -50,12 +53,11 @@ const TestTable = () => {
             TeamNumber: team.TeamNumber,
             Matches: teamStats.length > 0 ? teamMatches.sort().join(', ') : '',
             Priorities: strats.join(', '),
-            AvgPoints: !isNaN(avgPoints) ? avgPoints : '',
-            StdDev: 0,
+            AvgPoints: !isNaN(avgPoints) ? `${avgPoints}, σ=${calcDeviation(points, avgPoints)}` : '',
             AvgLowShots: !isNaN(avgLowShots) ? avgLowShots : '',
-            AvgLowAcc: !isNaN(avgLowAccuracy) ? avgLowAccuracy : '',
+            AvgLowAcc: !isNaN(avgLowAccuracy) ? `${avgLowAccuracy}, σ=${calcDeviation(lowAcc, avgLowAccuracy)}` : '',
             AvgUpperShots: !isNaN(avgUpperShots) ? avgUpperShots : '',
-            AvgUpperAcc: !isNaN(avgUpperAccuracy) ? avgUpperAccuracy : '',
+            AvgUpperAcc: !isNaN(avgUpperAccuracy) ? `${avgUpperAccuracy}, σ=${calcDeviation(upperAcc, avgUpperAccuracy)}` : '',
             AvgHangar: !isNaN(avgHangar) ? avgHangar : '',
             SumPriority: 0,
 
@@ -109,7 +111,7 @@ const TestTable = () => {
         const key = await api.getRegional();
         console.log(`key ${key}`)
 
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/${key}/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022hiho/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
@@ -144,10 +146,10 @@ const TestTable = () => {
         const disp = t.map(x => {
             return {
                 Match: x.MatchId.substring(9),
-                Strategy: x.Strategy.filter(val => val.trim() != '').map(val => val.trim()).join(', '),
+                Strategy: x.Strategy.filter(val => val.trim() != '').length != 0 ? x.Strategy.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : 'N/A',
                 TotalPoints: x.TotalPoints,
-                LowHubAccuracy: x.LowHubAccuracy != null ? x.LowHubAccuracy.toFixed(2) : '',
-                UpperHubAccuracy: x.UpperHubAccuracy != null ? x.UpperHubAccuracy.toFixed(2) : '',
+                LowHubAccuracy: x.LowHubAccuracy != null ? x.LowHubAccuracy.toFixed(2) : 'N/A',
+                UpperHubAccuracy: x.UpperHubAccuracy != null ? x.UpperHubAccuracy.toFixed(2) : 'N/A',
 
                 AutoPlacement: x.AutoPlacement,
                 AutoLow: `${x.AutoLowMade}/${x.AutoLowMade + x.AutoLowMissed}`,
@@ -161,7 +163,11 @@ const TestTable = () => {
                 HangarCargoBonus: x.HangarCargoBonus.filter(val => val.trim() != '').map(val => val.trim()).join(', '),
                 NumberOfRankingPoints: x.NumberOfRankingPoints,
                 NumberOfFoulAndTech: `${x.NumberOfFouls} | ${x.NumberOfTech}`,
-                Penalties: x.Penalties.filter(val => val.trim() != '').map(val => val.trim()).join(', '),
+                Penalties: x.Penalties.filter(val => val.trim() != '').length != 0 ? x.Penalties.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : 'N/A',
+
+                DriveSpeed: x.DriveSpeed != undefined ? x.DriveSpeed : 'N/A',
+                SwerveNoSwerve: x.Swerve != undefined ? x.Swerve : 'N/A',
+                DriveMobility: x.Mobility != undefined ? x.Mobility : 'N/A',
 
                 Comments: x.Comments.trim(),
 
@@ -308,9 +314,9 @@ const TestTable = () => {
             return sum;
         }
 
-        const dev = Math.sqrt( sumOfDistance() / (distance.length) )
+        const dev = Math.sqrt( sumOfDistance() / (distance.length-1) )
 
-        return dev;
+        return dev.toFixed(3);
     }
 
     const data = React.useMemo(
@@ -361,27 +367,23 @@ const TestTable = () => {
                 accessor: 'AvgPoints',
             },
             {
-                Header: 'SD',
-                accessor: 'StdDev',
-            },
-            {
-                Header: 'Average Low Hub',
+                Header: 'Avg Low Shots',
                 accessor: 'AvgLowShots',
             },
             {
-                Header: 'Average Low Hub Accuracy',
+                Header: 'Avg Low Accuracy',
                 accessor: 'AvgLowAcc',
             },
             {
-                Header: 'Average Upper Hub',
+                Header: 'Avg Upper Shots',
                 accessor: 'AvgUpperShots',
             },
             {
-                Header: 'Average Upper Hub Accuracy',
+                Header: 'Avg Upper Accuracy',
                 accessor: 'AvgUpperAcc',
             },
             {
-                Header: 'Average Hangar Points',
+                Header: 'Avg Hangar Points',
                 accessor: 'AvgHangar',
             },
             {
@@ -407,7 +409,11 @@ const TestTable = () => {
             <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
             {<List setList={setSortBy}/>}
             <br/><br/>
-            <table {...getTableProps()} >
+            <table {...getTableProps()} 
+                style={{
+                    maxWidth: '1200px'
+                }}
+            >
                 <thead>
                     {
                         headerGroups.map(headerGroup =>
@@ -467,7 +473,7 @@ const TestTable = () => {
                                     <tr>
                                         <td colSpan={visibleColumns.length}
                                             style = {{
-                                                maxWidth: '1000px'
+                                                maxWidth: '1200px'
                                             }}
                                         >
                                             {renderRowSubComponent({ row })}
@@ -488,4 +494,4 @@ const TestTable = () => {
     )
 }
 
-export default TestTable;
+export default Summary;

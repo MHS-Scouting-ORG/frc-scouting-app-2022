@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useTable, useSortBy, useExpanded } from 'react-table';
+import { useTable, useSortBy, useExpanded} from 'react-table';
 import List from './List'
 import TeamTable from './TeamTable'
 import api from "../../api";
@@ -141,27 +141,31 @@ const TestTable = () => {
     const renderRowSubComponent = ({ row }) => {
         const t = apiData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber);
 
-        const disp = t.map(x => { console.log(x)
+        const disp = t.map(x => {
             return {
                 Match: x.MatchId.substring(9),
-                Strategy: x.Strategy.filter(val => val.trim() != '').map(val => val.trim()).join(', '),
+                Strategy: x.Strategy.filter(val => val.trim() != '').length != 0 ? x.Strategy.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : 'N/A',
                 TotalPoints: x.TotalPoints,
-                LowHubAccuracy: x.LowHubAccuracy != null ? x.LowHubAccuracy.toFixed(2) : '',
-                UpperHubAccuracy: x.UpperHubAccuracy != null ? x.UpperHubAccuracy.toFixed(2) : '',
+                LowHubAccuracy: x.LowHubAccuracy != null ? x.LowHubAccuracy.toFixed(2) : 'N/A',
+                UpperHubAccuracy: x.UpperHubAccuracy != null ? x.UpperHubAccuracy.toFixed(2) : 'N/A',
 
                 AutoPlacement: x.AutoPlacement,
-                AutoLow: `${x.AutoLowMade} / ${x.AutoLowMade + x.AutoLowMissed}`,
-                AutoUpper: `${x.AutoUpperMade} / ${x.AutoUpperMade + x.AutoUpperMissed}`,
+                AutoLow: `${x.AutoLowMade}/${x.AutoLowMade + x.AutoLowMissed}`,
+                AutoUpper: `${x.AutoUpperMade}/${x.AutoUpperMade + x.AutoUpperMissed}`,
                 Taxi: x.Taxi,
 
-                TeleLow: `${x.TeleLowMade} / ${x.TeleLowMade + x.TeleLowMissed}`,
-                TeleUpper: `${x.TeleUpperMade} / ${x.TeleUpperMade + x.TeleUpperMissed}`,
+                TeleLow: `${x.TeleLowMade}/${x.TeleLowMade + x.TeleLowMissed}`,
+                TeleUpper: `${x.TeleUpperMade}/${x.TeleUpperMade + x.TeleUpperMissed}`,
                 Hangar: x.Hangar,
 
                 HangarCargoBonus: x.HangarCargoBonus.filter(val => val.trim() != '').map(val => val.trim()).join(', '),
                 NumberOfRankingPoints: x.NumberOfRankingPoints,
                 NumberOfFoulAndTech: `${x.NumberOfFouls} | ${x.NumberOfTech}`,
-                Penalties: x.Penalties.filter(val => val.trim() != '').map(val => val.trim()).join(', '),
+                Penalties: x.Penalties.filter(val => val.trim() != '').length != 0 ? x.Penalties.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : 'N/A',
+
+                DriveSpeed: x.DriveSpeed != undefined ? x.DriveSpeed : 'N/A',
+                SwerveNoSwerve: x.Swerve != undefined ? x.Swerve : 'N/A',
+                DriveMobility: x.Mobility != undefined ? x.Mobility : 'N/A',
 
                 Comments: x.Comments.trim(),
 
@@ -176,7 +180,7 @@ const TestTable = () => {
             </pre>)
             : (                             // else if no data, notify no data has been collected
                 <tr><td style={{
-                    padding: '10px',
+                    padding: '5px',
                     textAlign: 'center',
                 }}> No data collected for Team {row.values.TeamNumber}. </td></tr>
             );
@@ -343,7 +347,7 @@ const TestTable = () => {
             {
                 Header: 'Team #',
                 accessor: 'TeamNumber',
-                Cell: ({ row }) =>(
+                Cell: ({ row }) => (
                     <span {...row.getToggleRowExpandedProps()}>
                         {row.values.TeamNumber}
                     </span>)
@@ -419,7 +423,7 @@ const TestTable = () => {
                                         <th
                                             {...column.getHeaderProps(column.getSortByToggleProps())}
                                             style={{
-                                                padding: '10px',
+                                                padding: '5px',
                                                 textAlign: 'center',
                                             }}
                                         >
@@ -449,7 +453,7 @@ const TestTable = () => {
                                                 <td
                                                     {...cell.getCellProps()}
                                                     style={{
-                                                        padding: '10px',
+                                                        padding: '5px',
                                                         border: 'solid 1px black',
                                                         textAlign: 'center',
                                                     }}
@@ -465,7 +469,11 @@ const TestTable = () => {
 
                                 {row.isExpanded ? (
                                     <tr>
-                                        <td colSpan={visibleColumns.length}>
+                                        <td colSpan={visibleColumns.length}
+                                            style = {{
+                                                maxWidth: '1000px'
+                                            }}
+                                        >
                                             {renderRowSubComponent({ row })}
                                         </td>
                                     </tr>
