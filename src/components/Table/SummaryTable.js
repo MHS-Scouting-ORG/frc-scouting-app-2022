@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useTable, useSortBy, useExpanded} from 'react-table';
+import { useTable, useSortBy, useExpanded, useGlobalFilter } from 'react-table';
 import List from './List'
 import TeamTable from './TeamTable'
 import api from "../../api";
+import GlobalFilter from "./Filter";
 
 const Summary = () => {
 
@@ -204,13 +205,12 @@ const Summary = () => {
 
     const getStrat = (arr) => {                                 // Create a list of all the priorities/strats for each team
         let a = arr.map(teamObj => teamObj.Strategy).reduce((a,b) => a.concat(b), []).filter((item) => item.trim().length > 0);
-        
         return uniqueArray(a);
     }
 
     const uniqueArray = (arr) => { 
         return arr.filter((item, index) => {
-            return index === arr.indexOf(item);
+            return arr.indexOf(item, 0) === index;
         })
     }
 
@@ -314,7 +314,7 @@ const Summary = () => {
             return sum;
         }
 
-        const dev = Math.sqrt( sumOfDistance() / (distance.length-1) )
+        const dev = Math.sqrt( sumOfDistance() / (distance.length) )
 
         return dev.toFixed(3);
     }
@@ -393,7 +393,7 @@ const Summary = () => {
         ], []
     )
 
-    const tableInstance = useTable({ columns, data }, useSortBy, useExpanded);
+    const tableInstance = useTable({ columns, data }, useGlobalFilter, useSortBy, useExpanded);
 
     const {
         getTableProps,
@@ -402,13 +402,18 @@ const Summary = () => {
         rows,
         prepareRow,
         visibleColumns,
+        state,
+        setGlobalFilter
     } = tableInstance
+
+    const {globalFilter} = state
 
     return (
         <div>
             <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
             {<List setList={setSortBy}/>}
             <br/><br/>
+            <GlobalFilter filter={globalFilter} set={setGlobalFilter} />
             <table {...getTableProps()} 
                 style={{
                     maxWidth: '1200px'
