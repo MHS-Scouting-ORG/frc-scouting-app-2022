@@ -112,7 +112,7 @@ const Summary = () => {
         const key = await api.getRegional();
         console.log(`key ${key}`)
 
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022casd/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022nytr/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
@@ -147,10 +147,10 @@ const Summary = () => {
         const disp = t.map(x => {
             return {
                 Match: x.MatchId.substring(9),
-                Strategy: x.Strategy.filter(val => val.trim() != '').length != 0 ? x.Strategy.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : 'N/A',
+                Strategy: x.Strategy.filter(val => val.trim() != '').length != 0 ? x.Strategy.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : '',
                 TotalPoints: x.TotalPoints,
-                LowHubAccuracy: x.LowHubAccuracy != null ? x.LowHubAccuracy.toFixed(2) : 'N/A',
-                UpperHubAccuracy: x.UpperHubAccuracy != null ? x.UpperHubAccuracy.toFixed(2) : 'N/A',
+                LowHubAccuracy: x.LowHubAccuracy != null ? x.LowHubAccuracy.toFixed(2) : '',
+                UpperHubAccuracy: x.UpperHubAccuracy != null ? x.UpperHubAccuracy.toFixed(2) : '',
 
                 AutoPlacement: x.AutoPlacement,
                 AutoLow: `${x.AutoLowMade}/${x.AutoLowMade + x.AutoLowMissed}`,
@@ -164,11 +164,11 @@ const Summary = () => {
                 HangarCargoBonus: x.HangarCargoBonus.filter(val => val.trim() != '').map(val => val.trim()).join(', '),
                 NumberOfRankingPoints: x.NumberOfRankingPoints,
                 NumberOfFoulAndTech: `${x.NumberOfFouls} | ${x.NumberOfTech}`,
-                Penalties: x.Penalties.filter(val => val.trim() != '').length != 0 ? x.Penalties.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : 'N/A',
+                Penalties: x.Penalties.filter(val => val.trim() != '').length != 0 ? x.Penalties.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : '',
 
-                DriveSpeed: x.DriveSpeed != undefined ? x.DriveSpeed : 'N/A',
-                SwerveNoSwerve: x.Swerve != undefined ? x.Swerve : 'N/A',
-                DriveMobility: x.Mobility != undefined ? x.Mobility : 'N/A',
+                DriveSpeed: x.DriveSpeed != undefined ? x.DriveSpeed : '',
+                SwerveNoSwerve: x.Swerve != undefined ? x.Swerve : '',
+                DriveMobility: x.Mobility != undefined ? x.Mobility : '',
 
                 Comments: x.Comments.trim(),
 
