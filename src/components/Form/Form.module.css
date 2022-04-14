@@ -9,6 +9,13 @@
 	}
 }
 
+.Div{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	align-items: center;
+}
+
 .Input{
 	width: 3rem;
 }

@@ -291,21 +291,24 @@ class Form extends React.Component{
         */
 
     changeHangar(event){
-        let hangarValues = this.state.hangarValues;
-        hangarValues[1] = event.target.value;
+        let hangar = Array(this.state.hangarValues);
+        hangar[0] = event.target.value;
+        this.setState({hangarValues: hangar})
     }
 
     changeHangarStart(event){
         let hangarValues = this.state.hangarValues;
-        hangarValues[2] = event.target.value;
+        hangarValues[1] = event.target.value;
     }
 
     changeHangarEnd(event){
         let hangarValues = this.state.hangarValues;
-        hangarValues[3] = event.target.value;
+        hangarValues[2] = event.target.value;
     }
 
-    makeHangarStartEndBoxes(hangar){
+    makeHangarStartEndBoxes(){
+        let hangarVals = this.state.hangarValues;
+        let hangar = hangarVals[0];
         if(hangar !== "None" && hangar !== ""){
             if(hangar === "Attempted"){
                 return (
@@ -321,17 +324,20 @@ class Form extends React.Component{
                     <div>
                         <div>
                             <label> {"Hangar Start: "}
-                                <input onChange={this.changeHangarStart}></input>
+                                <input className={classes.Input} onChange={this.changeHangarStart}></input>
                             </label>
                         </div>
                         <div>
                             <label> {"Hangar End: "}
-                                <input onChange={this.changeHangarEnd}></input>
+                                <input className={classes.Input} onChange={this.changeHangarEnd}></input>
                             </label>
                         </div>
                     </div>
                 )
-            }
+            } 
+        }
+        else {
+            return <div></div>;
         }
     }
 
@@ -777,6 +783,13 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nRobot priorities/strategies"
         }
 
+        /*let hangarValues2 = this.state.hangarValues;
+        let hangarUsed2 = hangarValues2[0];
+
+        if(true){
+            windowAlertMessage = windowAlertMessage + "\n" + hangarUsed2;
+        }*/
+
         /*if(this.state.comment === ''){
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nScouter comment"
@@ -861,7 +874,10 @@ class Form extends React.Component{
                 {this.makeInputBox("# Upper Hub Made: ",6)}
                 {this.makeInputBox("# Upper Hub Missed: ",7)}
                 {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)}
+
                 {this.makeHangarDropdownBox()}
+                {this.makeHangarStartEndBoxes()}
+
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
                 {this.makePenaltyBox("Yellow card ",0)}

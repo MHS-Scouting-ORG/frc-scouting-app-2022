@@ -13,7 +13,7 @@ class HangarDropdown extends React.Component{
 
     changeHangar(event){
         this.props.changeHangarUsed(event);
-        this.setState({hangarUsed:event.target.value})
+        this.setState({hangarUsed:event.value});
     }
 
     makeHangarStartEndTimeBoxes(){
@@ -29,17 +29,18 @@ class HangarDropdown extends React.Component{
                     <label className={classes.Label}> {"Hangar Used: "}
                         <select className={classes.Select} onChange={this.changeHangar}>
                             <option></option>
-                            <option> None </option>
-                            <option> Attempted </option>
-                            <option> Low </option>
-                            <option> Mid </option>
-                            <option> High </option>
-                            <option> Traversal </option>
+                            <option value='None'> None </option>
+                            <option value='Attempted'> Attempted </option>
+                            <option value='Low'> Low </option>
+                            <option value='Mid'> Mid </option>
+                            <option value='High'> High </option>
+                            <option value='Traverse'> Traversal </option>
                         </select>
                     </label>
                 </div>
                 <div>
-                    {this.makeHangarStartEndTimeBoxes()}
+                    {//this.makeHangarStartEndTimeBoxes()
+                    }
                 </div>
             </div>
         )
