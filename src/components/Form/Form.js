@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "./Input";
 import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
-import Initials from "./Initials";
 import Dropdown from "./Dropdown";
 import HangarDropdown from "./HangarDropdown";
 import Scale from "./Scale";
@@ -71,8 +70,10 @@ class Form extends React.Component{
 
         this.setMarkers = this.setMarkers.bind(this);
 
-        //const [teamId, setTeamId] = useState("")
-        //const [matchNumber, setMatchNumber] = useState("")
+
+        this.dropDownTarmac = this.dropDownTarmac.bind(this);
+
+
 
         this.state = {
             totalPoints: 0,
@@ -98,7 +99,8 @@ class Form extends React.Component{
             comment:"",
             scale:0,
             markers: [],
-            override:false
+            tarmacSection: 0,
+            override:false,
         };
     }
     
@@ -672,10 +674,13 @@ class Form extends React.Component{
         let dropboxVals = this.state.dropDownBoxValues;
         let taxiBox = dropboxVals[0];
         let taxiValue;
-        let autoPosition = dropboxVals[1]
+        let autoPosition = dropboxVals[1];
         let hangarUsed = dropboxVals[2];
+        let hangarTime = dropboxVals[3];
+        let driveStrength = dropboxVals[4];
         let taxiPoints = 0;
         let hangarPoints = 0;
+
         if(taxiBox === "Yes"){
             taxiPoints = 2;
             taxiValue = true;
@@ -697,7 +702,7 @@ class Form extends React.Component{
         
         let points =  taxiPoints + hangarPoints + (lowTeleMade + (2 * ( lowAutoMade + highTeleMade + ( highAutoMade * 2 ))));
         let lowAccuracy = 100 * (( lowAutoMade + lowTeleMade ) / ( lowMissed + lowAutoMade + lowTeleMade ));
-        let highAccuracy = 100 * (( highTeleMade + highAutoMade ) / ( highMissed + highAutoMade + highTeleMade ))
+        let highAccuracy = 100 * (( highTeleMade + highAutoMade ) / ( highMissed + highAutoMade + highTeleMade ));
             
         this.setState({
             totalPoints: points,
@@ -706,7 +711,11 @@ class Form extends React.Component{
         })
         console.log(this.state);
         console.log(points, lowAccuracy, highAccuracy);
-        
+
+        /*if(teamNumber === false){
+            windowAlertMessage + "\n";
+        }
+        */
         let penalties = this.state.penaltyValues;
         let bonuses = this.state.bonusValues;
         let strategies = this.state.strategyValues;
@@ -772,6 +781,16 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nWhat hangar the robot did"
         }
 
+        if(hangarTime == ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nWhat hangar time the robot did"
+        }
+
+        if(driveStrength == ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nWhat strength is the robot drive"
+        }
+
         strats.filter(strat => {
             if(strat !== ' '){
                 incompletePriorities = false;
@@ -795,7 +814,7 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nScouter comment"
         }*/
 
-        if(scale == 0){
+        if(scale === 0){
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nPartnership scale"
         }
@@ -880,6 +899,9 @@ class Form extends React.Component{
 
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
+                {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)}
+                {this.makeDropDownBox("Hangar Time: ",["None","5 seconds", "10 seconds", "15 seconds", "20 seconds", "30 seconds", "40 seconds", "45 seconds", "50 seconds", "55 seconds", "60 seconds"],3)}
+                {this.makeDropDownBox("Drive: ", ["Weak Base", "Strong Base",],4)}
                 {this.makePenaltyBox("Yellow card ",0)}
                 {this.makePenaltyBox("Red card ", 1)}
                 {this.makePenaltyBox("Disabled ", 2)}
@@ -898,6 +920,7 @@ class Form extends React.Component{
                 {this.makeStrategyBox("Hangar ", 3)}
                 {this.makeStrategyBox("Defense ", 4)}
                 <br></br>
+                <p>How well is there defense if any? What is their start time for hang? How strong is there drive?</p>
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
                 <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>

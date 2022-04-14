@@ -6,9 +6,6 @@ class Checkbox extends React.Component{
     constructor(props){
         super(props);
         this.changeState = this.changeState.bind(this);
-        this.state = {
-            checked:false
-        }
     }
     
     changeState(){
