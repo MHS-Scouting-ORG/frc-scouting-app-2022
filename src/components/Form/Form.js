@@ -4,6 +4,7 @@ import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
 import Initials from "./Initials";
 import Dropdown from "./Dropdown";
+import HangarDropdown from "./HangarDropdown";
 import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
 //import ImageMarker from "react-image-marker";
@@ -32,6 +33,12 @@ class Form extends React.Component{
 
         this.dropDownChanged = this.dropDownChanged.bind(this);
         this.makeDropDownBox = this.makeDropDownBox.bind(this);
+
+        this.changeHangar = this.changeHangar.bind(this);
+        this.changeHangarStart = this.changeHangarStart.bind(this);
+        this.changeHangarEnd = this.changeHangarEnd.bind(this);
+        this.makeHangarStartEndBoxes = this.makeHangarStartEndBoxes.bind(this);
+        this.makeHangarDropdownBox = this.makeHangarDropdownBox.bind(this);
 
         this.inputBoxChanged = this.inputBoxChanged.bind(this);
         this.buttonMinus = this.buttonMinus.bind(this);
@@ -77,6 +84,7 @@ class Form extends React.Component{
             teams:["team1","team2","team3","team4","team5","team6"],
             teamNumber:'',
             dropDownBoxValues:["","",""],
+            hangarValues:['','',''],
             matchData:'not found',
             //autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
@@ -259,8 +267,84 @@ class Form extends React.Component{
             </div>
         )
     }
+/*
+    makeMatchTypeNumberDropdown(matchType){
+        if(matchType === 'qf' || matchType === 'sf' || matchType === 'f'){    
+            return (
+                <input onChange={this.changeTypeNumber}></input>
+            )
+        }
+    }
 
+    makeMatchDropdown(){
+        return (
+            <div>
+                <MatchDropdown
+                    setMatchType={this.changeMatchType}
+                    setTypeNumber={this.changeTypeNumber}
+                    makeNumberDropdown={this.makeMatchTypeNumberDropdown}
+                    setMatchNumber={this.changeMatchNumber}
+                />
+            </div>
+            )
+        }
+        */
 
+    changeHangar(event){
+        let hangarValues = this.state.hangarValues;
+        hangarValues[1] = event.target.value;
+    }
+
+    changeHangarStart(event){
+        let hangarValues = this.state.hangarValues;
+        hangarValues[2] = event.target.value;
+    }
+
+    changeHangarEnd(event){
+        let hangarValues = this.state.hangarValues;
+        hangarValues[3] = event.target.value;
+    }
+
+    makeHangarStartEndBoxes(hangar){
+        if(hangar !== "None" && hangar !== ""){
+            if(hangar === "Attempted"){
+                return (
+                    <div>
+                        <label> {"Hangar Start: "}
+                            <input className={classes.Input} onChange={this.changeHangar}></input>
+                        </label>
+                    </div>
+                )
+            }
+            else{
+                return (
+                    <div>
+                        <div>
+                            <label> {"Hangar Start: "}
+                                <input onChange={this.changeHangarStart}></input>
+                            </label>
+                        </div>
+                        <div>
+                            <label> {"Hangar End: "}
+                                <input onChange={this.changeHangarEnd}></input>
+                            </label>
+                        </div>
+                    </div>
+                )
+            }
+        }
+    }
+
+    makeHangarDropdownBox(){
+        return (
+            <div>
+                <HangarDropdown
+                    changeHangarUsed={this.changeHangar}
+                    makeHangarStartEndBoxes={this.makeHangarStartEndBoxes}
+                />
+            </div>
+        )
+    }
 
     //--------------------------------------------------------------------------------------------------------------------------
 
@@ -777,6 +861,7 @@ class Form extends React.Component{
                 {this.makeInputBox("# Upper Hub Made: ",6)}
                 {this.makeInputBox("# Upper Hub Missed: ",7)}
                 {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)}
+                {this.makeHangarDropdownBox()}
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
                 {this.makePenaltyBox("Yellow card ",0)}
@@ -792,9 +877,8 @@ class Form extends React.Component{
                 <Header display={this.state.rankingPoints} bonus={this.state.bonusValues}/>
                 <br></br>
                 <h3>PRIORITIES & STRATEGIES</h3>
-                {this.makeStrategyBox("Low Hub Shooter ", 0)}
-                {this.makeStrategyBox("Upper Hub Shooter ", 1)}
-                {this.makeStrategyBox("Launchpad Shooter ", 2)}
+                {this.makeStrategyBox("Low Shooter ", 0)}
+                {this.makeStrategyBox("Upper Shooter ", 1)}
                 {this.makeStrategyBox("Hangar ", 3)}
                 {this.makeStrategyBox("Defense ", 4)}
                 <br></br>
