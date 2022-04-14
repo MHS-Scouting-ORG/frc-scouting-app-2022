@@ -54,12 +54,12 @@ const Summary = () => {
             TeamNumber: team.TeamNumber,
             Matches: teamStats.length > 0 ? teamMatches.sort().join(', ') : '',
             Priorities: strats.join(', '),
-            AvgPoints: !isNaN(avgPoints) ? `${avgPoints}, σ=${calcDeviation(points, avgPoints)}` : '',
-            AvgLowShots: !isNaN(avgLowShots) ? avgLowShots : '',
-            AvgLowAcc: !isNaN(avgLowAccuracy) ? `${avgLowAccuracy}, σ=${calcDeviation(lowAcc, avgLowAccuracy)}` : '',
-            AvgUpperShots: !isNaN(avgUpperShots) ? avgUpperShots : '',
-            AvgUpperAcc: !isNaN(avgUpperAccuracy) ? `${avgUpperAccuracy}, σ=${calcDeviation(upperAcc, avgUpperAccuracy)}` : '',
-            AvgHangar: !isNaN(avgHangar) ? avgHangar : '',
+            AvgPoints: !isNaN(avgPoints) ? `μ=${avgPoints}, σ=${calcDeviation(points, avgPoints)}` : '',
+            AvgLowShots: !isNaN(avgLowShots) ? `μ=${avgLowShots}` : '',
+            AvgLowAcc: !isNaN(avgLowAccuracy) ? `μ=${avgLowAccuracy}, σ=${calcDeviation(lowAcc, avgLowAccuracy)}` : '',
+            AvgUpperShots: !isNaN(avgUpperShots) ? `μ=${avgUpperShots}` : '',
+            AvgUpperAcc: !isNaN(avgUpperAccuracy) ? `μ=${avgUpperAccuracy}, σ=${calcDeviation(upperAcc, avgUpperAccuracy)}` : '',
+            AvgHangar: !isNaN(avgHangar) ? `μ=${avgHangar}` : '',
             SumPriority: 0,
 
             NLowShots: 0,
@@ -112,7 +112,7 @@ const Summary = () => {
         const key = await api.getRegional();
         console.log(`key ${key}`)
 
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022nytr/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/${key}/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
@@ -414,6 +414,12 @@ const Summary = () => {
             {<List setList={setSortBy}/>}
             <br/><br/>
             <GlobalFilter filter={globalFilter} set={setGlobalFilter} />
+            <br/><br/>
+            <p> 
+                "Avg" / μ = Average
+                <br/> σ = Standard Deviation
+                <br/> Acc = Accuracy
+            </p>
             <table {...getTableProps()} 
                 style={{
                     maxWidth: '1200px'
