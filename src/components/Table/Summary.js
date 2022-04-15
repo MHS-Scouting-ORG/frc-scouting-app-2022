@@ -436,16 +436,47 @@ const Summary = () => {
 
     return (
         <div>
-            <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
-            {<List setList={setSortBy}/>}
+
+            <table>
+                <tr>
+                    <td
+                        style={{
+                            minWidth: '750px'
+                        }}
+                    >
+                        <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
+                        {<List setList={setSortBy}/>}
+                        <br/>
+                    </td>
+                    <td>
+                        <p
+                            style={{
+                                border: '2px solid black',
+                                maxWidth: '240px',
+                                display: 'inline-block',
+                                padding: '5px',
+                            }}
+                        >
+                            <strong>KEY</strong> 
+                            <br/> "Avg" / μ = Average
+                            <br/> σ = Standard Deviation
+                            <br/> Acc = Accuracy
+                        </p>
+                    </td>
+                    <td>
+                        <img src={"./images/tarmac.jpg"} width="240px" height="180px"
+                            style={{
+                                display: 'inline-block',
+                                margin: '25px'
+                            }}
+                        ></img>
+                    </td>
+                </tr>
+            </table>
+            
             <br/><br/>
+
             <GlobalFilter filter={globalFilter} set={setGlobalFilter} />
-            <br/><br/>
-            <p> 
-                "Avg" / μ = Average
-                <br/> σ = Standard Deviation
-                <br/> Acc = Accuracy
-            </p>
             <table {...getTableProps()} 
                 style={{
                     maxWidth: '1500px'

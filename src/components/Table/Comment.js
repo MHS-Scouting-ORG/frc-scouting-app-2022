@@ -19,13 +19,12 @@ class Comment extends React.Component{
             <div>
                 <button
                     style={{
-                        //border: '2px solid #008CBA',
                         color: 'black',
                         borderRadius: '8px',
                         fontSize: '12px'
                     }}
                     onClick={this.changeReadOnly}
-                > Edit </button>
+                > {this.state.readOnly ? 'Edit' : 'Done'} </button>
                 {/*<input
                     readOnly={this.state.readOnly}
                     style={{
