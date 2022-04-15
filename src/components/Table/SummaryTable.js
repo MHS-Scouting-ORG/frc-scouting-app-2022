@@ -4,6 +4,7 @@ import List from './List'
 import TeamTable from './TeamTable'
 import api from "../../api";
 import GlobalFilter from "./Filter";
+import Comment from "./Comment";
 
 const Summary = () => {
 
@@ -112,7 +113,7 @@ const Summary = () => {
         const key = await api.getRegional();
         console.log(`key ${key}`)
 
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/${key}/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022casd/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
@@ -204,7 +205,7 @@ const Summary = () => {
     }
 
     const getStrat = (arr) => {                                 // Create a list of all the priorities/strats for each team
-        let a = arr.map(teamObj => teamObj.Strategy).reduce((a,b) => a.concat(b), []).filter((item) => item.trim().length > 0);
+        let a = arr.map(teamObj => teamObj.Strategy).reduce((a,b) => a.concat(b), []).filter((item) =>  item.trim().length > 0);
         return uniqueArray(a);
     }
 
@@ -360,7 +361,16 @@ const Summary = () => {
             },
             {
                 Header: 'Priority/Strategy',
-                accessor: 'Priorities'
+                accessor: 'Priorities',
+                Cell: ({ row }) => (
+                    <div
+                        style = {{
+                            whiteSpace: 'normal',
+                        }}
+                    >
+                        {row.values.Priorities}
+                    </div>
+                )
             },
             {
                 Header: 'Average Points',
@@ -385,6 +395,22 @@ const Summary = () => {
             {
                 Header: 'Avg Hangar Points',
                 accessor: 'AvgHangar',
+            },
+            {
+                Header: "Comments",
+                Cell: () => (
+                    <div
+                        style = {{
+                            minWidth: '300px',
+                            maxWidth: '300px',
+                            textAlign: 'left',
+                            padding: '5px',
+                            whiteSpace: 'break-spaces'
+                        }}
+                    >
+                        <Comment/>
+                    </div>
+                )
             },
             {
                 Header: 'Column Sort',
@@ -422,7 +448,7 @@ const Summary = () => {
             </p>
             <table {...getTableProps()} 
                 style={{
-                    maxWidth: '1200px'
+                    maxWidth: '1500px'
                 }}
             >
                 <thead>
