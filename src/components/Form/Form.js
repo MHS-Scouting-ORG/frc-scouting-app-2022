@@ -246,7 +246,7 @@ class Form extends React.Component{
     makeTeamDropdown(){
         let alliances = this.state.teams; //this.getMatchTeams();*/
         console.log(this.state.matchNumber)
-        parseInt(this.state.matchNumber) !== 0 ?  (
+        return parseInt(this.state.matchNumber) !== 0 ?  (
             <div>
                 <select onChange={this.changeTeam}>
                     <option></option>
