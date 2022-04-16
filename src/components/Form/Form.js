@@ -105,6 +105,8 @@ class Form extends React.Component{
             markers: [],
             tarmacSection: 0,
             override:false,
+
+            summaryComm: ''
         };
     }
     
@@ -255,7 +257,10 @@ class Form extends React.Component{
             </div>
         ) : (
             <div>
-                <input onChange={e => {this.setState({teamNumber: e.target.value})}}/>
+                <input type='number' onChange={e => { console.log(e.target.value)
+                    this.setState({teamNumber: 'frc' + e.target.value})
+                    }}/>
+                <Textbox title={"Summary Comment: "} commentState={evt => {this.setState({summaryComm: evt.target.value})}} />
             </div>
         )
     }
@@ -919,6 +924,7 @@ class Form extends React.Component{
                     Strategy: strategies,
                     OpinionScale: Number(this.state.scale),
                     Comments: String(this.state.comment),
+                    SummaryComment: String(this.state.summaryComm),
                 }
             })//*/
             .then(window.alert("States have successfully been submitted to table")
