@@ -1,10 +1,15 @@
 import React from "react";
 
 function Textbox(props){
-    return(
-        <label> {props.title}
-            <input type="text" onChange={props.commentState}></input>
-        </label>
+    return (
+        <div>
+            <p>{props.title}</p>
+            <textarea onChange={props.commentState} rows="4" cols="50"
+                style={{
+                wordWrap: 'normal', 
+                }}
+            />
+        </div>
     )
 }
 

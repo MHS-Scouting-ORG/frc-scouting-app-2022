@@ -3,7 +3,9 @@ import React from "react";
 function Header(props){
     return(
         <div>
-            <h4> { "Ranking Points: " + props.display }</h4>
+            <p style={{
+                fontSize:'20px'
+            }}> { "Ranking Points: " + props.display }</p>
         </div>
     )
 }

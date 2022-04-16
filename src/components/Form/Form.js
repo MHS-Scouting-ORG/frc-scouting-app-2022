@@ -247,7 +247,6 @@ class Form extends React.Component{
 
     makeTeamDropdown(){
         let alliances = this.state.teams; //this.getMatchTeams();*/
-        console.log(this.state.matchNumber)
         return parseInt(this.state.matchNumber) !== 0 ?  (
             <div>
                 <select onChange={this.changeTeam}>
@@ -257,10 +256,21 @@ class Form extends React.Component{
             </div>
         ) : (
             <div>
-                <input type='number' onChange={e => { console.log(e.target.value)
-                    this.setState({teamNumber: 'frc' + e.target.value})
-                    }}/>
-                <Textbox title={"Summary Comment: "} commentState={evt => {this.setState({summaryComm: evt.target.value})}} />
+                <br/>
+                <label> Team Number 
+                <input type='number' 
+                    onChange={e => {
+                        this.setState({teamNumber: 'frc' + e.target.value})
+                    }}
+                    style = {{
+                        maxWidth: '75px'
+                    }}
+                />
+                </label>
+                <br/>
+                <Textbox title={"Summary Comment: "} 
+                    commentState={evt => {this.setState({summaryComm: evt.target.value})}}
+                />
             </div>
         )
     }
@@ -947,16 +957,17 @@ class Form extends React.Component{
                 {this.makeMatchDropdown()}
                 <button onClick={this.getMatchTeams}>GET MATCH TEAMS</button>
                 {this.makeTeamDropdown()}
-                <br/>
-                {this.makeMatchOverride("Match Override ")}
+                {/*this.makeMatchOverride("Match Override ")*/}
                 <br></br>
                 <h3>AUTONOMOUS</h3>
                 <img className={classes.TarmacImage} src={'./images/tarmac.jpg'} prop={"Tarmac"}></img>
                 {this.makeDropDownBox("Auto Position On Tarmac: ",[1,2,3,4,5,6,7,8],1)}
+                <br/>
                 {this.makeInputBox("# Low Hub Made: ",0)}
                 {this.makeInputBox("# Low Hub Missed: ",1)}
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
+                <br/>
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],0)}
                 {/*<ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>*/}
                 {/* */}
@@ -980,7 +991,7 @@ class Form extends React.Component{
                 {this.makeDropDownBox("Drive Speed: ", ["Slow","Average","Fast"],2)}
                 {this.makeDropDownBox("Drive Turning: ", ["Bad","Okay","Good"],3)}
                 {this.makeDropDownBox("Drive Strength: ", ["Weak", "Normal", "Strong"],4)}
-
+                <br/>
                 {this.makePenaltyBox("Yellow card ",0)}
                 {this.makePenaltyBox("Red card ", 1)}
                 {this.makePenaltyBox("Disabled ", 2)}
@@ -999,13 +1010,14 @@ class Form extends React.Component{
                 {this.makeStrategyBox("Hangar ", 3)}
                 {this.makeStrategyBox("Defense ", 4)}
                 <br></br>
-                <p>How well is there defense if any? Note if the robot is prone to tipping?</p>
+                <p>How well is there defense if any? Note if the robot is prone to tipping, reasons for fouls, etc.</p>
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
                 {this.overrideCheckbox()
                 }
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>
                 </div>
+                <br/>
             </div>
         )
     }
