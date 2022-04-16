@@ -5,6 +5,7 @@ import TeamTable from './TeamTable'
 import api from "../../api";
 import GlobalFilter from "./Filter";
 import Comment from "./Comment";
+import { APIClass } from "aws-amplify";
 
 const Summary = () => {
 
@@ -31,24 +32,27 @@ const Summary = () => {
     }, [teamNumbers])
 
     useEffect(() => setAverages(teamNumbers.map(team => {   // Calculate averages for each team
-        const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber);
+        const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0);
+        const summaryComment = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) === 0);
         const teamMatches = teamStats.map(x => x.MatchId.substring(9));
+
+        //console.log(teamStats); console.log(summaryComment);
 
         const points = teamStats.map(x => x.TotalPoints);
         const avgPoints = calcAveragePoints(teamStats);
         const strats = getStrat(teamStats);
 
-        const lowHub = teamStats.filter(x => (x.AutoLowMade + x.AutoLowMissed + x.TeleLowMade + x.TeleLowMissed) != 0);
+        const lowHub = teamStats.filter(x => (x.AutoLowMade + x.AutoLowMissed + x.TeleLowMade + x.TeleLowMissed) !== 0);
         const lowAcc = lowHub.map(x => x.LowHubAccuracy);
         const avgLowAccuracy = calcLowAcc(lowHub);
         const avgLowShots = calcLowShots(lowHub);
 
-        const upperHub = teamStats.filter(x => (x.AutoUpperMade + x.AutoUpperMissed + x.TeleUpperMade + x.TeleUpperMissed) != 0);
+        const upperHub = teamStats.filter(x => (x.AutoUpperMade + x.AutoUpperMissed + x.TeleUpperMade + x.TeleUpperMissed) !== 0);
         const upperAcc = upperHub.map(x => x.UpperHubAccuracy);
         const avgUpperAccuracy = calcUpperAcc(upperHub);
         const avgUpperShots = calcUpperShots(upperHub);
 
-        const hang = teamStats.filter(x => x.Hangar != 'None')
+        const hang = teamStats.filter(x => x.Hangar !== 'None')
         const avgHangar = calcHangar(hang);
 
         return {
@@ -61,6 +65,7 @@ const Summary = () => {
             AvgUpperShots: !isNaN(avgUpperShots) ? `μ=${avgUpperShots}` : '',
             AvgUpperAcc: !isNaN(avgUpperAccuracy) ? `μ=${avgUpperAccuracy}, σ=${calcDeviation(upperAcc, avgUpperAccuracy)}` : '',
             AvgHangar: !isNaN(avgHangar) ? `μ=${avgHangar}` : '',
+            Comments: summaryComment.length > 0 ? summaryComment[0].SummaryComment : '',
             SumPriority: 0,
 
             NLowShots: 0,
@@ -73,38 +78,45 @@ const Summary = () => {
     })), [apiData, teamNumbers])
 
     useEffect(() => setTempData(averages.map(team => {
-        const maxAvgPoint = getMax(averages.map(team => team.AvgPoints));
-        const maxLowShots = getMax(averages.map(team => team.AvgLowShots));
-        const maxLowAcc = getMax(averages.map(team => team.AvgLowAcc));
-        const maxUpperShots = getMax(averages.map(team => team.AvgUpperShots));
-        const maxUpperAcc = getMax(averages.map(team => team.AvgUpperAcc));
-        const maxHangar = getMax(averages.map(team => team.AvgHangar));
+        const points = Number(team.AvgPoints.substring(2,8));
+        const lowShots = Number(team.AvgLowShots.substring(2));
+        const lowAcc = Number(team.AvgLowAcc.substring(2,8));
+        const upperShots = Number(team.AvgUpperShots.substring(2));
+        const upperAcc = Number(team.AvgUpperAcc.substring(2,8));
+        const hangar = Number(team.AvgHangar.substring(2));
 
-        const rPoints = team.AvgPoints / maxAvgPoint;
-        const rLowShots = team.AvgLowShots / maxLowShots;
-        const rLowAcc = team.AvgLowAcc / maxLowAcc;
-        const rUpperShots = team.AvgUpperShots / maxUpperShots;
-        const rUpperAcc = team.AvgUpperAcc / maxUpperAcc;
-        const rHangar = team.AvgHangar / maxHangar;
+        const maxAvgPoint = getMax(averages.map(team => team.AvgPoints.substring(2,8)));
+        const maxLowShots = getMax(averages.map(team => team.AvgLowShots.substring(2)));
+        const maxLowAcc = getMax(averages.map(team => team.AvgLowAcc.substring(2,8)));
+        const maxUpperShots = getMax(averages.map(team => team.AvgUpperShots.substring(2)));
+        const maxUpperAcc = getMax(averages.map(team => team.AvgUpperAcc.substring(2,8)));
+        const maxHangar = getMax(averages.map(team => team.AvgHangar.substring(2)));
+
+        const rPoints = points / maxAvgPoint;
+        const rLowShots = lowShots / maxLowShots;
+        const rLowAcc = lowAcc / maxLowAcc;
+        const rUpperShots = upperShots / maxUpperShots;
+        const rUpperAcc = upperAcc / maxUpperAcc;
+        const rHangar = hangar / maxHangar;
 
         return {
             TeamNumber: team.TeamNumber,
             Matches: team.Matches,
             Priorities: team.Priorities,
             AvgPoints: team.AvgPoints,
-            StdDev: 0,
             AvgLowShots: team.AvgLowShots,
             AvgLowAcc: team.AvgLowAcc,
             AvgUpperShots: team.AvgUpperShots,
             AvgUpperAcc: team.AvgUpperAcc,
             AvgHangar: team.AvgHangar,
+            Comments: team.Comments,
             SumPriority: 0,
 
-            NLowShots: rLowShots,
-            NLowAcc: rLowAcc,
-            NUpperShots: rUpperShots,
-            NUpperAcc: rUpperAcc,
-            NHangar: rHangar,
+            NLowShots: !isNaN(rLowShots) ? rLowShots : 0,
+            NLowAcc: !isNaN(rLowAcc) ? rLowAcc : 0,
+            NUpperShots: !isNaN(rUpperShots) ? rUpperShots : 0,
+            NUpperAcc: !isNaN(rUpperAcc) ? rUpperAcc : 0,
+            NHangar: !isNaN(rHangar) ? rHangar : 0,
         };
 
     })), [averages, apiData, teamNumbers])
@@ -113,7 +125,7 @@ const Summary = () => {
         const key = await api.getRegional();
         console.log(`key ${key}`)
 
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022casd/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022hiho/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
@@ -123,12 +135,12 @@ const Summary = () => {
                         Matches: '',
                         Priorities: '',
                         AvgPoints: 0,
-                        StdDev: 0,
                         AvgLowShots: 0,
                         AvgLowAcc: 0,
                         AvgUpperShots: 0,
                         AvgUpperAcc: 0,
                         AvgHangar: 0,
+                        Comments: '',
                         SumPriority: 0,
 
                         NLowShots: 0,
@@ -143,15 +155,15 @@ const Summary = () => {
     }
 
     const renderRowSubComponent = ({ row }) => {
-        const t = apiData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber);
+        const t = apiData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber && parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0);
 
         const disp = t.map(x => {
             return {
-                Match: x.MatchId.substring(9),
-                Strategy: x.Strategy.filter(val => val.trim() != '').length != 0 ? x.Strategy.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : '',
+                Match: x.MatchId.substring(x.MatchId.indexOf('_')+1),
+                Strategy: x.Strategy.filter(val => val.trim() !== '').length !== 0 ? x.Strategy.filter(val => val.trim() !== '').map(val => val.trim()).join(', ') : '',
                 TotalPoints: x.TotalPoints,
-                LowHubAccuracy: x.LowHubAccuracy != null ? x.LowHubAccuracy.toFixed(2) : '',
-                UpperHubAccuracy: x.UpperHubAccuracy != null ? x.UpperHubAccuracy.toFixed(2) : '',
+                LowHubAccuracy: x.LowHubAccuracy !== null ? x.LowHubAccuracy.toFixed(2) : '',
+                UpperHubAccuracy: x.UpperHubAccuracy !== null ? x.UpperHubAccuracy.toFixed(2) : '',
 
                 AutoPlacement: x.AutoPlacement,
                 AutoLow: `${x.AutoLowMade}/${x.AutoLowMade + x.AutoLowMissed}`,
@@ -160,18 +172,20 @@ const Summary = () => {
 
                 TeleLow: `${x.TeleLowMade}/${x.TeleLowMade + x.TeleLowMissed}`,
                 TeleUpper: `${x.TeleUpperMade}/${x.TeleUpperMade + x.TeleUpperMissed}`,
-                Hangar: x.Hangar,
+                Hangar: x.Hangar !== undefined ? x.Hangar : '',
+                HangarStart: x.HangarStart !== undefined ? x.HangarStart : '',
+                HangarEnd: x.HangarEnd !== undefined ? x.HangarEnd : '',
 
-                HangarCargoBonus: x.HangarCargoBonus.filter(val => val.trim() != '').map(val => val.trim()).join(', '),
-                NumberOfRankingPoints: x.NumberOfRankingPoints,
-                NumberOfFoulAndTech: `${x.NumberOfFouls} | ${x.NumberOfTech}`,
-                Penalties: x.Penalties.filter(val => val.trim() != '').length != 0 ? x.Penalties.filter(val => val.trim() != '').map(val => val.trim()).join(', ') : '',
+                HangarCargoBonus: x.HangarCargoBonus ? x.HangarCargoBonus.filter(val => val.trim() !== '').map(val => val.trim()).join(', ') : '',
+                NumberOfRankingPoints: x.NumberOfRankingPoints !== undefined ? x.NumberOfRankingPoints : '',
+                NumberOfFoulAndTech: x.NumberOfFoulAndTech !== undefined ? `${x.NumberOfFouls} | ${x.NumberOfTech}` : 's',
+                Penalties: x.Penalties !== undefined && x.Penalties.filter(val => val.trim() !== '').length !== 0 ? x.Penalties.filter(val => val.trim() !== '').map(val => val.trim()).join(', ') : '',
 
-                DriveSpeed: x.DriveSpeed != undefined ? x.DriveSpeed : '',
-                SwerveNoSwerve: x.Swerve != undefined ? x.Swerve : '',
-                DriveMobility: x.Mobility != undefined ? x.Mobility : '',
+                DriveSpeed: x.DriveSpeed !== undefined ? x.DriveSpeed : '',
+                DriveStrength: x.DriveStrength !== undefined ? x.DriveStrength : '',
+                DriveMobility: x.DriveMobility !== undefined ? x.DriveMobility : '',
 
-                Comments: x.Comments.trim(),
+                Comments: x.Comments !== undefined ? x.Comments.trim() : '',
 
                 email: x.email.substring(0, x.email.length-17),
 
@@ -183,10 +197,9 @@ const Summary = () => {
                 <div> {<TeamTable information={disp} />} </div>
             </pre>)
             : (                             // else if no data, notify no data has been collected
-                <tr><td style={{
+                <div style={{
                     padding: '5px',
-                    textAlign: 'center',
-                }}> No data collected for Team {row.values.TeamNumber}. </td></tr>
+                }}> No data collected for Team {row.values.TeamNumber}. </div>
             );
     }
 
@@ -205,13 +218,14 @@ const Summary = () => {
     }
 
     const getStrat = (arr) => {                                 // Create a list of all the priorities/strats for each team
-        let a = arr.map(teamObj => teamObj.Strategy).reduce((a,b) => a.concat(b), []).filter((item) =>  item.trim().length > 0);
+        let a = arr.map(teamObj => teamObj.Strategy).reduce((a,b) => a.concat(b), []).filter((item) =>  item.trim() !== '');
         return uniqueArray(a);
     }
 
-    const uniqueArray = (arr) => { 
-        return arr.filter((item, index) => {
-            return arr.indexOf(item, 0) === index;
+    const uniqueArray = (arr) => {
+        const a = arr.map(x => x.trim());
+        return a.filter((item, index) => {
+            return a.indexOf(item, 0) === index;
         })
     }
 
@@ -334,6 +348,7 @@ const Summary = () => {
                 AvgUpperShots: team.AvgUpperShots,
                 AvgUpperAcc: team.AvgUpperAcc,
                 AvgHangar: team.AvgHangar,
+                Comments: team.Comments,
                 SumPriority: grade !== 0.000 ? grade : "",
 
                 NLowShots: team.NLowShots,
@@ -368,7 +383,7 @@ const Summary = () => {
                             whiteSpace: 'normal',
                         }}
                     >
-                        {row.values.Priorities}
+                        {row.original.Priorities}
                     </div>
                 )
             },
@@ -398,8 +413,8 @@ const Summary = () => {
             },
             {
                 Header: "Comments",
-                Cell: () => (
-                    <div
+                Cell: ({row}) => {
+                    return <div
                         style = {{
                             minWidth: '300px',
                             maxWidth: '300px',
@@ -408,9 +423,9 @@ const Summary = () => {
                             whiteSpace: 'break-spaces'
                         }}
                     >
-                        <Comment/>
+                        {row.original.Comments}
                     </div>
-                )
+                }
             },
             {
                 Header: 'Column Sort',
@@ -436,42 +451,43 @@ const Summary = () => {
 
     return (
         <div>
-
-            <table>
-                <tr>
-                    <td
-                        style={{
-                            minWidth: '750px'
-                        }}
-                    >
-                        <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
-                        {<List setList={setSortBy}/>}
-                        <br/>
-                    </td>
-                    <td>
-                        <p
+            <table style={{ width:'1250px' }} >
+                <tbody>
+                    <tr>
+                        <td
                             style={{
-                                border: '2px solid black',
-                                maxWidth: '240px',
-                                display: 'inline-block',
-                                padding: '5px',
+                                minWidth: '750px'
                             }}
                         >
-                            <strong>KEY</strong> 
-                            <br/> "Avg" / μ = Average
-                            <br/> σ = Standard Deviation
-                            <br/> Acc = Accuracy
-                        </p>
-                    </td>
-                    <td>
-                        <img src={"./images/tarmac.jpg"} width="240px" height="180px"
-                            style={{
-                                display: 'inline-block',
-                                margin: '25px'
-                            }}
-                        ></img>
-                    </td>
-                </tr>
+                            <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
+                            {<List setList={setSortBy}/>}
+                            <br/>
+                        </td>
+                        <td>
+                            <p
+                                style={{
+                                    border: '2px solid black',
+                                    maxWidth: '240px',
+                                    display: 'inline-block',
+                                    padding: '5px',
+                                }}
+                            >
+                                <strong>KEY</strong> 
+                                <br/> "Avg" / μ = Average
+                                <br/> σ = Standard Deviation
+                                <br/> Acc = Accuracy
+                            </p>
+                        </td>
+                        <td>
+                            <img src={"./images/tarmac.jpg"} width="240px" height="180px"
+                                style={{
+                                    display: 'inline-block',
+                                    margin: '25px'
+                                }}
+                            ></img>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
             
             <br/><br/>
@@ -479,7 +495,7 @@ const Summary = () => {
             <GlobalFilter filter={globalFilter} set={setGlobalFilter} />
             <table {...getTableProps()} 
                 style={{
-                    maxWidth: '1500px'
+                    width: '1250px'
                 }}
             >
                 <thead>

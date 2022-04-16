@@ -80,6 +80,18 @@ const TeamTable = (props) => {
           {
             Header: 'Hangar',
             accessor: 'Hangar',
+          },
+          {
+            Header: 'Hangar Time',
+            Cell: ({row}) => 
+              (
+                row.original.Hangar !== 'None' ? 
+                  <div>
+                    {row.original.HangarStart !== undefined ? <div> start @ {row.original.HangarStart} </div> : <div> </div>} <br/>
+                    {row.original.Hangar !== 'Attempted' && !isNaN(row.original.HangarStart - row.original.HangarEnd) ? <div> took {row.original.HangarStart - row.original.HangarEnd}s </div> : <div> </div>}
+                  </div> : <div> N/A </div>
+              )
+            
           },]
       },
       {
@@ -110,8 +122,8 @@ const TeamTable = (props) => {
             accessor: 'DriveSpeed',
           },
           {
-            Header: 'Swerve?',
-            accessor: 'SwerveNoSwerve',
+            Header: 'Strength',
+            accessor: 'DriveStrength',
           },
           {
             Header: 'Mobility',
@@ -135,11 +147,11 @@ const TeamTable = (props) => {
                   //overflowWrap: 'normal',
                   whiteSpace: 'normal',
                 }}
-              >{row.values.Comments}</div>
+              >{row.original.Comments}</div>
             }
           },
           {
-            Header: 'Email',
+            Header: 'Scouter',
             accessor: 'email',
           },]
       }

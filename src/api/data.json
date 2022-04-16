@@ -16,6 +16,10 @@
     "TeleUpperMade": 4,
     "TeleUpperMissed": 3,
     "Hangar": "Traversal",
+
+    "HangarStart": 45,
+    "HangarEnd": 10,
+
     "NumberOfFouls": 0,
     "NumberOfTech": 0,
     "Penalties":[" ", " ", " ", " ", " "],
@@ -24,6 +28,33 @@
     "Strategy": [" ", "Upper Shooter ", " ", "Hangar ", " "],
     "OpinionScale": 7,
     "Comments": "couldve shot more consistently and intook cargo faster",
+    "email" : "braedenjames.asuncion2025@mauihigh.org"
+  },
+  {
+    "TeamId": "2443",
+    "MatchId": "2022hiho_m0",
+    "TotalPoints": 33,
+    "LowHubAccuracy": null  ,
+    "UpperHubAccuracy": 66.666666666667,
+    "AutoLowMade": 0,
+    "AutoLowMissed": 0,
+    "AutoUpperMade": 2,
+    "AutoUpperMissed": 0,
+    "Taxi": "true",
+    "AutoPlacement": 2,
+    "TeleLowMade": 0,
+    "TeleLowMissed": 0,
+    "TeleUpperMade": 4,
+    "TeleUpperMissed": 3,
+    "Hangar": "Traversal",
+    "NumberOfFouls": 0,
+    "NumberOfTech": 0,
+    "Penalties":[" ", " ", " ", " ", " "],
+    "HangarCargoBonus": ["Hangar ", "Cargo"],
+    "NumberOfRankingPoints": 4,
+    "Strategy": [" ", "Upper Shooter ", " ", "Hangar ", " "],
+    "OpinionScale": 7,
+    "SummaryComment": "couldve shot more consistently and intook cargo faster",
     "email" : "braedenjames.asuncion2025@mauihigh.org"
   },
   {
@@ -48,7 +79,7 @@
     "Penalties":[" ", " ", " ", " ", " "],
     "HangarCargoBonus": ["Hangar ", "Cargo"],
     "NumberOfRankingPoints": 4,
-    "Strategy": [" ", "Upper Shooter ", " ", "Hangar", " "],
+    "Strategy": [" ", "Upper Shooter ", " ", "Hangar ", " "],
     "OpinionScale": 9,
     "Comments": "fast robot + intake, and has a really consistent high hub shooter; went to hang at 15 seconds in and finished in under 15 seconds",
     "email" : "braedenjames.asuncion2025@mauihigh.org"
@@ -75,7 +106,7 @@
     "Penalties":[" ", " ", " ", " ", " "],
     "HangarCargoBonus": ["Hangar ", "Cargo"],
     "NumberOfRankingPoints": 4,
-    "Strategy": [" ", "Upper Shooter", " ", "Hangar", " "],
+    "Strategy": [" ", "Upper Shooter ", " ", "Hangar ", " "],
     "OpinionScale": 7,
     "Comments": "hang start at :70 with 30 seconds to spare",
     "email" : "magdalena.martin2024@mauihigh.org"

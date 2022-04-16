@@ -4,14 +4,21 @@ class Comment extends React.Component{
     constructor(props){
         super(props);
         this.changeReadOnly = this.changeReadOnly.bind(this);
+        this.changeText = this.changeText.bind(this);
         this.state = {
             readOnly: true,
+            text: '',
         };
     }
 
     changeReadOnly(){
-        console.log(this.state.readOnly)
         this.setState({readOnly: !this.state.readOnly});
+    }
+
+    changeText(e){
+        console.log(e.target.value)
+        this.setState({text: e.target.value});
+        this.props.setValue(e.target.value);
     }
 
     render(){
@@ -41,6 +48,7 @@ class Comment extends React.Component{
                         border: !this.state.readOnly ? '1px solid black' : '',
                         borderRadius: '8px',
                     }}
+                    onChange={this.changeText}
                 ></p>
             </div>
         )
