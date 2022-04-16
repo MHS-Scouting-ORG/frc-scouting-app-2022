@@ -6,10 +6,10 @@ function Scale(props){
     return (
         <div className={classes.Div}>
             {props.values.map((num) => 
-				    <div className={classes.InnerDiv}>
+				<div className={classes.InnerDiv}>
                    <label className={classes.Label} key={num}>{num}</label>
                    <input 
-   					    className={classes.Input}
+   					  className={classes.Input}
                       type="radio"
                       name={"scale"}
                       value={num}
