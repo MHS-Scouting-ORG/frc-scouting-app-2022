@@ -68,6 +68,8 @@ const Summary = () => {
             NUpperShots: 0,
             NUpperAcc: 0,
             NHangar: 0,
+
+            Comments: '',
         };
 
     })), [apiData, teamNumbers])
@@ -113,7 +115,7 @@ const Summary = () => {
         const key = await api.getRegional();
         console.log(`key ${key}`)
 
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022casd/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022hiho/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
@@ -398,7 +400,7 @@ const Summary = () => {
             },
             {
                 Header: "Comments",
-                Cell: () => (
+                /*Cell: () => (
                     <div
                         style = {{
                             minWidth: '300px',
@@ -410,7 +412,8 @@ const Summary = () => {
                     >
                         <Comment/>
                     </div>
-                )
+                )*/
+                accessor: "SummaryComments",
             },
             {
                 Header: 'Column Sort',
