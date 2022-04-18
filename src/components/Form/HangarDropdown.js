@@ -34,7 +34,7 @@ class HangarDropdown extends React.Component{
                             <option value='Low'> Low </option>
                             <option value='Mid'> Mid </option>
                             <option value='High'> High </option>
-                            <option value='Traverse'> Traversal </option>
+                            <option value='Traversal'> Traversal </option>
                         </select>
                     </label>
                 </div>
