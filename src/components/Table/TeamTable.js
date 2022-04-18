@@ -107,7 +107,7 @@ const TeamTable = (props) => {
           },
           {
             Header: 'Foul | Tech',
-            accessor: 'NumberOfFoulsAndTech',
+            accessor: 'NumberOfFoulAndTech',
           },
           {
             Header: 'Penalties',

@@ -180,7 +180,7 @@ const Summary = () => {
 
                 HangarCargoBonus: x.HangarCargoBonus ? x.HangarCargoBonus.filter(val => val.trim() !== '').map(val => val.trim()).join(', ') : '',
                 NumberOfRankingPoints: x.NumberOfRankingPoints !== undefined ? x.NumberOfRankingPoints : '',
-                NumberOfFoulAndTech: x.NumberOfFoulAndTech !== undefined ? `${x.NumberOfFouls} | ${x.NumberOfTech}` : 's',
+                NumberOfFoulAndTech: x.NumberOfFouls !== undefined && x.NumberOfTech !== undefined ? `${x.NumberOfFouls} | ${x.NumberOfTech}` : '',
                 Penalties: x.Penalties !== undefined && x.Penalties.filter(val => val.trim() !== '').length !== 0 ? x.Penalties.filter(val => val.trim() !== '').map(val => val.trim()).join(', ') : '',
 
                 DriveSpeed: x.DriveSpeed !== undefined ? x.DriveSpeed : '',
