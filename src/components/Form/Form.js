@@ -909,28 +909,40 @@ class Form extends React.Component{
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
+
                     MatchId: /* insert event key here /*/ /* "2022casd" *//* */ await api.getRegional() /* */ + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
+                    
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
                     UpperHubAccuracy: Number(highAccuracy),
+
                     AutoLowMade: Number(vals[0]),
                     AutoLowMissed: Number(vals[1]),
                     AutoUpperMade: Number(vals[2]),
                     AutoUpperMissed: Number(vals[3]),
                     Taxi: String(taxiValue),
                     AutoPlacement: Number(autoPosition),
+
                     TeleLowMade: Number(vals[4]),
                     TeleLowMissed: Number(vals[5]),
                     TeleUpperMade: Number(vals[6]),
                     TeleUpperMissed: Number(vals[7]),
+
                     Hangar: String(hangarUsed),
                     HangarStart: Number(hangarStart),
                     HangarEnd: Number(hangarEnd),
+
+                    DriveSpeed: String(driveSpeed),
+                    DriveStrength: String(driveStrength),
+                    DriveMobility: String(driveTurning),
+
                     NumberOfFouls: Number(vals[8]),
                     NumberOfTech: Number(vals[9]),
                     Penalties: penalties,
+
                     HangarCargoBonus: bonuses,
                     NumberOfRankingPoints: Number(this.state.rankingPoints),
+                    
                     Strategy: strategies,
                     OpinionScale: Number(this.state.scale),
                     Comments: String(this.state.comment),
