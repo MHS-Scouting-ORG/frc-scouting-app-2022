@@ -893,10 +893,10 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nScouter comment"
         }*/
 
-        if(scale === 0){
+        /*if(scale === 0){
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nPartnership scale"
-        }
+        }*/
 
         let override = this.state.override;
 
