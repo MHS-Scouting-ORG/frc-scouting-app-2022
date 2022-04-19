@@ -425,7 +425,7 @@ const Summary = () => {
                             whiteSpace: 'break-spaces'
                         }}
                     >
-                        {row.original.Comments}
+                        {row.original.SummaryComment}
                     </div>
                 }
             },
