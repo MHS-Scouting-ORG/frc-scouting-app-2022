@@ -36,8 +36,6 @@ const Summary = () => {
         const summaryComment = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) === 0);
         const teamMatches = teamStats.map(x => x.MatchId.substring(9));
 
-        //console.log(teamStats); console.log(summaryComment);
-
         const points = teamStats.map(x => x.TotalPoints);
         const avgPoints = calcAveragePoints(teamStats);
         const strats = getStrat(teamStats);
@@ -65,7 +63,7 @@ const Summary = () => {
             AvgUpperShots: !isNaN(avgUpperShots) ? `μ=${avgUpperShots}` : '',
             AvgUpperAcc: !isNaN(avgUpperAccuracy) ? `μ=${avgUpperAccuracy}, σ=${calcDeviation(upperAcc, avgUpperAccuracy)}` : '',
             AvgHangar: !isNaN(avgHangar) ? `μ=${avgHangar}` : '',
-            Comments: summaryComment.length > 0 ? summaryComment[0].SummaryComment : '',
+            Comments:  summaryComment[0] !== undefined ? summaryComment[0].SummaryComment : '',
             SumPriority: 0,
 
             NLowShots: 0,
@@ -73,8 +71,6 @@ const Summary = () => {
             NUpperShots: 0,
             NUpperAcc: 0,
             NHangar: 0,
-
-            Comments: '',
         };
 
     })), [apiData, teamNumbers])
@@ -415,6 +411,7 @@ const Summary = () => {
             },
             {
                 Header: "Comments",
+                accessor: 'Comments',
                 Cell: ({row}) => {
                     return <div
                         style = {{
@@ -425,7 +422,7 @@ const Summary = () => {
                             whiteSpace: 'break-spaces'
                         }}
                     >
-                        {row.original.SummaryComment}
+                        {row.original.Comments}
                     </div>
                 }
             },
