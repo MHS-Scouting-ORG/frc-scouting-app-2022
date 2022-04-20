@@ -79,7 +79,7 @@ api.getBlueAllianceAuthKey = use_remote ? async function() {
     ssm.getParameter({
       Name:"bluealliance_api_key",
       WithDecryption: true
-    }, (err, data) => {
+    }, (err, data) => { 
       if(err)
         reject(err)
       else
@@ -87,7 +87,7 @@ api.getBlueAllianceAuthKey = use_remote ? async function() {
     })
   })
 } : async function() {
-  return Promise.resolve('47dyFWjomANFVkIVhafvIf2tFVzuvNsJ9iBOznH89PDotuFbEaSiSB6HpzBxlPZy')
+    return Promise.resolve("B9xCtlRyJheUGvzJShpl1QkOor35UTPO8GUtpn7Uq9xB5aJQL44yNzXnTZBHpWXz");
 }
 
 api.put = use_remote ? async function(obj) {
