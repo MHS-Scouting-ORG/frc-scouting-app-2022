@@ -1,151 +1,208 @@
-import React, { useEffect, useState } from 'react'
-import { useTable, useSortBy, useExpanded } from "react-table";
-import TeamTable from "./TeamTable";
-//import Checkbox from './Checkbox';
-import api from '../../api';
-import List from './List';
+import React, { useState, useEffect } from "react";
+import { useTable, useSortBy, useExpanded, useGlobalFilter } from 'react-table';
+import List from './List'
+import TeamTable from './TeamTable'
+import api from "../../api";
+import GlobalFilter from "./Filter";
+import Comment from "./Comment";
+import { APIClass } from "aws-amplify";
 
-const SummaryTable = () => {
+const Summary = () => {
 
-    const [teamNumbers, setTeamNumbers] = useState([]);             // List of teamNumbers from Blue Alliance
-    const [teamData, setTeamData] = useState([]);                   // List of teamData from API
-    const [dataOfAverages, setAverages] = useState([]);             // Temporary objects of averages
+    const [apiData, setApiData] = useState([]);     // api data
+    const [teamNumbers, setTeamNumbers] = useState([]);
+    const [averages, setAverages] = useState([]);   // averaged data
+    const [tempData, setTempData] = useState([]);    // "final" data
 
-    const [sortColumns, setSortColumns] = useState([]);             // List of checkboxes to sort by
-    const [tempData, setTempData] = useState([]);                   // List of data with grade
+    const [sortBy, setSortBy] = useState([]);
 
-    const update = (arr) => {                                       // Update sortColumns state
-        setSortColumns(arr)                                         // Used in List when one checkbox is clicked
-        console.log(`[x] columns update ${arr}`)
-    }; 
- 
-    useEffect(() => {                                               // Sets teamNumbers state (objects only contain team numbers)
+    useEffect(() => {                                // Sets team numbers of objects
         getTeams()
             .then(data => {
-                //console.log(`getting team numbers ${data}`)
                 setTeamNumbers(data);
             })
     }, [])
 
-    useEffect(() => {                                               // Get data from api and store into teamData state
-        console.log('update data')
+    useEffect(() => {                               // Get data from api
+        console.log('updating data')
         api.get()
             .then(data => {
-                // /console.log(`getting team numbers ${data}`)
-                setTeamData(data)
+                setApiData(data);
             })
     }, [teamNumbers])
 
+    useEffect(() => setAverages(teamNumbers.map(team => {   // Calculate averages for each team
+        const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0);
+        const summaryComment = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) === 0);
+        const teamMatches = teamStats.map(x => x.MatchId.substring(9));
 
-    useEffect(() => setAverages(teamNumbers.map(team => {           // Calculate averages of each team
-        let teamStats = teamData.filter(x => parseInt(x.TeamId) === team.TeamNumber);
+        const points = teamStats.map(x => x.TotalPoints);
+        const avgPoints = calcAveragePoints(teamStats);
+        const strats = getStrat(teamStats);
 
-        let avgPoints = calcAveragePoints(teamStats);
-        let strats = getStrat(teamStats);
-        let avgLowAccuracy = calcLowAcc(teamStats);
-        let avgLowShots = calcLowShots(teamStats);
-        let avgUpperAccuracy = calcUpperAcc(teamStats);
-        let avgUpperShots = calcUpperShots(teamStats);
-        let avgHangar = calcHangar(teamStats);
-        let avgRanking = calcRanking(teamStats);
+        const lowHub = teamStats.filter(x => (x.AutoLowMade + x.AutoLowMissed + x.TeleLowMade + x.TeleLowMissed) !== 0);
+        const lowAcc = lowHub.map(x => x.LowHubAccuracy);
+        const avgLowAccuracy = calcLowAcc(lowHub);
+        const avgLowShots = calcLowShots(lowHub);
+
+        const upperHub = teamStats.filter(x => (x.AutoUpperMade + x.AutoUpperMissed + x.TeleUpperMade + x.TeleUpperMissed) !== 0);
+        const upperAcc = upperHub.map(x => x.UpperHubAccuracy);
+        const avgUpperAccuracy = calcUpperAcc(upperHub);
+        const avgUpperShots = calcUpperShots(upperHub);
+
+        const hang = teamStats.filter(x => x.Hangar !== 'None')
+        const avgHangar = calcHangar(hang);
 
         return {
             TeamNumber: team.TeamNumber,
-            Strategy: strats.join(', '),
-            NumberOfMatches: teamStats.length > 0 ? teamStats.length : '',
-            AveragePoints: !isNaN(avgPoints) ? avgPoints : '',
-            AverageLowHubShots: !isNaN(avgLowShots) ? avgLowShots : '',
-            AverageLowHubAccuracy: !isNaN(avgLowAccuracy) ? avgLowAccuracy : '',
-            AverageUpperHubShots: !isNaN(avgUpperShots) ? avgUpperShots : '',
-            AverageUpperHubAccuracy: !isNaN(avgUpperAccuracy) ? avgUpperAccuracy : '',
-            AverageHangar: !isNaN(avgHangar) ? avgHangar : '',
-            AverageRating: !isNaN(avgRanking) ? avgRanking : '',
+            Matches: teamStats.length > 0 ? teamMatches.sort().join(', ') : '',
+            Priorities: strats.join(', '),
+            AvgPoints: !isNaN(avgPoints) ? `μ=${avgPoints}, σ=${calcDeviation(points, avgPoints)}` : '',
+            AvgLowShots: !isNaN(avgLowShots) ? `μ=${avgLowShots}` : '',
+            AvgLowAcc: !isNaN(avgLowAccuracy) ? `μ=${avgLowAccuracy}, σ=${calcDeviation(lowAcc, avgLowAccuracy)}` : '',
+            AvgUpperShots: !isNaN(avgUpperShots) ? `μ=${avgUpperShots}` : '',
+            AvgUpperAcc: !isNaN(avgUpperAccuracy) ? `μ=${avgUpperAccuracy}, σ=${calcDeviation(upperAcc, avgUpperAccuracy)}` : '',
+            AvgHangar: !isNaN(avgHangar) ? `μ=${avgHangar}` : '',
+            Comments:  summaryComment[0] !== undefined ? summaryComment[0].SummaryComment : '',
+            SumPriority: 0,
 
-            RatePoints: 0,
-            RateLowShots: 0,
-            RateLowAccuracy: 0,
-            RateUpperShots: 0,
-            RateUpperAccuracy: 0,
-            RateHangar: 0,
-            SumOfSelected: 0,
+            NLowShots: 0,
+            NLowAcc: 0,
+            NUpperShots: 0,
+            NUpperAcc: 0,
+            NHangar: 0,
         };
-    })), [teamData, teamNumbers])
 
-    useEffect(() => setTempData(dataOfAverages.map(team => {    // Calculate each team's grades for each column
-        const maxAvgPoint = getMax(dataOfAverages.map(team => team.AveragePoints));
-        const maxLowShots = getMax(dataOfAverages.map(team => team.AverageLowHubShots));
-        const maxLowAcc = getMax(dataOfAverages.map(team => team.AverageLowHubAccuracy));
-        const maxUpperShots = getMax(dataOfAverages.map(team => team.AverageUpperHubShots));
-        const maxUpperAcc = getMax(dataOfAverages.map(team => team.AverageUpperHubAccuracy));
-        const maxHangar = getMax(dataOfAverages.map(team => team.AverageHangar));
+    })), [apiData, teamNumbers])
 
-        const rPoints = team.AveragePoints / maxAvgPoint;
-        const rLowShots = team.AverageLowHubShots / maxLowShots;
-        const rLowAcc = team.AverageLowHubAccuracy / maxLowAcc;
-        const rUpperShots = team.AverageUpperHubShots / maxUpperShots;
-        const rUpperAcc = team.AverageUpperHubAccuracy / maxUpperAcc;
-        const rHangar = team.AverageHangar / maxHangar;
+    useEffect(() => setTempData(averages.map(team => {
+        const points = Number(team.AvgPoints.substring(2,8));
+        const lowShots = Number(team.AvgLowShots.substring(2));
+        const lowAcc = Number(team.AvgLowAcc.substring(2,8));
+        const upperShots = Number(team.AvgUpperShots.substring(2));
+        const upperAcc = Number(team.AvgUpperAcc.substring(2,8));
+        const hangar = Number(team.AvgHangar.substring(2));
+
+        const maxAvgPoint = getMax(averages.map(team => team.AvgPoints.substring(2,8)));
+        const maxLowShots = getMax(averages.map(team => team.AvgLowShots.substring(2)));
+        const maxLowAcc = getMax(averages.map(team => team.AvgLowAcc.substring(2,8)));
+        const maxUpperShots = getMax(averages.map(team => team.AvgUpperShots.substring(2)));
+        const maxUpperAcc = getMax(averages.map(team => team.AvgUpperAcc.substring(2,8)));
+        const maxHangar = getMax(averages.map(team => team.AvgHangar.substring(2)));
+
+        const rPoints = points / maxAvgPoint;
+        const rLowShots = lowShots / maxLowShots;
+        const rLowAcc = lowAcc / maxLowAcc;
+        const rUpperShots = upperShots / maxUpperShots;
+        const rUpperAcc = upperAcc / maxUpperAcc;
+        const rHangar = hangar / maxHangar;
 
         return {
             TeamNumber: team.TeamNumber,
-            Strategy: team.Strategy,
-            NumberOfMatches: team.NumberOfMatches,
-            AveragePoints: team.AveragePoints,
-            AverageLowHubShots: team.AverageLowHubShots,
-            AverageLowHubAccuracy: team.AverageLowHubAccuracy,
-            AverageUpperHubShots: team.AverageUpperHubShots,
-            AverageUpperHubAccuracy: team.AverageUpperHubAccuracy,
-            AverageHangar: team.AverageHangar,
-            AverageRating: team.AverageRating,
+            Matches: team.Matches,
+            Priorities: team.Priorities,
+            AvgPoints: team.AvgPoints,
+            AvgLowShots: team.AvgLowShots,
+            AvgLowAcc: team.AvgLowAcc,
+            AvgUpperShots: team.AvgUpperShots,
+            AvgUpperAcc: team.AvgUpperAcc,
+            AvgHangar: team.AvgHangar,
+            Comments: team.Comments,
+            SumPriority: 0,
 
-            RatePoints: rPoints,
-            RateLowShots: rLowShots,
-            RateLowAccuracy: rLowAcc,
-            RateUpperShots: rUpperShots,
-            RateUpperAccuracy: rUpperAcc,
-            RateHangar: rHangar,
+            NLowShots: !isNaN(rLowShots) ? rLowShots : 0,
+            NLowAcc: !isNaN(rLowAcc) ? rLowAcc : 0,
+            NUpperShots: !isNaN(rUpperShots) ? rUpperShots : 0,
+            NUpperAcc: !isNaN(rUpperAcc) ? rUpperAcc : 0,
+            NHangar: !isNaN(rHangar) ? rHangar : 0,
+        };
 
-            SumOfSelected: 0,
-        }
-    })
+    })), [averages, apiData, teamNumbers])
 
-    ), [dataOfAverages, teamData, teamNumbers])
-
-
-    const getMax = (arr) => {                                   // Get max of array
-        return arr.sort((a, b) => b - a).shift();
-    }
-
-    const getTeams = async () => {                              // Get list of teams from the Blue Alliance
+    const getTeams = async () => {                  // List of teams from the Blue Alliance
         const key = await api.getRegional();
-        console.log(`https://www.thebluealliance.com/api/v3/event/${key}/teams`);
-        return await fetch(`https://www.thebluealliance.com/api/v3/event/${key}/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
+        console.log(`key ${key}`)
+
+        return await fetch(`https://www.thebluealliance.com/api/v3/event/2022hiho/teams`, { mode: "cors", headers: { 'x-tba-auth-key': await api.getBlueAllianceAuthKey() } })
             .catch(err => console.log(err))
             .then(response => response.json())
             .then(data => {
                 return data.map(obj => {
                     return {
                         TeamNumber: obj.team_number,
-                        Strategy: '',
-                        AveragePoints: 0,
-                        AverageLowHubShots: 0,
-                        AverageLowHubAccuracy: 0,
-                        AverageUpperHubShots: 0,
-                        AverageUpperHubAccuracy: 0,
-                        AverageHangar: 0,
-                        AverageRating: 0,
+                        Matches: '',
+                        Priorities: '',
+                        AvgPoints: 0,
+                        AvgLowShots: 0,
+                        AvgLowAcc: 0,
+                        AvgUpperShots: 0,
+                        AvgUpperAcc: 0,
+                        AvgHangar: 0,
+                        Comments: '',
+                        SumPriority: 0,
 
-                        RatePoints: 0,
-                        RateLowShots: 0,
-                        RateLowAccuracy: 0,
-                        RateUpperShots: 0,
-                        RateUpperAccuracy: 0,
-                        RateHangar: 0,
-                        SumOfSelected: 0,
+                        NLowShots: 0,
+                        NLowAcc: 0,
+                        NUpperShots: 0,
+                        NUpperAcc: 0,
+                        NHangar: 0,
                     };
                 });
             })
             .catch(err => console.log(err))
+    }
+
+    const renderRowSubComponent = ({ row }) => {
+        const t = apiData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber && parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0);
+
+        const disp = t.map(x => {
+            return {
+                Match: x.MatchId.substring(x.MatchId.indexOf('_')+1),
+                Strategy: x.Strategy.filter(val => val.trim() !== '').length !== 0 ? x.Strategy.filter(val => val.trim() !== '').map(val => val.trim()).join(', ') : '',
+                TotalPoints: x.TotalPoints,
+                LowHubAccuracy: x.LowHubAccuracy !== null ? x.LowHubAccuracy.toFixed(2) : '',
+                UpperHubAccuracy: x.UpperHubAccuracy !== null ? x.UpperHubAccuracy.toFixed(2) : '',
+
+                AutoPlacement: x.AutoPlacement,
+                AutoLow: `${x.AutoLowMade}/${x.AutoLowMade + x.AutoLowMissed}`,
+                AutoUpper: `${x.AutoUpperMade}/${x.AutoUpperMade + x.AutoUpperMissed}`,
+                Taxi: x.Taxi,
+
+                TeleLow: `${x.TeleLowMade}/${x.TeleLowMade + x.TeleLowMissed}`,
+                TeleUpper: `${x.TeleUpperMade}/${x.TeleUpperMade + x.TeleUpperMissed}`,
+                Hangar: x.Hangar !== undefined ? x.Hangar : '',
+                HangarStart: x.HangarStart !== undefined ? x.HangarStart : '',
+                HangarEnd: x.HangarEnd !== undefined ? x.HangarEnd : '',
+
+                HangarCargoBonus: x.HangarCargoBonus ? x.HangarCargoBonus.filter(val => val.trim() !== '').map(val => val.trim()).join(', ') : '',
+                NumberOfRankingPoints: x.NumberOfRankingPoints !== undefined ? x.NumberOfRankingPoints : '',
+                NumberOfFoulAndTech: x.NumberOfFouls !== undefined && x.NumberOfTech !== undefined ? `${x.NumberOfFouls} | ${x.NumberOfTech}` : '',
+                Penalties: x.Penalties !== undefined && x.Penalties.filter(val => val.trim() !== '').length !== 0 ? x.Penalties.filter(val => val.trim() !== '').map(val => val.trim()).join(', ') : '',
+
+                DriveSpeed: x.DriveSpeed !== undefined ? x.DriveSpeed : '',
+                DriveStrength: x.DriveStrength !== undefined ? x.DriveStrength : '',
+                DriveMobility: x.DriveMobility !== undefined ? x.DriveMobility : '',
+
+                Comments: x.Comments !== undefined ? x.Comments.trim() : '',
+
+                email: x.email.substring(0, x.email.length-17),
+
+            };
+        })
+        
+        return disp.length > 0 ?               // if there is data on team, display a table when expanded
+            (<pre>
+                <div> {<TeamTable information={disp} />} </div>
+            </pre>)
+            : (                             // else if no data, notify no data has been collected
+                <div style={{
+                    padding: '5px',
+                }}> No data collected for Team {row.values.TeamNumber}. </div>
+            );
+    }
+
+    const getMax = (arr) => {                       // Get max of array
+        return arr.sort((a, b) => b - a).shift();
     }
 
     const calcAveragePoints = (arr) => {                        // Calculate average points for each team
@@ -159,14 +216,14 @@ const SummaryTable = () => {
     }
 
     const getStrat = (arr) => {                                 // Create a list of all the priorities/strats for each team
-        let a = arr.map(teamObj => teamObj.Strategy).reduce((a,b) => a.concat(b), []).filter((item) => item.trim().length > 0);
-        
+        let a = arr.map(teamObj => teamObj.Strategy).reduce((a,b) => a.concat(b), []).filter((item) =>  item.trim() !== '');
         return uniqueArray(a);
     }
 
-    const uniqueArray = (arr) => { 
-        return arr.filter((item, index) => {
-            return index === arr.indexOf(item);
+    const uniqueArray = (arr) => {
+        const a = arr.map(x => x.trim());
+        return a.filter((item, index) => {
+            return a.indexOf(item, 0) === index;
         })
     }
 
@@ -235,16 +292,6 @@ const SummaryTable = () => {
         return averageHangar.toFixed(3);
     }
 
-    const calcRanking = (arr) => {                              // Calculate average opinion scale for each team
-        let rankings = arr.map(value => (value.OpinionScale));          // get all team's opinions in a match
-        let sumRankings = 0;
-        for (let i = 0; i < rankings.length; i++) {                     // find the sum
-            sumRankings = sumRankings + rankings[i];
-        }
-        let averageRanking = sumRankings / rankings.length;             // find the average
-        return averageRanking.toFixed(3);
-    }
-
     const calcColumnSort = (arr, lShots, lAcc, uShots, uAcc, hangar) => {        // Calculate team's grades based on checkboxes selected
         let sum = 0;                                                        // if value is inside array, add it to grade
 
@@ -267,34 +314,48 @@ const SummaryTable = () => {
         return sum.toFixed(3);                                   // round to the nearest thousandth
     }
 
+    const calcDeviation = (arr, mean) => {
+        const distance = arr.map(value => {
+            return (value - mean) ** 2;
+        })
+
+        const sumOfDistance = () => {
+            let sum = 0;
+            for (let i=0; i < distance.length; i++){
+                sum = sum + distance[i]
+            }
+            return sum;
+        }
+
+        const dev = Math.sqrt( sumOfDistance() / (distance.length) )
+
+        return dev.toFixed(3);
+    }
+
     const data = React.useMemo(
         () => tempData.map(team => {
-
-            const grade = calcColumnSort(sortColumns, team.RateLowShots, team.RateLowAccuracy, team.RateUpperShots, team.RateUpperAccuracy, team.RateHangar);
-
+            const grade = calcColumnSort(sortBy, team.NLowShots, team.NLowAcc, team.NUpperShots, team.NUpperAcc, team.NHangar);
             return {
                 TeamNumber: team.TeamNumber,
-                Strategy: team.Strategy,
-                NumberOfMatches: team.NumberOfMatches,
-                AveragePoints: team.AveragePoints,
-                AverageLowHubShots: team.AverageLowHubShots,
-                AverageLowHubAccuracy: team.AverageLowHubAccuracy,
-                AverageUpperHubShots: team.AverageUpperHubShots,
-                AverageUpperHubAccuracy: team.AverageUpperHubAccuracy,
-                AverageHangar: team.AverageHangar,
-                AverageRating: team.AverageRating,
+                Matches: team.Matches,
+                Priorities: team.Priorities,
+                AvgPoints: team.AvgPoints,
+                StdDev: team.StdDev,
+                AvgLowShots: team.AvgLowShots,
+                AvgLowAcc: team.AvgLowAcc,
+                AvgUpperShots: team.AvgUpperShots,
+                AvgUpperAcc: team.AvgUpperAcc,
+                AvgHangar: team.AvgHangar,
+                Comments: team.Comments,
+                SumPriority: grade !== 0.000 ? grade : "",
 
-                RatePoints: team.RatePoints,
-                RateLowShots: team.RateLowShots,
-                RateLowAccuracy: team.RateLowAccuracy,
-                RateUpperShots: team.RateUpperShots,
-                RateUpperAccuracy: team.RateUpperAccuracy,
-                RateHangar: team.RateHangar,
-
-                SumOfSelected: grade !== 0.000 ? grade : "",
+                NLowShots: team.NLowShots,
+                NLowAcc: team.NLowAcc,
+                NUpperShots: team.NUpperShots,
+                NUpperAcc: team.NUpperAcc,
+                NHangar: team.NHangar,
             }
-
-        }), [tempData, sortColumns]
+        }), [tempData, sortBy]
     )
 
     const columns = React.useMemo(
@@ -302,72 +363,77 @@ const SummaryTable = () => {
             {
                 Header: 'Team #',
                 accessor: 'TeamNumber',
-                Cell: ({ row }) =>
-                (
+                Cell: ({ row }) => (
                     <span {...row.getToggleRowExpandedProps()}>
                         {row.values.TeamNumber}
                     </span>)
             },
             {
-                Header: 'Number of Matches',
-                accessor: 'NumberOfMatches',
+                Header: 'Matches',
+                accessor: 'Matches',
             },
             {
                 Header: 'Priority/Strategy',
-                accessor: 'Strategy'
+                accessor: 'Priorities',
+                Cell: ({ row }) => (
+                    <div
+                        style = {{
+                            whiteSpace: 'normal',
+                        }}
+                    >
+                        {row.original.Priorities}
+                    </div>
+                )
             },
             {
                 Header: 'Average Points',
-                accessor: 'AveragePoints',
+                accessor: 'AvgPoints',
             },
             {
-                Header: 'Average Low Hub',
-                accessor: 'AverageLowHubShots',
+                Header: 'Avg Low Shots',
+                accessor: 'AvgLowShots',
             },
             {
-                Header: 'Average Low Hub Accuracy',
-                accessor: 'AverageLowHubAccuracy',
+                Header: 'Avg Low Accuracy',
+                accessor: 'AvgLowAcc',
             },
             {
-                Header: 'Average Upper Hub',
-                accessor: 'AverageUpperHubShots',
+                Header: 'Avg Upper Shots',
+                accessor: 'AvgUpperShots',
             },
             {
-                Header: 'Average Upper Hub Accuracy',
-                accessor: 'AverageUpperHubAccuracy',
+                Header: 'Avg Upper Accuracy',
+                accessor: 'AvgUpperAcc',
             },
             {
-                Header: 'Average Hangar Points',
-                accessor: 'AverageHangar',
+                Header: 'Avg Hangar Points',
+                accessor: 'AvgHangar',
             },
             {
-                Header: 'Average Rating',
-                accessor: 'AverageRating',
+                Header: "Comments",
+                accessor: 'Comments',
+                Cell: ({row}) => {
+                    return <div
+                        style = {{
+                            minWidth: '300px',
+                            maxWidth: '300px',
+                            textAlign: 'left',
+                            padding: '5px',
+                            whiteSpace: 'break-spaces'
+                        }}
+                    >
+                        {row.original.Comments}
+                    </div>
+                }
             },
             {
                 Header: 'Column Sort',
-                accessor: 'SumOfSelected'
+                accessor: 'SumPriority',
             }
-        ],
-        []
+        ], []
     )
 
-    const renderRowSubComponent = ({ row }) => {
-        let t = teamData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber);
-        
-        return t.length > 0 ?               // if there is data on team, display a table when expanded
-            (<pre>
-                <div> {<TeamTable information={t} />} </div>
-            </pre>)
-            : (                             // else if no data, notify no data has been collected
-                <tr><td style={{
-                    padding: '10px',
-                    textAlign: 'center',
-                }}> No data collected for Team {row.values.TeamNumber}. </td></tr>
-            );
-    }
-
-    const tableInstance = useTable({ columns, data }, useSortBy, useExpanded);
+    const tableInstance = useTable({ columns, data }, useGlobalFilter, useSortBy, useExpanded);
 
     const {
         getTableProps,
@@ -376,14 +442,61 @@ const SummaryTable = () => {
         rows,
         prepareRow,
         visibleColumns,
+        state,
+        setGlobalFilter
     } = tableInstance
+
+    const {globalFilter} = state
 
     return (
         <div>
-            <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
-            {<List setList={setSortColumns}/>}
+            <table style={{ width:'1250px' }} >
+                <tbody>
+                    <tr>
+                        <td
+                            style={{
+                                minWidth: '750px'
+                            }}
+                        >
+                            <p> Select checkboxes to choose which priorities to sort by. Then click on <strong>Column Sort</strong>. </p>
+                            {<List setList={setSortBy}/>}
+                            <br/>
+                        </td>
+                        <td>
+                            <p
+                                style={{
+                                    border: '2px solid black',
+                                    maxWidth: '240px',
+                                    display: 'inline-block',
+                                    padding: '5px',
+                                }}
+                            >
+                                <strong>KEY</strong> 
+                                <br/> "Avg" / μ = Average
+                                <br/> σ = Standard Deviation
+                                <br/> Acc = Accuracy
+                            </p>
+                        </td>
+                        <td>
+                            <img src={"./images/tarmac.jpg"} width="240px" height="180px"
+                                style={{
+                                    display: 'inline-block',
+                                    margin: '25px'
+                                }}
+                            ></img>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
             <br/><br/>
-            <table {...getTableProps()} >
+
+            <GlobalFilter filter={globalFilter} set={setGlobalFilter} />
+            <table {...getTableProps()} 
+                style={{
+                    width: '1250px'
+                }}
+            >
                 <thead>
                     {
                         headerGroups.map(headerGroup =>
@@ -395,7 +508,7 @@ const SummaryTable = () => {
                                         <th
                                             {...column.getHeaderProps(column.getSortByToggleProps())}
                                             style={{
-                                                padding: '10px',
+                                                padding: '5px',
                                                 textAlign: 'center',
                                             }}
                                         >
@@ -425,7 +538,7 @@ const SummaryTable = () => {
                                                 <td
                                                     {...cell.getCellProps()}
                                                     style={{
-                                                        padding: '10px',
+                                                        padding: '5px',
                                                         border: 'solid 1px black',
                                                         textAlign: 'center',
                                                     }}
@@ -441,7 +554,11 @@ const SummaryTable = () => {
 
                                 {row.isExpanded ? (
                                     <tr>
-                                        <td colSpan={visibleColumns.length}>
+                                        <td colSpan={visibleColumns.length}
+                                            style = {{
+                                                maxWidth: '1200px'
+                                            }}
+                                        >
                                             {renderRowSubComponent({ row })}
                                         </td>
                                     </tr>
@@ -458,7 +575,6 @@ const SummaryTable = () => {
             </table>
         </div>
     )
-
 }
 
-export default SummaryTable;
+export default Summary;

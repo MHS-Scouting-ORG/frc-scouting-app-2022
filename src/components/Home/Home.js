@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Col, ListGroup, Form, Container, Nav, Row, Navbar, Button } from 'react-bootstrap'
 import { a, API } from 'aws-amplify'
-import SummaryTable from '../Table/SummaryTable'
+import Summary from '../Table/SummaryTable'
 import api from '../../api'
 
 const Home = (props) => {
@@ -27,9 +27,8 @@ const Home = (props) => {
     <div>
       <h4> Summary Statistics </h4>
       <br/>
-      <SummaryTable/>
+      <Summary/>
       <br/>
-      <img src={"./images/tarmac.jpg"} width="640" height="480"></img>
     </div>
   )
 }
