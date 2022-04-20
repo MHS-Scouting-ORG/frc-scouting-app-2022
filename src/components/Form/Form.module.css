@@ -1,0 +1,21 @@
+.TarmacImage {
+	width: 100%;
+	margin: 0.5rem 0;
+}
+
+@media (min-width: 420px) {
+	.TarmacImage {
+		width: 20rem;
+	}
+}
+
+.Div{
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.Input{
+	width: 3rem;
+}

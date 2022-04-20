@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "./Input";
 import Checkbox from "./Checkbox";
 import Textbox from "./Textbox";
-import Initials from "./Initials";
 import Dropdown from "./Dropdown";
+import HangarDropdown from "./HangarDropdown";
 import Scale from "./Scale";
 import MatchDropdown from "./MatchDropdown";
 //import ImageMarker from "react-image-marker";
@@ -30,8 +30,17 @@ class Form extends React.Component{
         this.makeTeamDropdown = this.makeTeamDropdown.bind(this);
         //this.changeMatchNumber = this.changeMatchNumber.bind(this);
 
+        this.changeMatchOverride = this.changeMatchOverride.bind(this);
+        this.makeMatchOverride = this.makeMatchOverride.bind(this);
+
         this.dropDownChanged = this.dropDownChanged.bind(this);
         this.makeDropDownBox = this.makeDropDownBox.bind(this);
+
+        this.changeHangar = this.changeHangar.bind(this);
+        this.changeHangarStart = this.changeHangarStart.bind(this);
+        this.changeHangarEnd = this.changeHangarEnd.bind(this);
+        this.makeHangarStartEndBoxes = this.makeHangarStartEndBoxes.bind(this);
+        this.makeHangarDropdownBox = this.makeHangarDropdownBox.bind(this);
 
         this.inputBoxChanged = this.inputBoxChanged.bind(this);
         this.buttonMinus = this.buttonMinus.bind(this);
@@ -64,8 +73,10 @@ class Form extends React.Component{
 
         this.setMarkers = this.setMarkers.bind(this);
 
-        //const [teamId, setTeamId] = useState("")
-        //const [matchNumber, setMatchNumber] = useState("")
+
+        //this.dropDownTarmac = this.dropDownTarmac.bind(this);
+
+
 
         this.state = {
             totalPoints: 0,
@@ -76,7 +87,9 @@ class Form extends React.Component{
             matchNumber:"",
             teams:["team1","team2","team3","team4","team5","team6"],
             teamNumber:'',
+            matchOverride:false,
             dropDownBoxValues:["","",""],
+            hangarValues:['','',''],
             matchData:'not found',
             //autoPosition:[0,0],
             inputBoxValues:[0,0,0,0,0,0,0,0,0,0],
@@ -90,7 +103,10 @@ class Form extends React.Component{
             comment:"",
             scale:0,
             markers: [],
-            override:false
+            tarmacSection: 0,
+            override:false,
+
+            summaryComm: ''
         };
     }
     
@@ -120,6 +136,9 @@ class Form extends React.Component{
     }
     
     changeMatchNumber(event){
+        if(event.target.value !== 0){
+            this.setState({matchOverride:false});
+        }
         this.setState({matchNumber:event.target.value});
         this.setState({teams:["team1","team2","team3","team4","team5","team6"]});
         this.setState({teamNumber:''});
@@ -228,12 +247,30 @@ class Form extends React.Component{
 
     makeTeamDropdown(){
         let alliances = this.state.teams; //this.getMatchTeams();*/
-        return (
+        return parseInt(this.state.matchNumber) !== 0 ?  (
             <div>
                 <select onChange={this.changeTeam}>
                     <option></option>
                     {alliances.map((alliance) => <option key={alliance}> {alliance} </option>)}
                 </select>
+            </div>
+        ) : (
+            <div>
+                <br/>
+                <label> Team Number 
+                <input type='number' 
+                    onChange={e => {
+                        this.setState({teamNumber: 'frc' + e.target.value})
+                    }}
+                    style = {{
+                        maxWidth: '75px'
+                    }}
+                />
+                </label>
+                <br/>
+                <Textbox title={"Summary Comment: "} 
+                    commentState={evt => {this.setState({summaryComm: evt.target.value})}}
+                />
             </div>
         )
     }
@@ -242,10 +279,28 @@ class Form extends React.Component{
         this.setState({matchNumber:event.target.value});
     }*/
 
+    changeMatchOverride(){
+        this.setState({matchOverride:!this.state.matchOverride});
+    }
+
+    makeMatchOverride(label){
+        return(
+            <Checkbox
+                label={label}
+                changeState={this.changeMatchOverride}
+                checked={this.state.matchOverride}
+            />
+        )
+    }
+
+
+
     dropDownChanged(event,i){
         let dropDownStates = this.state.dropDownBoxValues;
         dropDownStates[i] = event.target.value
     }
+
+
 
     makeDropDownBox(title,options,i){
         return (
@@ -259,8 +314,90 @@ class Form extends React.Component{
             </div>
         )
     }
+/*
+    makeMatchTypeNumberDropdown(matchType){
+        if(matchType === 'qf' || matchType === 'sf' || matchType === 'f'){    
+            return (
+                <input onChange={this.changeTypeNumber}></input>
+            )
+        }
+    }
 
+    makeMatchDropdown(){
+        return (
+            <div>
+                <MatchDropdown
+                    setMatchType={this.changeMatchType}
+                    setTypeNumber={this.changeTypeNumber}
+                    makeNumberDropdown={this.makeMatchTypeNumberDropdown}
+                    setMatchNumber={this.changeMatchNumber}
+                />
+            </div>
+            )
+        }
+        */
 
+    changeHangar(event){
+        let hangar = Array(this.state.hangarValues);
+        hangar[0] = event.target.value;
+        this.setState({hangarValues: hangar})
+    }
+
+    changeHangarStart(event){
+        let hangarValues = this.state.hangarValues;
+        hangarValues[1] = event.target.value;
+    }
+
+    changeHangarEnd(event){
+        let hangarValues = this.state.hangarValues;
+        hangarValues[2] = event.target.value;
+    }
+
+    makeHangarStartEndBoxes(){
+        let hangarVals = this.state.hangarValues;
+        let hangar = hangarVals[0];
+        if(hangar !== "None" && hangar !== ""){
+            if(hangar === "Attempted"){
+                return (
+                    <div>
+                        <label> {"Hangar Start: "}
+                            <input className={classes.Input} type="number" onChange={this.changeHangar}></input>
+                        </label>
+                    </div>
+                )
+            }
+            else{
+                return (
+                    <div>
+                        <div>
+                            <label> {"Hangar Start: "}
+                                <input className={classes.Input} type="number" onChange={this.changeHangarStart}></input>
+                            </label>
+                        </div>
+                        <div>
+                            <label> {"Hangar End: "}
+                                <input className={classes.Input} type="number" onChange={this.changeHangarEnd}></input>
+                            </label>
+                        </div>
+                    </div>
+                )
+            } 
+        }
+        else {
+            return <div></div>;
+        }
+    }
+
+    makeHangarDropdownBox(){
+        return (
+            <div>
+                <HangarDropdown
+                    changeHangarUsed={this.changeHangar}
+                    makeHangarStartEndBoxes={this.makeHangarStartEndBoxes}
+                />
+            </div>
+        )
+    }
 
     //--------------------------------------------------------------------------------------------------------------------------
 
@@ -573,19 +710,31 @@ class Form extends React.Component{
 
     async submitStates(){
         let vals = this.state.inputBoxValues;
+
         let lowTeleMade = parseInt(vals[4]);
         let lowAutoMade = parseInt(vals[0]);
         let highTeleMade = parseInt(vals[6]);
         let highAutoMade = parseInt(vals[2]);
         let lowMissed = parseInt(vals[1]) + parseInt(vals[5]);
         let highMissed = parseInt(vals[3]) + parseInt(vals[7]);
+
         let dropboxVals = this.state.dropDownBoxValues;
         let taxiBox = dropboxVals[0];
         let taxiValue;
-        let autoPosition = dropboxVals[1]
-        let hangarUsed = dropboxVals[2];
+        let autoPosition = dropboxVals[1];
+
+        let hangarValues = this.state.hangarValues;
+        let hangarUsed = hangarValues[0];
+        let hangarStart = hangarValues[1];
+        let hangarEnd = hangarValues[2];
+
+        let driveSpeed = dropboxVals[2];
+        let driveTurning = dropboxVals[3];
+        let driveStrength = dropboxVals[4];
+
         let taxiPoints = 0;
         let hangarPoints = 0;
+
         if(taxiBox === "Yes"){
             taxiPoints = 2;
             taxiValue = true;
@@ -607,7 +756,7 @@ class Form extends React.Component{
         
         let points =  taxiPoints + hangarPoints + (lowTeleMade + (2 * ( lowAutoMade + highTeleMade + ( highAutoMade * 2 ))));
         let lowAccuracy = 100 * (( lowAutoMade + lowTeleMade ) / ( lowMissed + lowAutoMade + lowTeleMade ));
-        let highAccuracy = 100 * (( highTeleMade + highAutoMade ) / ( highMissed + highAutoMade + highTeleMade ))
+        let highAccuracy = 100 * (( highTeleMade + highAutoMade ) / ( highMissed + highAutoMade + highTeleMade ));
             
         this.setState({
             totalPoints: points,
@@ -616,7 +765,11 @@ class Form extends React.Component{
         })
         console.log(this.state);
         console.log(points, lowAccuracy, highAccuracy);
-        
+
+        /*if(teamNumber === false){
+            windowAlertMessage + "\n";
+        }
+        */
         let penalties = this.state.penaltyValues;
         let bonuses = this.state.bonusValues;
         let strategies = this.state.strategyValues;
@@ -681,6 +834,41 @@ class Form extends React.Component{
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nWhat hangar the robot did"
         }
+        else{
+            if(hangarUsed !== "None"){
+                if(hangarUsed === "Attempted"){
+                    if(hangarStart === ''){
+                        incompleteForm = true;
+                        windowAlertMessage = windowAlertMessage + "\nWhat time the robot started hanging"
+                    }
+                }
+                else{
+                    if(hangarStart === ''){
+                        incompleteForm = true;
+                        windowAlertMessage = windowAlertMessage + "\nWhat time the robot started hanging"
+                    }
+                    if(hangarEnd === ''){
+                        incompleteForm = true;
+                        windowAlertMessage = windowAlertMessage + "\nWhat time the robot ended hanging"
+                    }
+                }
+            }
+
+        }
+        if(driveSpeed === ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nHow fast is the robot drive"
+        }
+        
+        if(driveTurning === ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nHow good is the turning of the robot drive"
+        }
+
+        if(driveStrength === ''){
+            incompleteForm = true;
+            windowAlertMessage = windowAlertMessage + "\nWhat strength is the robot drive"
+        }
 
         strats.filter(strat => {
             if(strat !== ' '){
@@ -693,15 +881,22 @@ class Form extends React.Component{
             windowAlertMessage = windowAlertMessage + "\nRobot priorities/strategies"
         }
 
+        /*let hangarValues2 = this.state.hangarValues;
+        let hangarUsed2 = hangarValues2[0];
+
+        if(true){
+            windowAlertMessage = windowAlertMessage + "\n" + hangarUsed2;
+        }*/
+
         /*if(this.state.comment === ''){
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nScouter comment"
         }*/
 
-        if(scale == 0){
+        /*if(scale === 0){
             incompleteForm = true;
             windowAlertMessage = windowAlertMessage + "\nPartnership scale"
-        }
+        }*/
 
         let override = this.state.override;
 
@@ -714,29 +909,44 @@ class Form extends React.Component{
             api.put({
                 body: {
                     TeamId: this.state.teamNumber.substring(3,this.state.teamNumber.length),
+
                     MatchId: /* insert event key here /*/ /* "2022casd" *//* */ await api.getRegional() /* */ + "_" + this.state.matchType + this.state.number + "m" + this.state.matchNumber,
+                    
                     TotalPoints: Number(points),
                     LowHubAccuracy: Number(lowAccuracy),
                     UpperHubAccuracy: Number(highAccuracy),
+
                     AutoLowMade: Number(vals[0]),
                     AutoLowMissed: Number(vals[1]),
                     AutoUpperMade: Number(vals[2]),
                     AutoUpperMissed: Number(vals[3]),
                     Taxi: String(taxiValue),
                     AutoPlacement: Number(autoPosition),
+
                     TeleLowMade: Number(vals[4]),
                     TeleLowMissed: Number(vals[5]),
                     TeleUpperMade: Number(vals[6]),
                     TeleUpperMissed: Number(vals[7]),
+
                     Hangar: String(hangarUsed),
+                    HangarStart: Number(hangarStart),
+                    HangarEnd: Number(hangarEnd),
+
+                    DriveSpeed: String(driveSpeed),
+                    DriveStrength: String(driveStrength),
+                    DriveMobility: String(driveTurning),
+
                     NumberOfFouls: Number(vals[8]),
                     NumberOfTech: Number(vals[9]),
                     Penalties: penalties,
+
                     HangarCargoBonus: bonuses,
                     NumberOfRankingPoints: Number(this.state.rankingPoints),
+                    
                     Strategy: strategies,
                     OpinionScale: Number(this.state.scale),
                     Comments: String(this.state.comment),
+                    SummaryComment: String(this.state.summaryComm),
                 }
             })//*/
             .then(window.alert("States have successfully been submitted to table")
@@ -759,14 +969,17 @@ class Form extends React.Component{
                 {this.makeMatchDropdown()}
                 <button onClick={this.getMatchTeams}>GET MATCH TEAMS</button>
                 {this.makeTeamDropdown()}
+                {/*this.makeMatchOverride("Match Override ")*/}
                 <br></br>
                 <h3>AUTONOMOUS</h3>
                 <img className={classes.TarmacImage} src={'./images/tarmac.jpg'} prop={"Tarmac"}></img>
                 {this.makeDropDownBox("Auto Position On Tarmac: ",[1,2,3,4,5,6,7,8],1)}
+                <br/>
                 {this.makeInputBox("# Low Hub Made: ",0)}
                 {this.makeInputBox("# Low Hub Missed: ",1)}
                 {this.makeInputBox("# Upper Hub Made: ",2)}
                 {this.makeInputBox("# Upper Hub Missed: ",3)}
+                <br/>
                 {this.makeDropDownBox("Taxi: ",["No","Yes"],0)}
                 {/*<ImageMarker src={'./images/TARRRRRMAC.PNG'} markers={this.state.markers} onAddMarker={(marker) => this.setMarkers([marker])}></ImageMarker>*/}
                 {/* */}
@@ -776,9 +989,21 @@ class Form extends React.Component{
                 {this.makeInputBox("# Low Hub Missed: ",5)}
                 {this.makeInputBox("# Upper Hub Made: ",6)}
                 {this.makeInputBox("# Upper Hub Missed: ",7)}
-                {this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)}
+                {/*this.makeDropDownBox("Hangar: ",["None","Attempted","Low","Mid","High","Traversal"],2)*/}
+                <br/>
                 {this.makeInputBox("# of fouls: ",8)}
                 {this.makeInputBox("# of tech fouls",9)}
+                <br/>
+                {this.makeHangarDropdownBox()}
+                {this.makeHangarStartEndBoxes()}
+                <br/>
+                {/*<p> Scale of 1-3, rate drive (slow, average, fast)) </p>
+                <Scale values={[1,2,3]} changeScale={this.scaleChange}></Scale>*/}
+                {/*<Dropdown choices={["Slow", "Average", "Fast"]} title={"Drive Speed: "} setState={this.dropDownChanged} place={2}/>*/}
+                {this.makeDropDownBox("Drive Speed: ", ["Slow","Average","Fast"],2)}
+                {this.makeDropDownBox("Drive Turning: ", ["Bad","Okay","Good"],3)}
+                {this.makeDropDownBox("Drive Strength: ", ["Weak", "Normal", "Strong"],4)}
+                <br/>
                 {this.makePenaltyBox("Yellow card ",0)}
                 {this.makePenaltyBox("Red card ", 1)}
                 {this.makePenaltyBox("Disabled ", 2)}
@@ -792,20 +1017,19 @@ class Form extends React.Component{
                 <Header display={this.state.rankingPoints} bonus={this.state.bonusValues}/>
                 <br></br>
                 <h3>PRIORITIES & STRATEGIES</h3>
-                {this.makeStrategyBox("Low Hub Shooter ", 0)}
-                {this.makeStrategyBox("Upper Hub Shooter ", 1)}
-                {this.makeStrategyBox("Launchpad Shooter ", 2)}
+                {this.makeStrategyBox("Low Shooter ", 0)}
+                {this.makeStrategyBox("Upper Shooter ", 1)}
                 {this.makeStrategyBox("Hangar ", 3)}
                 {this.makeStrategyBox("Defense ", 4)}
                 <br></br>
+                <p>How well is there defense if any? Note if the robot is prone to tipping, reasons for fouls, etc.</p>
                 <Textbox title={"Comments: "} commentState={this.setComment}></Textbox>
-                <p> Scale of 1-10, rate partnership (how well you do think our alliances can work together) </p>
-                <Scale values={[1,2,3,4,5,6,7,8,9,10]} changeScale={this.scaleChange}></Scale>
                 {this.overrideCheckbox()
                 }
                 <div>
                     <button onClick={this.submitStates}>SUBMIT</button>
                 </div>
+                <br/>
             </div>
         )
     }
