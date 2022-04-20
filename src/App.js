@@ -8,6 +8,7 @@ import MenuDrawer from './components/MenuDrawer/MenuDrawer';
 import Home from './components/Home/Home';
 import About from './components/About/About';
 import Dashboard from './components/Dashboard/Dashboard';
+import Form from './components/Form/Form';
 
 import { useState } from 'react';
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/about" element={<About/>}/>i
           <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/form" element={<Form/>}/>
         </Routes>
       </Container>
     </Router>
