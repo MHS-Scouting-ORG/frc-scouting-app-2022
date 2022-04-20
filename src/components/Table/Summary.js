@@ -4,8 +4,6 @@ import List from './List'
 import TeamTable from './TeamTable'
 import api from "../../api";
 import GlobalFilter from "./Filter";
-import Comment from "./Comment";
-import { APIClass } from "aws-amplify";
 
 const Summary = () => {
 
