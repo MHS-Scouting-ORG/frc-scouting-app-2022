@@ -31,7 +31,7 @@ const Summary = () => {
 
     useEffect(() => setAverages(teamNumbers.map(team => {   // Calculate averages for each team
         //const tempStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0);
-        const teamStats = apiData !== undefined ? apiData.filter(x => x.MatchId.substring(0, 6) === '2022hop') : apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0);
+        const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0).filter(x => x.MatchId.substring(0, 6) === '2022hop');
         //    const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => x.SummaryComment === undefined);
         const summaryComment = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) === 0);
         //    const summaryComment = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => x.SummaryComment !== undefined);
