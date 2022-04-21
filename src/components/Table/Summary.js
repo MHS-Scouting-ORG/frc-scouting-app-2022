@@ -32,7 +32,7 @@ const Summary = () => {
     useEffect(() => setAverages(teamNumbers.map(team => {   // Calculate averages for each team
         const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0);
         const summaryComment = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) === 0);
-        const teamMatches = teamStats.map(x => x.MatchId.substring(9));
+        const teamMatches = teamStats.map(x => x.MatchId.substring(x.MatchId.indexOf('_')+1));
 
         const points = teamStats.map(x => x.TotalPoints);
         const avgPoints = calcAveragePoints(teamStats);
