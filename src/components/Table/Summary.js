@@ -33,7 +33,6 @@ const Summary = () => {
         const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0);
         const summaryComment = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) === 0);
         const teamMatches = teamStats.map(x => x.MatchId.substring(9));
-        console.log(summaryComment)
 
         const points = teamStats.map(x => x.TotalPoints);
         const avgPoints = calcAveragePoints(teamStats);
@@ -62,7 +61,7 @@ const Summary = () => {
             AvgUpperShots: !isNaN(avgUpperShots) ? `μ=${avgUpperShots}` : '',
             AvgUpperAcc: !isNaN(avgUpperAccuracy) ? `μ=${avgUpperAccuracy}, σ=${calcDeviation(upperAcc, avgUpperAccuracy)}` : '',
             AvgHangar: !isNaN(avgHangar) ? `μ=${avgHangar}` : '',
-            Comments:  summaryComment[0] !== undefined ? summaryComment[0].SummaryComment : '',
+            Comments:  summaryComment[0] !== undefined ? summaryComment[summaryComment.length-1].SummaryComment : '',
             SumPriority: 0,
 
             NLowShots: 0,
@@ -332,7 +331,7 @@ const Summary = () => {
     }
 
     const data = React.useMemo(
-        () => tempData.map(team => { console.log(team)
+        () => tempData.map(team => {
             const grade = calcColumnSort(sortBy, team.NLowShots, team.NLowAcc, team.NUpperShots, team.NUpperAcc, team.NHangar);
             return {
                 TeamNumber: team.TeamNumber,
