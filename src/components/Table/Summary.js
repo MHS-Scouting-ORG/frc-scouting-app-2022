@@ -154,7 +154,7 @@ const Summary = () => {
     }
 
     const renderRowSubComponent = ({ row }) => {
-        const t = apiData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber && parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0 && x.MatchId.substring(0, 7) === '2022hop');
+        const t = apiData.filter((x) => parseInt(x.TeamId) === row.values.TeamNumber && parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0 && x.MatchId.substring(0, 7) === '2022hop' && x.MatchId.indexOf('qm0') === -1);
 
         const disp = t.map(x => {
             return {
