@@ -344,13 +344,15 @@ class Form extends React.Component{
     }
 
     changeHangarStart(event){
-        let hangarValues = this.state.hangarValues;
-        hangarValues[1] = event.target.value;
+        let hangar = Array(this.state.hangarValues);
+        hangar[1] = event.target.value;
+        this.setState({hangarValues: hangar})
     }
 
     changeHangarEnd(event){
-        let hangarValues = this.state.hangarValues;
-        hangarValues[2] = event.target.value;
+        let hangar = Array(this.state.hangarValues);
+        hangar[2] = event.target.value;
+        this.setState({hangarValues: hangar})
     }
 
     makeHangarStartEndBoxes(){
@@ -361,7 +363,7 @@ class Form extends React.Component{
                 return (
                     <div>
                         <label> {"Hangar Start: "}
-                            <input className={classes.Input} type="number" onChange={this.changeHangar}></input>
+                            <input className={classes.Input} type="number" onChange={this.changeHangarStart}></input>
                         </label>
                     </div>
                 )

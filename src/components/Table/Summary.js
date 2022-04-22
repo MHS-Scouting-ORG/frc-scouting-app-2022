@@ -10,7 +10,7 @@ const Summary = () => {
     const [apiData, setApiData] = useState([]);     // api data
     const [teamNumbers, setTeamNumbers] = useState([]);
     const [averages, setAverages] = useState([]);   // averaged data
-    const [tempData, setTempData] = useState([]);    // "final" data
+    const [tempData, setTempData] = useState([]);   // "final" data
 
     const [sortBy, setSortBy] = useState([]);
 
@@ -31,7 +31,7 @@ const Summary = () => {
 
     useEffect(() => setAverages(teamNumbers.map(team => {   // Calculate averages for each team
         //const tempStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0);
-        const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0).filter(x => x.MatchId.substring(0, 7) === '2022hop');
+        const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) !== 0 || x.MatchId.indexOf('qm0') === -1).filter(x => x.MatchId.substring(0, 7) === '2022hop');
         //    const teamStats = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => x.SummaryComment === undefined);
         const summaryComment = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => parseInt(x.MatchId.substring(x.MatchId.indexOf('_')+2)) === 0);
         //    const summaryComment = apiData.filter(x => parseInt(x.TeamId) === team.TeamNumber).filter(x => x.SummaryComment !== undefined);
@@ -44,12 +44,12 @@ const Summary = () => {
         const lowHub = teamStats.filter(x => (x.AutoLowMade + x.AutoLowMissed + x.TeleLowMade + x.TeleLowMissed) !== 0);
         const lowAcc = lowHub.map(x => x.LowHubAccuracy);
         const avgLowAccuracy = calcLowAcc(lowHub);
-        const avgLowShots = calcLowShots(lowHub);
+        const avgLowShots = calcLowShots(teamStats);
 
         const upperHub = teamStats.filter(x => (x.AutoUpperMade + x.AutoUpperMissed + x.TeleUpperMade + x.TeleUpperMissed) !== 0);
         const upperAcc = upperHub.map(x => x.UpperHubAccuracy);
         const avgUpperAccuracy = calcUpperAcc(upperHub);
-        const avgUpperShots = calcUpperShots(upperHub);
+        const avgUpperShots = calcUpperShots(teamStats);
 
         const hang = teamStats.filter(x => x.Hangar !== 'None')
         const avgHangar = calcHangar(hang);
